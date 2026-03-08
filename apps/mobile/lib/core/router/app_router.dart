@@ -12,9 +12,15 @@ import '../../features/menu/presentation/menu_screen.dart';
 import '../../features/cart/presentation/cart_screen.dart';
 import '../../features/loyalty/presentation/loyalty_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/profile/presentation/profile_edit_screen.dart';
+import '../../features/profile/presentation/saved_addresses_screen.dart';
+import '../../features/profile/presentation/settings_screen.dart';
 import '../../features/delivery/presentation/delivery_tracking_screen.dart';
 import '../../features/stores/presentation/store_locator_screen.dart';
 import '../../features/order/presentation/order_history_screen.dart';
+import '../../features/feedback/presentation/feedback_screen.dart';
+import '../../features/voucher/presentation/voucher_screen.dart';
+import '../../features/notifications/presentation/notification_inbox_screen.dart';
 
 /// Route paths as constants
 class AppRoutes {
@@ -27,12 +33,16 @@ class AppRoutes {
   static const String loyalty = '/loyalty';
   static const String delivery = '/delivery';
   static const String profile = '/profile';
+  static const String profileEdit = '/profile/edit';
+  static const String savedAddresses = '/profile/addresses';
+  static const String settings = '/settings';
   static const String login = '/login';
   static const String register = '/register';
   static const String otp = '/otp';
   static const String notifications = '/notifications';
   static const String storeLocator = '/store-locator';
-  static const String settings = '/settings';
+  static const String feedback = '/feedback';
+  static const String vouchers = '/vouchers';
 }
 
 /// Navigation shell for bottom navigation bar
@@ -71,11 +81,6 @@ class _ScaffoldWithNavBar extends StatelessWidget {
             label: 'Tích điểm',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.store_outlined),
-            activeIcon: Icon(Icons.store),
-            label: 'Cửa hàng',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             activeIcon: Icon(Icons.person),
             label: 'Tài khoản',
@@ -90,8 +95,7 @@ class _ScaffoldWithNavBar extends StatelessWidget {
     if (location.startsWith(AppRoutes.menu)) return 1;
     if (location.startsWith(AppRoutes.cart)) return 2;
     if (location.startsWith(AppRoutes.loyalty)) return 3;
-    if (location.startsWith(AppRoutes.storeLocator)) return 4;
-    if (location.startsWith(AppRoutes.profile)) return 5;
+    if (location.startsWith(AppRoutes.profile)) return 4;
     return 0;
   }
 
@@ -106,30 +110,8 @@ class _ScaffoldWithNavBar extends StatelessWidget {
       case 3:
         context.go(AppRoutes.loyalty);
       case 4:
-        context.go(AppRoutes.storeLocator);
-      case 5:
         context.go(AppRoutes.profile);
     }
-  }
-}
-
-/// Placeholder screen for features not yet implemented
-class _PlaceholderScreen extends StatelessWidget {
-  const _PlaceholderScreen({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-      ),
-    );
   }
 }
 
@@ -219,17 +201,48 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: AppRoutes.profile,
             name: 'profile',
             builder: (context, state) => const ProfileScreen(),
+            routes: [
+              GoRoute(
+                path: 'edit',
+                name: 'profileEdit',
+                builder: (context, state) => const ProfileEditScreen(),
+              ),
+              GoRoute(
+                path: 'addresses',
+                name: 'savedAddresses',
+                builder: (context, state) => const SavedAddressesScreen(),
+              ),
+            ],
           ),
           GoRoute(
             path: AppRoutes.notifications,
             name: 'notifications',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Thông báo'),
+            builder: (context, state) => const NotificationInboxScreen(),
           ),
           GoRoute(
             path: AppRoutes.storeLocator,
             name: 'storeLocator',
             builder: (context, state) => const StoreLocatorScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.feedback,
+            name: 'feedback',
+            builder: (context, state) {
+              final orderId =
+                  int.tryParse(state.uri.queryParameters['orderId'] ?? '') ??
+                      0;
+              return FeedbackScreen(orderId: orderId);
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.vouchers,
+            name: 'vouchers',
+            builder: (context, state) => const VoucherScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.settings,
+            name: 'settings',
+            builder: (context, state) => const SettingsScreen(),
           ),
         ],
       ),

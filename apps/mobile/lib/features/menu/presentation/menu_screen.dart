@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/cache/cache_service.dart';
+import '../../../core/network/api_client.dart';
 import '../../../core/theme/app_colors.dart';
 
 // -- Data models ----------------------------------------------------------
@@ -13,6 +15,7 @@ class MenuItem {
     required this.category,
     this.description = '',
     this.imageUrl,
+    this.isPopular = false,
   });
 
   final int id;
@@ -21,11 +24,33 @@ class MenuItem {
   final String category;
   final String description;
   final String? imageUrl;
+  final bool isPopular;
+
+  factory MenuItem.fromJson(Map<String, dynamic> json) => MenuItem(
+        id: json['id'] as int,
+        name: json['name'] as String,
+        price: json['price'] as int,
+        category: json['category'] as String,
+        description: json['description'] as String? ?? '',
+        imageUrl: json['image_url'] as String?,
+        isPopular: json['is_popular'] as bool? ?? false,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'price': price,
+        'category': category,
+        'description': description,
+        'image_url': imageUrl,
+        'is_popular': isPopular,
+      };
 }
 
 // -- Sample data ----------------------------------------------------------
 
 const _kCategories = [
+  'Tất cả',
   'Cơm tấm',
   'Món thêm',
   'Nước uống',
@@ -39,6 +64,7 @@ const _kSampleItems = [
     price: 55000,
     category: 'Cơm tấm',
     description: 'Sườn nướng than hoa, bì, chả trứng, kèm đồ chua',
+    isPopular: true,
   ),
   MenuItem(
     id: 2,
@@ -46,6 +72,7 @@ const _kSampleItems = [
     price: 45000,
     category: 'Cơm tấm',
     description: 'Sườn heo nướng than hoa đậm vị, ăn kèm nước mắm',
+    isPopular: true,
   ),
   MenuItem(
     id: 3,
@@ -60,6 +87,7 @@ const _kSampleItems = [
     price: 65000,
     category: 'Cơm tấm',
     description: 'Sườn, bì, chả, trứng ốp la, thêm lạp xưởng',
+    isPopular: true,
   ),
   MenuItem(
     id: 5,
@@ -126,22 +154,127 @@ const _kSampleItems = [
   ),
 ];
 
-// -- Providers ------------------------------------------------------------
+// -- Menu state ------------------------------------------------------------
 
-final menuItemsProvider = Provider<List<MenuItem>>((ref) => _kSampleItems);
+sealed class MenuLoadState {
+  const MenuLoadState();
+}
+
+class MenuInitial extends MenuLoadState {
+  const MenuInitial();
+}
+
+class MenuLoading extends MenuLoadState {
+  const MenuLoading();
+}
+
+class MenuLoaded extends MenuLoadState {
+  const MenuLoaded(this.items, {this.fromCache = false});
+  final List<MenuItem> items;
+  final bool fromCache;
+}
+
+class MenuError extends MenuLoadState {
+  const MenuError(this.message);
+  final String message;
+}
+
+// -- Menu notifier with cache support --------------------------------------
+
+class MenuNotifier extends StateNotifier<MenuLoadState> {
+  MenuNotifier({
+    required this.apiClient,
+    required this.cacheService,
+  }) : super(const MenuInitial());
+
+  final ApiClient apiClient;
+  final CacheService cacheService;
+
+  static const _cacheMaxAge = Duration(minutes: 30);
+
+  Future<void> loadMenu() async {
+    // Try cache first
+    if (cacheService.isCacheValid('cache_menu', _cacheMaxAge)) {
+      final cached = cacheService.getCachedMenu();
+      if (cached.isNotEmpty) {
+        final items = cached.map((e) => MenuItem.fromJson(e)).toList();
+        state = MenuLoaded(items, fromCache: true);
+        // Still fetch fresh data in background
+        _refreshFromApi();
+        return;
+      }
+    }
+
+    state = const MenuLoading();
+
+    // Try API
+    try {
+      await _refreshFromApi();
+    } catch (_) {
+      // Fallback to cache even if expired
+      final cached = cacheService.getCachedMenu();
+      if (cached.isNotEmpty) {
+        final items = cached.map((e) => MenuItem.fromJson(e)).toList();
+        state = MenuLoaded(items, fromCache: true);
+      } else {
+        // Last resort: sample data
+        state = const MenuLoaded(_kSampleItems);
+      }
+    }
+  }
+
+  Future<void> _refreshFromApi() async {
+    try {
+      final response = await apiClient.get('/menu');
+      final data = List<Map<String, dynamic>>.from(response.data ?? []);
+      if (data.isNotEmpty) {
+        final items = data.map((e) => MenuItem.fromJson(e)).toList();
+        await cacheService.cacheMenu(data);
+        state = MenuLoaded(items);
+      }
+    } catch (_) {
+      // Silent fail for background refresh
+    }
+  }
+}
+
+final menuNotifierProvider =
+    StateNotifierProvider<MenuNotifier, MenuLoadState>((ref) {
+  try {
+    final apiClient = ref.watch(apiClientProvider);
+    final cacheService = ref.watch(cacheServiceProvider);
+    return MenuNotifier(apiClient: apiClient, cacheService: cacheService);
+  } catch (_) {
+    // Fallback if providers not yet initialized
+    return MenuNotifier(
+      apiClient: ApiClient(),
+      cacheService: CacheService(
+        prefs: throw UnimplementedError('SharedPreferences not ready'),
+      ),
+    );
+  }
+});
+
+// Fallback providers for when MenuNotifier isn't initialized
+final menuItemsProvider =
+    Provider<List<MenuItem>>((ref) => _kSampleItems);
 
 final menuSearchQueryProvider = StateProvider<String>((ref) => '');
 
 final menuCategoryProvider = StateProvider<int>((ref) => 0);
 
 final filteredMenuItemsProvider = Provider<List<MenuItem>>((ref) {
-  final items = ref.watch(menuItemsProvider);
+  final menuState = ref.watch(menuNotifierProvider);
+  final items = switch (menuState) {
+    MenuLoaded(items: final loadedItems) => loadedItems,
+    _ => _kSampleItems,
+  };
   final query = ref.watch(menuSearchQueryProvider).toLowerCase();
   final catIndex = ref.watch(menuCategoryProvider);
-  final category = _kCategories[catIndex];
 
   return items.where((item) {
-    final matchesCategory = item.category == category;
+    final matchesCategory =
+        catIndex == 0 || item.category == _kCategories[catIndex];
     final matchesQuery =
         query.isEmpty || item.name.toLowerCase().contains(query);
     return matchesCategory && matchesQuery;
@@ -163,18 +296,52 @@ String _formatPrice(int price) {
 
 // -- Screen ---------------------------------------------------------------
 
-/// Menu screen with category tabs, search, and menu item grid.
-class MenuScreen extends ConsumerWidget {
+/// Menu screen with category tabs, search, cache-first loading, and menu item grid.
+class MenuScreen extends ConsumerStatefulWidget {
   const MenuScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MenuScreen> createState() => _MenuScreenState();
+}
+
+class _MenuScreenState extends ConsumerState<MenuScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Try loading from cache/API
+    Future.microtask(() {
+      try {
+        ref.read(menuNotifierProvider.notifier).loadMenu();
+      } catch (_) {
+        // Provider not ready, will use sample data
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final selectedCategory = ref.watch(menuCategoryProvider);
     final filteredItems = ref.watch(filteredMenuItemsProvider);
+    final menuState = ref.watch(menuNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Thực đơn'),
+        actions: [
+          if (menuState is MenuLoaded && menuState.fromCache)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: Chip(
+                label: const Text(
+                  'Ngoại tuyến',
+                  style: TextStyle(fontSize: 11, color: Colors.white),
+                ),
+                backgroundColor: AppColors.warning,
+                visualDensity: VisualDensity.compact,
+                padding: EdgeInsets.zero,
+              ),
+            ),
+        ],
       ),
       body: Column(
         children: [
@@ -237,38 +404,56 @@ class MenuScreen extends ConsumerWidget {
 
           const SizedBox(height: 12),
 
+          // Loading state
+          if (menuState is MenuLoading)
+            const Expanded(
+              child: Center(child: CircularProgressIndicator()),
+            )
           // Menu items list
-          Expanded(
-            child: filteredItems.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.search_off,
-                          size: 64,
-                          color: AppColors.textHint,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Không tìm thấy món ăn',
-                          style:
-                              Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: AppColors.textSecondary,
-                                  ),
-                        ),
-                      ],
+          else
+            Expanded(
+              child: filteredItems.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.search_off,
+                            size: 64,
+                            color: AppColors.textHint,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Không tìm thấy món ăn',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : RefreshIndicator(
+                      onRefresh: () async {
+                        try {
+                          await ref
+                              .read(menuNotifierProvider.notifier)
+                              .loadMenu();
+                        } catch (_) {}
+                      },
+                      child: ListView.separated(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        itemCount: filteredItems.length,
+                        separatorBuilder: (_, __) =>
+                            const SizedBox(height: 12),
+                        itemBuilder: (context, index) {
+                          return _MenuItemCard(item: filteredItems[index]);
+                        },
+                      ),
                     ),
-                  )
-                : ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                    itemCount: filteredItems.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      return _MenuItemCard(item: filteredItems[index]);
-                    },
-                  ),
-          ),
+            ),
         ],
       ),
     );
@@ -295,18 +480,56 @@ class _MenuItemCard extends StatelessWidget {
         child: Row(
           children: [
             // Image placeholder
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.08),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                Icons.restaurant,
-                size: 36,
-                color: AppColors.primary.withOpacity(0.4),
-              ),
+            Stack(
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: item.imageUrl != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            item.imageUrl!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Icon(
+                              Icons.restaurant,
+                              size: 36,
+                              color: AppColors.primary.withValues(alpha: 0.4),
+                            ),
+                          ),
+                        )
+                      : Icon(
+                          Icons.restaurant,
+                          size: 36,
+                          color: AppColors.primary.withValues(alpha: 0.4),
+                        ),
+                ),
+                if (item.isPopular)
+                  Positioned(
+                    top: 4,
+                    left: 4,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppColors.secondary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Text(
+                        'Hot',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(width: 12),
 
