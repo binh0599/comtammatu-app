@@ -55,6 +55,9 @@ dependencies:
   # Analytics
   posthog_flutter: ^4.5.0
 
+  # Splash & App Icon
+  flutter_native_splash: ^2.4.4
+
   # Utils
   intl: ^0.19.0
   uuid: ^4.5.1

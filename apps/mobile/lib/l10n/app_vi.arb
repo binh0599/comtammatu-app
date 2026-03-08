@@ -25,5 +25,65 @@
   "delivery": "Giao hàng",
   "storeLocator": "Tìm cửa hàng",
   "notifications": "Thông báo",
-  "settings": "Cài đặt"
+  "settings": "Cài đặt",
+  "vouchers": "Ưu đãi",
+  "feedback": "Đánh giá",
+  "dashboard": "Bảng điều khiển",
+  "staffManagement": "Quản lý nhân viên",
+  "inventory": "Kho hàng",
+  "savedAddresses": "Địa chỉ đã lưu",
+  "editProfile": "Chỉnh sửa hồ sơ",
+  "orderHistory": "Lịch sử đơn hàng",
+  "deliveryTracking": "Theo dõi giao hàng",
+  "redeemPoints": "Đổi điểm",
+  "earnPoints": "Tích điểm",
+  "scanQR": "Quét mã QR",
+  "cancel": "Hủy",
+  "confirm": "Xác nhận",
+  "save": "Lưu",
+  "delete": "Xóa",
+  "edit": "Sửa",
+  "search": "Tìm kiếm",
+  "filter": "Lọc",
+  "sortBy": "Sắp xếp theo",
+  "all": "Tất cả",
+  "today": "Hôm nay",
+  "thisWeek": "Tuần này",
+  "thisMonth": "Tháng này",
+  "totalRevenue": "Tổng doanh thu",
+  "totalOrders": "Tổng đơn hàng",
+  "newMembers": "Thành viên mới",
+  "lowStock": "Sắp hết hàng",
+  "restock": "Nhập hàng",
+  "welcomeBack": "Chào mừng trở lại!",
+  "seeAll": "Xem tất cả",
+  "noNotifications": "Không có thông báo nào",
+  "noOrders": "Bạn chưa có đơn hàng nào",
+  "emptyCart": "Giỏ hàng trống",
+  "continueOrdering": "Tiếp tục đặt hàng",
+  "orderSuccess": "Đặt hàng thành công!",
+  "pointsEarned": "Bạn đã nhận được {points} điểm",
+  "@pointsEarned": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "itemCount": "{count} món",
+  "@itemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "priceFormat": "{price}đ",
+  "@priceFormat": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -24,10 +24,14 @@ import '../../features/notifications/presentation/notification_inbox_screen.dart
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/staff/presentation/staff_management_screen.dart';
 import '../../features/inventory/presentation/inventory_screen.dart';
+import '../../features/splash/presentation/splash_screen.dart';
 
 /// Route paths as constants
 class AppRoutes {
   AppRoutes._();
+
+  // Splash
+  static const String splash = '/splash';
 
   // Customer routes
   static const String home = '/';
@@ -188,9 +192,12 @@ class _AdminScaffoldWithNavBar extends StatelessWidget {
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: AppRoutes.home,
+    initialLocation: AppRoutes.splash,
     debugLogDiagnostics: true,
     redirect: (context, state) {
+      final isSplash = state.uri.path == AppRoutes.splash;
+      if (isSplash) return null; // Allow splash through
+
       final authState = ref.read(authNotifierProvider);
       final isLoggedIn = authState is Authenticated;
       final isAuthRoute = state.uri.path == AppRoutes.login ||
@@ -202,6 +209,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      // Splash screen
+      GoRoute(
+        path: AppRoutes.splash,
+        name: 'splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
+
       // Auth routes (outside shell)
       GoRoute(
         path: AppRoutes.login,
