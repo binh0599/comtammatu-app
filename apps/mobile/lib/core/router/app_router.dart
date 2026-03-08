@@ -269,6 +269,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.delivery,
             name: 'delivery',
+            redirect: (context, state) {
+              if (state.uri.path == AppRoutes.delivery) {
+                return AppRoutes.orders;
+              }
+              return null;
+            },
             builder: (context, state) =>
                 const DeliveryTrackingScreen(orderId: ''),
             routes: [

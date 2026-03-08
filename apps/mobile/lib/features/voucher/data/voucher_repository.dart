@@ -37,7 +37,8 @@ class VoucherRepository {
   /// Fetches vouchers available for point redemption.
   Future<List<Voucher>> getAvailableVouchers() async {
     return _apiClient.get<List<Voucher>>(
-      '/get-available-vouchers',
+      '/redeem-points',
+      queryParameters: {'action': 'available_rewards'},
       fromJson: (json) => (json as List<dynamic>)
           .map((e) => Voucher.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -47,8 +48,12 @@ class VoucherRepository {
   /// Redeems a voucher using loyalty points.
   Future<VoucherRedemptionResult> redeemVoucher(int voucherId) async {
     return _apiClient.post<VoucherRedemptionResult>(
-      '/redeem-voucher',
-      data: {'voucher_id': voucherId},
+      '/redeem-points',
+      data: {
+        'voucher_id': voucherId,
+        'reward_type': 'voucher',
+        'points': 0, // Server calculates from voucher
+      },
       fromJson: (json) =>
           VoucherRedemptionResult.fromJson(json as Map<String, dynamic>),
     );
@@ -57,7 +62,8 @@ class VoucherRepository {
   /// Fetches vouchers the user has already redeemed (owned).
   Future<List<Voucher>> getMyVouchers() async {
     return _apiClient.get<List<Voucher>>(
-      '/get-my-vouchers',
+      '/redeem-points',
+      queryParameters: {'action': 'my_vouchers'},
       fromJson: (json) => (json as List<dynamic>)
           .map((e) => Voucher.fromJson(e as Map<String, dynamic>))
           .toList(),

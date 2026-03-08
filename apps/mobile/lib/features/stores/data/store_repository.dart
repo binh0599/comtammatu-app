@@ -34,9 +34,10 @@ class StoreRepository {
   }
 
   /// Fetches a single store by its ID.
-  Future<StoreInfo> getStore(String id) async {
+  Future<StoreInfo> getStore(int id) async {
     return _apiClient.get<StoreInfo>(
-      '/stores/$id',
+      '/stores',
+      queryParameters: {'id': id},
       fromJson: (json) =>
           StoreInfo.fromJson(json as Map<String, dynamic>),
     );

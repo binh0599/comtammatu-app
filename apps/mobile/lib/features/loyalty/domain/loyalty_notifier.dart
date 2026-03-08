@@ -24,15 +24,15 @@ class LoyaltyNotifier extends StateNotifier<LoyaltyState> {
 
   /// Verify check-in at a branch.
   Future<void> checkIn({
-    required String qrPayload,
-    required String deviceFingerprint,
+    required int branchId,
+    String? qrCode,
     double? latitude,
     double? longitude,
   }) async {
     try {
-      await _loyaltyRepository.verifyCheckIn(
-        qrPayload: qrPayload,
-        deviceFingerprint: deviceFingerprint,
+      await _loyaltyRepository.verifyCheckin(
+        branchId: branchId,
+        qrCode: qrCode,
         latitude: latitude,
         longitude: longitude,
       );
@@ -46,13 +46,15 @@ class LoyaltyNotifier extends StateNotifier<LoyaltyState> {
 
   /// Redeem points for a reward.
   Future<void> redeemPoints({
-    required int rewardId,
-    required int points,
+    required double points,
+    required String rewardType,
+    int? orderId,
   }) async {
     try {
       await _loyaltyRepository.redeemPoints(
-        rewardId: rewardId,
         points: points,
+        rewardType: rewardType,
+        orderId: orderId,
       );
       await loadDashboard();
     } catch (e) {

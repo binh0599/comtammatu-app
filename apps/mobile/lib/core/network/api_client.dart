@@ -138,14 +138,14 @@ class _AuthInterceptor extends Interceptor {
   }
 }
 
-/// Adds X-Idempotency-Key for POST requests (UUID v4).
+/// Adds X-Idempotency-Key for POST requests (UUID v7).
 class _IdempotencyInterceptor extends Interceptor {
   static const _uuid = Uuid();
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (options.method == 'POST') {
-      options.headers['X-Idempotency-Key'] = _uuid.v4();
+      options.headers['X-Idempotency-Key'] = _uuid.v7();
     }
     handler.next(options);
   }

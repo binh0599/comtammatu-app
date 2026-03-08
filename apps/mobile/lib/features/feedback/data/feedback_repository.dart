@@ -25,10 +25,13 @@ class FeedbackRepository {
 
   /// Fetch all feedback submitted by the current user.
   Future<List<FeedbackModel>> getMyFeedback() async {
-    final response = await _client.get<List<dynamic>>('/feedback/me');
-    return response
-        .map((e) => FeedbackModel.fromJson(e as Map<String, dynamic>))
-        .toList();
+    return _client.get<List<FeedbackModel>>(
+      '/feedback',
+      queryParameters: {'action': 'my_feedback'},
+      fromJson: (json) => (json as List<dynamic>)
+          .map((e) => FeedbackModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
   }
 }
 

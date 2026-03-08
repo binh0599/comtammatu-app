@@ -5,10 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+import 'core/cache/cache_service.dart';
 import 'core/config/env_config.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
@@ -43,6 +45,9 @@ Future<void> main() async {
     ),
   );
 
+  // Initialize SharedPreferences
+  final prefs = await SharedPreferences.getInstance();
+
   // Initialize Supabase
   await Supabase.initialize(
     url: EnvConfig.supabaseUrl,
@@ -51,6 +56,35 @@ Future<void> main() async {
 
   // Initialize Firebase
   await Firebase.initializeApp();
+
+  // Set global error widget before runApp
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.warning_amber_rounded,
+                    size: 64, color: AppColors.warning),
+                const SizedBox(height: 16),
+                const Text('Đã xảy ra lỗi hiển thị'),
+                const SizedBox(height: 8),
+                if (EnvConfig.enableDebugLogs)
+                  Text(
+                    details.exceptionAsString(),
+                    maxLines: 5,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  };
 
   // Initialize Sentry (only in staging/production)
   if (EnvConfig.enableCrashReporting && EnvConfig.sentryDsn.isNotEmpty) {
@@ -62,15 +96,23 @@ Future<void> main() async {
         options.attachScreenshot = true;
         options.sendDefaultPii = false;
       },
-      appRunner: () => _runApp(),
+      appRunner: () => _runApp(prefs),
     );
   } else {
-    _runApp();
+    _runApp(prefs);
   }
 }
 
-void _runApp() {
-  runApp(const ProviderScope(child: ComTamMaTuApp()));
+void _runApp(SharedPreferences prefs) {
+  runApp(
+    ProviderScope(
+      overrides: [
+        cacheServiceProvider
+            .overrideWithValue(CacheService(prefs: prefs)),
+      ],
+      child: const ComTamMaTuApp(),
+    ),
+  );
 }
 
 class ComTamMaTuApp extends ConsumerWidget {
@@ -98,39 +140,6 @@ class ComTamMaTuApp extends ConsumerWidget {
         Locale('en'),
       ],
       locale: const Locale('vi'),
-      builder: (context, child) {
-        // Global error boundary
-        ErrorWidget.builder = (FlutterErrorDetails details) {
-          return Scaffold(
-            body: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.warning_amber_rounded,
-                        size: 64, color: AppColors.warning),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Đã xảy ra lỗi hiển thị',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    if (EnvConfig.enableDebugLogs)
-                      Text(
-                        details.exceptionAsString(),
-                        style: Theme.of(context).textTheme.bodySmall,
-                        maxLines: 5,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        };
-        return child ?? const SizedBox.shrink();
-      },
     );
   }
 }

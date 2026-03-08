@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../models/dashboard_stats.dart';
+import '../data/dashboard_repository.dart';
 
 /// Trạng thái của bảng điều khiển quản lý.
 sealed class DashboardState {
@@ -27,63 +28,18 @@ class DashboardError extends DashboardState {
 
 /// Quản lý trạng thái bảng điều khiển cho chủ/quản lý cửa hàng.
 class DashboardNotifier extends StateNotifier<DashboardState> {
-  DashboardNotifier() : super(const DashboardInitial());
+  DashboardNotifier({required DashboardRepository repository})
+      : _repository = repository,
+        super(const DashboardInitial());
 
-  /// Tải dữ liệu bảng điều khiển.
+  final DashboardRepository _repository;
+
+  /// Tải dữ liệu bảng điều khiển từ Edge Function dashboard-stats.
   Future<void> loadDashboard() async {
     state = const DashboardLoading();
     try {
-      // Giả lập gọi API với độ trễ mạng
-      await Future<void>.delayed(const Duration(milliseconds: 800));
-
-      const sampleStats = DashboardStats(
-        todayRevenue: 4850000,
-        todayOrders: 86,
-        avgOrderValue: 56400,
-        completedOrders: 72,
-        cancelledOrders: 3,
-        pendingOrders: 11,
-        customerCount: 1245,
-        newCustomersToday: 8,
-        weeklyRevenue: [
-          DailyRevenue(day: 'Thứ 2', amount: 3200000),
-          DailyRevenue(day: 'Thứ 3', amount: 4100000),
-          DailyRevenue(day: 'Thứ 4', amount: 3800000),
-          DailyRevenue(day: 'Thứ 5', amount: 4500000),
-          DailyRevenue(day: 'Thứ 6', amount: 5200000),
-          DailyRevenue(day: 'Thứ 7', amount: 6100000),
-          DailyRevenue(day: 'CN', amount: 4850000),
-        ],
-        popularItems: [
-          PopularItem(
-            name: 'Cơm tấm sườn bì chả',
-            count: 42,
-            revenue: 2520000,
-          ),
-          PopularItem(
-            name: 'Cơm tấm đặc biệt',
-            count: 28,
-            revenue: 2240000,
-          ),
-          PopularItem(
-            name: 'Cơm tấm sườn nướng',
-            count: 25,
-            revenue: 1500000,
-          ),
-          PopularItem(
-            name: 'Trà đá',
-            count: 65,
-            revenue: 325000,
-          ),
-          PopularItem(
-            name: 'Nước sâm',
-            count: 18,
-            revenue: 270000,
-          ),
-        ],
-      );
-
-      state = const DashboardLoaded(stats: sampleStats);
+      final stats = await _repository.getStats();
+      state = DashboardLoaded(stats: stats);
     } catch (e) {
       state = DashboardError(
         message: 'Không thể tải dữ liệu bảng điều khiển: $e',
@@ -95,5 +51,6 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
 /// Provider cho trạng thái bảng điều khiển.
 final dashboardNotifierProvider =
     StateNotifierProvider<DashboardNotifier, DashboardState>((ref) {
-  return DashboardNotifier();
+  final repo = ref.watch(dashboardRepositoryProvider);
+  return DashboardNotifier(repository: repo);
 });

@@ -14,6 +14,7 @@ class InventoryRepository {
   Future<List<InventoryItem>> getInventory() async {
     return _apiClient.get<List<InventoryItem>>(
       '/inventory',
+      queryParameters: {'action': 'list'},
       fromJson: (json) {
         final list = json as List<dynamic>;
         return list
@@ -30,8 +31,10 @@ class InventoryRepository {
     String? note,
   }) async {
     return _apiClient.post<InventoryItem>(
-      '/inventory/$id/restock',
+      '/inventory',
       data: {
+        'action': 'restock',
+        'item_id': id,
         'quantity': quantity,
         if (note != null) 'note': note,
       },
@@ -42,9 +45,13 @@ class InventoryRepository {
 
   /// Cập nhật mức tồn kho trực tiếp.
   Future<InventoryItem> updateStock(int id, double newStock) async {
-    return _apiClient.patch<InventoryItem>(
-      '/inventory/$id',
-      data: {'current_stock': newStock},
+    return _apiClient.post<InventoryItem>(
+      '/inventory',
+      data: {
+        'action': 'update_stock',
+        'item_id': id,
+        'current_stock': newStock,
+      },
       fromJson: (json) =>
           InventoryItem.fromJson(json as Map<String, dynamic>),
     );

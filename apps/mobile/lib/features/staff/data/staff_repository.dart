@@ -13,8 +13,9 @@ class StaffRepository {
   /// Lấy danh sách nhân viên, có thể lọc theo chi nhánh.
   Future<List<StaffMember>> getStaff({int? branchId}) async {
     return _apiClient.get<List<StaffMember>>(
-      '/get-staff',
+      '/staff-management',
       queryParameters: {
+        'action': 'list',
         if (branchId != null) 'branch_id': branchId,
       },
       fromJson: (json) => (json as List<dynamic>)
@@ -32,8 +33,9 @@ class StaffRepository {
     required String branchName,
   }) async {
     return _apiClient.post<StaffMember>(
-      '/add-staff',
+      '/staff-management',
       data: {
+        'action': 'add',
         'name': name,
         'phone': phone,
         'role': role.name,
@@ -54,9 +56,11 @@ class StaffRepository {
     int? branchId,
     String? branchName,
   }) async {
-    return _apiClient.put<StaffMember>(
-      '/update-staff/$staffId',
+    return _apiClient.post<StaffMember>(
+      '/staff-management',
       data: {
+        'action': 'update',
+        'staff_id': staffId,
         if (name != null) 'name': name,
         if (phone != null) 'phone': phone,
         if (role != null) 'role': role.name,
@@ -70,8 +74,12 @@ class StaffRepository {
 
   /// Kích hoạt hoặc vô hiệu hoá nhân viên.
   Future<StaffMember> toggleActive({required int staffId}) async {
-    return _apiClient.patch<StaffMember>(
-      '/toggle-staff-active/$staffId',
+    return _apiClient.post<StaffMember>(
+      '/staff-management',
+      data: {
+        'action': 'toggle_active',
+        'staff_id': staffId,
+      },
       fromJson: (json) =>
           StaffMember.fromJson(json as Map<String, dynamic>),
     );

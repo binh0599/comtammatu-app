@@ -83,9 +83,17 @@ class CartNotifier extends StateNotifier<CartState> {
     state = state.copyWith(paymentMethod: method);
   }
 
-  /// Set delivery address.
-  void setAddress(int addressId) {
-    state = state.copyWith(addressId: addressId);
+  /// Set delivery address with coordinates.
+  void setAddress({
+    required String deliveryAddress,
+    required double latitude,
+    required double longitude,
+  }) {
+    state = state.copyWith(
+      deliveryAddress: deliveryAddress,
+      latitude: latitude,
+      longitude: longitude,
+    );
   }
 
   /// Set order note.
@@ -105,20 +113,21 @@ class CartNotifier extends StateNotifier<CartState> {
 
   /// Place the delivery order.
   Future<void> placeOrder() async {
-    final items = state.items
-        .map((item) => {
-              'menu_item_id': item.menuItem.id,
-              'quantity': item.quantity,
-              'note': item.note ?? '',
-            })
-        .toList();
+    final address = state.deliveryAddress;
+    final lat = state.latitude;
+    final lng = state.longitude;
+
+    if (address == null || lat == null || lng == null) {
+      throw StateError('Vui lòng chọn địa chỉ giao hàng');
+    }
 
     await _orderRepository.createDeliveryOrder(
-      items: items,
-      addressId: state.addressId,
-      paymentMethod: state.paymentMethod,
-      couponCode: state.couponCode,
-      note: state.note,
+      items: state.items,
+      deliveryAddress: address,
+      latitude: lat,
+      longitude: lng,
+      note: state.note.isEmpty ? null : state.note,
+      promotionId: state.promotionId,
     );
 
     clearCart();

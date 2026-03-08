@@ -7,18 +7,24 @@ class CartState {
     this.deliveryFee = 0,
     this.discount = 0,
     this.paymentMethod = 'cod',
-    this.addressId,
+    this.deliveryAddress,
+    this.latitude,
+    this.longitude,
     this.note = '',
     this.couponCode,
+    this.promotionId,
   });
 
   final List<CartItem> items;
   final double deliveryFee;
   final double discount;
   final String paymentMethod;
-  final int? addressId;
+  final String? deliveryAddress;
+  final double? latitude;
+  final double? longitude;
   final String note;
   final String? couponCode;
+  final int? promotionId;
 
   double get subtotal =>
       items.fold(0, (sum, item) => sum + item.total);
@@ -34,18 +40,24 @@ class CartState {
     double? deliveryFee,
     double? discount,
     String? paymentMethod,
-    int? addressId,
+    String? deliveryAddress,
+    double? latitude,
+    double? longitude,
     String? note,
     String? couponCode,
+    int? promotionId,
   }) {
     return CartState(
       items: items ?? this.items,
       deliveryFee: deliveryFee ?? this.deliveryFee,
       discount: discount ?? this.discount,
       paymentMethod: paymentMethod ?? this.paymentMethod,
-      addressId: addressId ?? this.addressId,
+      deliveryAddress: deliveryAddress ?? this.deliveryAddress,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
       note: note ?? this.note,
       couponCode: couponCode ?? this.couponCode,
+      promotionId: promotionId ?? this.promotionId,
     );
   }
 }
