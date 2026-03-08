@@ -21,11 +21,15 @@ import '../../features/order/presentation/order_history_screen.dart';
 import '../../features/feedback/presentation/feedback_screen.dart';
 import '../../features/voucher/presentation/voucher_screen.dart';
 import '../../features/notifications/presentation/notification_inbox_screen.dart';
+import '../../features/dashboard/presentation/dashboard_screen.dart';
+import '../../features/staff/presentation/staff_management_screen.dart';
+import '../../features/inventory/presentation/inventory_screen.dart';
 
 /// Route paths as constants
 class AppRoutes {
   AppRoutes._();
 
+  // Customer routes
   static const String home = '/';
   static const String menu = '/menu';
   static const String cart = '/cart';
@@ -43,9 +47,14 @@ class AppRoutes {
   static const String storeLocator = '/store-locator';
   static const String feedback = '/feedback';
   static const String vouchers = '/vouchers';
+
+  // Management routes (owner/manager)
+  static const String dashboard = '/dashboard';
+  static const String staffManagement = '/staff';
+  static const String inventory = '/inventory';
 }
 
-/// Navigation shell for bottom navigation bar
+/// Navigation shell for customer bottom navigation bar
 class _ScaffoldWithNavBar extends StatelessWidget {
   const _ScaffoldWithNavBar({required this.child});
 
@@ -115,6 +124,68 @@ class _ScaffoldWithNavBar extends StatelessWidget {
   }
 }
 
+/// Navigation shell for management bottom navigation bar (owner/manager)
+class _AdminScaffoldWithNavBar extends StatelessWidget {
+  const _AdminScaffoldWithNavBar({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: child,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _calculateSelectedIndex(context),
+        onTap: (index) => _onItemTapped(index, context),
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard_outlined),
+            activeIcon: Icon(Icons.dashboard),
+            label: 'Bảng điều khiển',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people_outline),
+            activeIcon: Icon(Icons.people),
+            label: 'Nhân viên',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.inventory_2_outlined),
+            activeIcon: Icon(Icons.inventory_2),
+            label: 'Kho hàng',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: 'Tài khoản',
+          ),
+        ],
+      ),
+    );
+  }
+
+  int _calculateSelectedIndex(BuildContext context) {
+    final location = GoRouterState.of(context).uri.path;
+    if (location.startsWith(AppRoutes.staffManagement)) return 1;
+    if (location.startsWith(AppRoutes.inventory)) return 2;
+    if (location.startsWith(AppRoutes.profile)) return 3;
+    return 0;
+  }
+
+  void _onItemTapped(int index, BuildContext context) {
+    switch (index) {
+      case 0:
+        context.go(AppRoutes.dashboard);
+      case 1:
+        context.go(AppRoutes.staffManagement);
+      case 2:
+        context.go(AppRoutes.inventory);
+      case 3:
+        context.go(AppRoutes.profile);
+    }
+  }
+}
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: AppRoutes.home,
@@ -152,7 +223,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // Main app shell with bottom navigation
+      // Customer app shell with bottom navigation
       ShellRoute(
         builder: (context, state, child) => _ScaffoldWithNavBar(child: child),
         routes: [
@@ -243,6 +314,29 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: AppRoutes.settings,
             name: 'settings',
             builder: (context, state) => const SettingsScreen(),
+          ),
+        ],
+      ),
+
+      // Management shell with admin navigation (owner/manager)
+      ShellRoute(
+        builder: (context, state, child) =>
+            _AdminScaffoldWithNavBar(child: child),
+        routes: [
+          GoRoute(
+            path: AppRoutes.dashboard,
+            name: 'dashboard',
+            builder: (context, state) => const DashboardScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.staffManagement,
+            name: 'staffManagement',
+            builder: (context, state) => const StaffManagementScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.inventory,
+            name: 'inventory',
+            builder: (context, state) => const InventoryScreen(),
           ),
         ],
       ),
