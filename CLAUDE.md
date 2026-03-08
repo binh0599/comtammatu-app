@@ -75,18 +75,58 @@
 
 ---
 
-## IV. KEY FILES
+## IV. BOOT SEQUENCE
 
 ```
-Design_Tech_Workflow.md    ← Architecture, data flow, tech stack, task delegation
-API_Contract.md            ← 20 endpoints, request/response schemas, error codes, Dart models
-Team_Hiring_Proposal.md    ← Team structure, RACI matrix, hiring JDs
-diagrams/                  ← Mermaid diagrams (architecture + sequence)
+1. Check tasks/regressions.md — rule nào áp dụng?
+2. Check tasks/lessons.md — pattern nào relevant?
+3. Identify agent(s) phù hợp → invoke skill
+4. Fill Task Contract → confirm scope trước khi code
+5. Checkpoint commit: git commit -m "checkpoint: before [task]"
+6. After task: flutter analyze + flutter test → commit → kill session
 ```
 
 ---
 
-## V. API BASE
+## V. SKILL INVOCATION MAP
+
+| Task involves | Invoke skill first |
+|---|---|
+| UI/UX design, component review | `sr-ux-designer` + `web-design-guidelines` |
+| Flutter architecture, Riverpod | `sr-flutter-dev` + `vercel-react-native-skills` |
+| Delivery/Reservation screens | `mid-flutter-dev` |
+| Edge Functions, DB schema, RLS | `backend-dev` + `postgres` |
+| Test strategy, E2E, load test | `qa-engineer` + `tdd-test-driven-development` |
+| CI/CD, Fastlane, monitoring | `devops-engineer` |
+| Architecture decisions | `ddd-software-architecture` + `brainstorming` |
+| Bug investigation | `systematic-debugging` + `kaizen-root-cause-tracing` |
+| Implementation planning | `writing-plans` + `executing-plans` |
+| Code review before merge | `code-review-review-local-changes` |
+| Before claiming "done" | `verification-before-completion` |
+
+---
+
+## VI. KEY FILES
+
+```
+docs/
+  Design_Tech_Workflow.md       ← Architecture, data flow, tech stack, task delegation
+  API_Contract.md               ← 20 endpoints, request/response schemas, Dart models
+  Team_Hiring_Proposal.md       ← Team structure, RACI matrix, hiring JDs
+  SESSION_PROTOCOL.md           ← Session lifecycle, error recovery, parallel sessions
+  PROJECT_OPERATING_SYSTEM.md   ← Workflow, meta-learning, quality gates, anti-patterns
+
+tasks/
+  regressions.md  ← Rules from past failures — CHECK EVERY SESSION
+  lessons.md      ← Patterns + prevention — CHECK EVERY SESSION
+  friction.md     ← What slows down development
+  predictions.md  ← "This will probably break when..."
+  todo.md         ← Current progress
+```
+
+---
+
+## VII. API BASE
 
 ```
 Base URL: https://zrlriuednoaqrsvnjjyo.supabase.co/functions/v1
