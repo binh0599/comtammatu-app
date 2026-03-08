@@ -1,0 +1,221 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../features/auth/presentation/login_screen.dart';
+import '../../features/home/presentation/home_screen.dart';
+
+/// Route paths as constants
+class AppRoutes {
+  AppRoutes._();
+
+  static const String home = '/';
+  static const String menu = '/menu';
+  static const String cart = '/cart';
+  static const String orders = '/orders';
+  static const String loyalty = '/loyalty';
+  static const String delivery = '/delivery';
+  static const String profile = '/profile';
+  static const String login = '/login';
+  static const String register = '/register';
+  static const String notifications = '/notifications';
+  static const String storeLocator = '/store-locator';
+  static const String settings = '/settings';
+}
+
+/// Navigation shell for bottom navigation bar
+class _ScaffoldWithNavBar extends StatelessWidget {
+  const _ScaffoldWithNavBar({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: child,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _calculateSelectedIndex(context),
+        onTap: (index) => _onItemTapped(index, context),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
+            label: 'Trang chủ',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.restaurant_menu_outlined),
+            activeIcon: Icon(Icons.restaurant_menu),
+            label: 'Thực đơn',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart_outlined),
+            activeIcon: Icon(Icons.shopping_cart),
+            label: 'Giỏ hàng',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.star_outline),
+            activeIcon: Icon(Icons.star),
+            label: 'Tích điểm',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: 'Tài khoản',
+          ),
+        ],
+      ),
+    );
+  }
+
+  int _calculateSelectedIndex(BuildContext context) {
+    final location = GoRouterState.of(context).uri.path;
+    if (location.startsWith(AppRoutes.menu)) return 1;
+    if (location.startsWith(AppRoutes.cart)) return 2;
+    if (location.startsWith(AppRoutes.loyalty)) return 3;
+    if (location.startsWith(AppRoutes.profile)) return 4;
+    return 0;
+  }
+
+  void _onItemTapped(int index, BuildContext context) {
+    switch (index) {
+      case 0:
+        context.go(AppRoutes.home);
+      case 1:
+        context.go(AppRoutes.menu);
+      case 2:
+        context.go(AppRoutes.cart);
+      case 3:
+        context.go(AppRoutes.loyalty);
+      case 4:
+        context.go(AppRoutes.profile);
+    }
+  }
+}
+
+/// Placeholder screen for features not yet implemented
+class _PlaceholderScreen extends StatelessWidget {
+  const _PlaceholderScreen({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: Center(
+        child: Text(
+          title,
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+      ),
+    );
+  }
+}
+
+final appRouterProvider = Provider<GoRouter>((ref) {
+  return GoRouter(
+    initialLocation: AppRoutes.home,
+    debugLogDiagnostics: true,
+    redirect: (context, state) {
+      // TODO: Implement auth redirect guard
+      // final isLoggedIn = ref.read(authStateProvider).isAuthenticated;
+      // final isLoginRoute = state.uri.path == AppRoutes.login;
+      // if (!isLoggedIn && !isLoginRoute) return AppRoutes.login;
+      // if (isLoggedIn && isLoginRoute) return AppRoutes.home;
+      return null;
+    },
+    routes: [
+      // Auth routes (outside shell)
+      GoRoute(
+        path: AppRoutes.login,
+        name: 'login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.register,
+        name: 'register',
+        builder: (context, state) =>
+            const _PlaceholderScreen(title: 'Đăng ký'),
+      ),
+
+      // Main app shell with bottom navigation
+      ShellRoute(
+        builder: (context, state, child) => _ScaffoldWithNavBar(child: child),
+        routes: [
+          GoRoute(
+            path: AppRoutes.home,
+            name: 'home',
+            builder: (context, state) => const HomeScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.menu,
+            name: 'menu',
+            builder: (context, state) =>
+                const _PlaceholderScreen(title: 'Thực đơn'),
+          ),
+          GoRoute(
+            path: AppRoutes.cart,
+            name: 'cart',
+            builder: (context, state) =>
+                const _PlaceholderScreen(title: 'Giỏ hàng'),
+          ),
+          GoRoute(
+            path: AppRoutes.orders,
+            name: 'orders',
+            builder: (context, state) =>
+                const _PlaceholderScreen(title: 'Đơn hàng'),
+          ),
+          GoRoute(
+            path: AppRoutes.loyalty,
+            name: 'loyalty',
+            builder: (context, state) =>
+                const _PlaceholderScreen(title: 'Tích điểm'),
+          ),
+          GoRoute(
+            path: AppRoutes.delivery,
+            name: 'delivery',
+            builder: (context, state) =>
+                const _PlaceholderScreen(title: 'Giao hàng'),
+          ),
+          GoRoute(
+            path: AppRoutes.profile,
+            name: 'profile',
+            builder: (context, state) =>
+                const _PlaceholderScreen(title: 'Tài khoản'),
+          ),
+          GoRoute(
+            path: AppRoutes.notifications,
+            name: 'notifications',
+            builder: (context, state) =>
+                const _PlaceholderScreen(title: 'Thông báo'),
+          ),
+          GoRoute(
+            path: AppRoutes.storeLocator,
+            name: 'storeLocator',
+            builder: (context, state) =>
+                const _PlaceholderScreen(title: 'Tìm cửa hàng'),
+          ),
+        ],
+      ),
+    ],
+    errorBuilder: (context, state) => Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const SizedBox(height: 16),
+            Text(
+              'Không tìm thấy trang',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () => context.go(AppRoutes.home),
+              child: const Text('Về trang chủ'),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+});
