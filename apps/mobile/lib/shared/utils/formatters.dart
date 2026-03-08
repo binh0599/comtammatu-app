@@ -69,4 +69,13 @@ class Formatters {
   static String points(int points) {
     return '${number(points)} điểm';
   }
+
+  /// Alias for number() — used across screens.
+  static String formatNumber(num value) => number(value);
+
+  /// Alias for dateTime() — used across screens.
+  static String formatDateTime(DateTime dt) => dateTime(dt);
+
+  /// Alias for currency() — used across screens.
+  static String formatCurrency(num amount) => currency(amount);
 }

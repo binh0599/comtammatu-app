@@ -1,4 +1,3 @@
 /// Profile feature barrel file.
-// export 'data/...';
-// export 'domain/...';
-// export 'presentation/...';
+export 'data/profile_repository.dart';
+export 'presentation/profile_screen.dart';

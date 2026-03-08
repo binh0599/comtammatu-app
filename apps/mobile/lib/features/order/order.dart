@@ -1,4 +1,2 @@
 /// Order feature barrel file.
-// export 'data/...';
-// export 'domain/...';
-// export 'presentation/...';
+export 'data/order_repository.dart';

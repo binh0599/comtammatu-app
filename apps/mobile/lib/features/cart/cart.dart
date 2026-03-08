@@ -1,4 +1,4 @@
 /// Cart feature barrel file.
-// export 'data/...';
-// export 'domain/...';
-// export 'presentation/...';
+export 'domain/cart_notifier.dart';
+export 'domain/cart_state.dart';
+export 'presentation/cart_screen.dart';

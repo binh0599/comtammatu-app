@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../features/auth/domain/auth_notifier.dart';
+import '../../features/auth/domain/auth_state.dart';
 import '../../features/auth/presentation/login_screen.dart';
+import '../../features/auth/presentation/register_screen.dart';
+import '../../features/auth/presentation/otp_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
+import '../../features/menu/presentation/menu_screen.dart';
+import '../../features/cart/presentation/cart_screen.dart';
+import '../../features/loyalty/presentation/loyalty_screen.dart';
+import '../../features/profile/presentation/profile_screen.dart';
 
 /// Route paths as constants
 class AppRoutes {
@@ -17,6 +26,7 @@ class AppRoutes {
   static const String profile = '/profile';
   static const String login = '/login';
   static const String register = '/register';
+  static const String otp = '/otp';
   static const String notifications = '/notifications';
   static const String storeLocator = '/store-locator';
   static const String settings = '/settings';
@@ -35,6 +45,7 @@ class _ScaffoldWithNavBar extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _calculateSelectedIndex(context),
         onTap: (index) => _onItemTapped(index, context),
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -116,11 +127,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     initialLocation: AppRoutes.home,
     debugLogDiagnostics: true,
     redirect: (context, state) {
-      // TODO: Implement auth redirect guard
-      // final isLoggedIn = ref.read(authStateProvider).isAuthenticated;
-      // final isLoginRoute = state.uri.path == AppRoutes.login;
-      // if (!isLoggedIn && !isLoginRoute) return AppRoutes.login;
-      // if (isLoggedIn && isLoginRoute) return AppRoutes.home;
+      final authState = ref.read(authNotifierProvider);
+      final isLoggedIn = authState is Authenticated;
+      final isAuthRoute = state.uri.path == AppRoutes.login ||
+          state.uri.path == AppRoutes.register ||
+          state.uri.path == AppRoutes.otp;
+
+      if (!isLoggedIn && !isAuthRoute) return AppRoutes.login;
+      if (isLoggedIn && isAuthRoute) return AppRoutes.home;
       return null;
     },
     routes: [
@@ -133,8 +147,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.register,
         name: 'register',
-        builder: (context, state) =>
-            const _PlaceholderScreen(title: 'Đăng ký'),
+        builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.otp,
+        name: 'otp',
+        builder: (context, state) {
+          final phone = state.uri.queryParameters['phone'] ?? '';
+          final type = state.uri.queryParameters['type'] ?? 'signup';
+          return OtpScreen(phone: phone, type: type);
+        },
       ),
 
       // Main app shell with bottom navigation
@@ -149,14 +171,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.menu,
             name: 'menu',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Thực đơn'),
+            builder: (context, state) => const MenuScreen(),
           ),
           GoRoute(
             path: AppRoutes.cart,
             name: 'cart',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Giỏ hàng'),
+            builder: (context, state) => const CartScreen(),
           ),
           GoRoute(
             path: AppRoutes.orders,
@@ -167,8 +187,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.loyalty,
             name: 'loyalty',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Tích điểm'),
+            builder: (context, state) => const LoyaltyScreen(),
           ),
           GoRoute(
             path: AppRoutes.delivery,
@@ -179,8 +198,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.profile,
             name: 'profile',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Tài khoản'),
+            builder: (context, state) => const ProfileScreen(),
           ),
           GoRoute(
             path: AppRoutes.notifications,
