@@ -19,19 +19,19 @@ class NotificationRepository {
         'token': token,
         'platform': platform,
       },
-      fromJson: (json) =>
-          DeviceToken.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        return DeviceToken.fromJson(
+          map['subscription'] as Map<String, dynamic>,
+        );
+      },
     );
   }
 
   /// Unregisters (deactivates) a device token.
   Future<void> unregisterToken(String token) async {
-    await _apiClient.post<dynamic>(
-      '/push-register',
-      data: {
-        'token': token,
-        'action': 'unregister',
-      },
+    await _apiClient.delete<dynamic>(
+      '/push-register/$token',
     );
   }
 
@@ -46,20 +46,20 @@ class NotificationRepository {
         if (cursor != null) 'cursor': cursor,
         'limit': limit,
       },
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => NotificationItem.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        final list = map['notifications'] as List<dynamic>? ?? [];
+        return list
+            .map((e) => NotificationItem.fromJson(e as Map<String, dynamic>))
+            .toList();
+      },
     );
   }
 
   /// Marks a notification as read.
   Future<void> markAsRead(int notificationId) async {
-    await _apiClient.post<dynamic>(
-      '/notifications-inbox',
-      data: {
-        'action': 'mark_read',
-        'notification_id': notificationId,
-      },
+    await _apiClient.put<dynamic>(
+      '/notifications-inbox/read/$notificationId',
     );
   }
 }

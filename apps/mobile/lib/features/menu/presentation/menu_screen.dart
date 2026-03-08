@@ -26,11 +26,13 @@ class MenuItem {
   final String? imageUrl;
   final bool isPopular;
 
-  factory MenuItem.fromJson(Map<String, dynamic> json) => MenuItem(
+  factory MenuItem.fromJson(Map<String, dynamic> json, {String? categoryName}) => MenuItem(
         id: json['id'] as int,
         name: json['name'] as String,
-        price: json['price'] as int,
-        category: json['category'] as String,
+        price: (json['base_price'] as num?)?.toInt() ??
+            (json['price'] as num?)?.toInt() ??
+            0,
+        category: categoryName ?? json['category'] as String? ?? '',
         description: json['description'] as String? ?? '',
         imageUrl: json['image_url'] as String?,
         isPopular: json['is_popular'] as bool? ?? false,
@@ -51,10 +53,10 @@ class MenuItem {
 
 const _kCategories = [
   'Tất cả',
-  'Cơm tấm',
-  'Món thêm',
-  'Nước uống',
-  'Tráng miệng',
+  'Cơm Tấm',
+  'Món Khác',
+  'Ăn Kèm',
+  'Giải Khát',
 ];
 
 const _kSampleItems = [
@@ -225,11 +227,30 @@ class MenuNotifier extends StateNotifier<MenuLoadState> {
 
   Future<void> _refreshFromApi() async {
     try {
-      final response = await apiClient.get('/menu');
-      final data = List<Map<String, dynamic>>.from(response.data ?? []);
-      if (data.isNotEmpty) {
-        final items = data.map((e) => MenuItem.fromJson(e)).toList();
-        await cacheService.cacheMenu(data);
+      final items = await apiClient.get<List<MenuItem>>(
+        '/get-menu',
+        queryParameters: {'branch_id': '1'},
+        fromJson: (json) {
+          final map = json as Map<String, dynamic>;
+          final categories = map['categories'] as List<dynamic>? ?? [];
+          final allItems = <MenuItem>[];
+          for (final cat in categories) {
+            final catMap = cat as Map<String, dynamic>;
+            final catName = catMap['name'] as String? ?? '';
+            final catItems = catMap['items'] as List<dynamic>? ?? [];
+            for (final item in catItems) {
+              allItems.add(MenuItem.fromJson(
+                item as Map<String, dynamic>,
+                categoryName: catName,
+              ));
+            }
+          }
+          return allItems;
+        },
+      );
+      if (items.isNotEmpty) {
+        final jsonData = items.map((e) => e.toJson()).toList();
+        await cacheService.cacheMenu(jsonData);
         state = MenuLoaded(items);
       }
     } catch (_) {

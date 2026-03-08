@@ -16,7 +16,8 @@ class InventoryRepository {
       '/inventory',
       queryParameters: {'action': 'list'},
       fromJson: (json) {
-        final list = json as List<dynamic>;
+        final map = json as Map<String, dynamic>;
+        final list = map['items'] as List<dynamic>? ?? [];
         return list
             .map((e) => InventoryItem.fromJson(e as Map<String, dynamic>))
             .toList();

@@ -28,9 +28,13 @@ class FeedbackRepository {
     return _client.get<List<FeedbackModel>>(
       '/feedback',
       queryParameters: {'action': 'my_feedback'},
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => FeedbackModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        final list = map['feedbacks'] as List<dynamic>? ?? [];
+        return list
+            .map((e) => FeedbackModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      },
     );
   }
 }

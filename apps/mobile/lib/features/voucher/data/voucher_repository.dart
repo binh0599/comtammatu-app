@@ -37,22 +37,23 @@ class VoucherRepository {
   /// Fetches vouchers available for point redemption.
   Future<List<Voucher>> getAvailableVouchers() async {
     return _apiClient.get<List<Voucher>>(
-      '/redeem-points',
-      queryParameters: {'action': 'available_rewards'},
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => Voucher.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      '/vouchers',
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        final list = map['vouchers'] as List<dynamic>? ?? [];
+        return list
+            .map((e) => Voucher.fromJson(e as Map<String, dynamic>))
+            .toList();
+      },
     );
   }
 
   /// Redeems a voucher using loyalty points.
   Future<VoucherRedemptionResult> redeemVoucher(int voucherId) async {
     return _apiClient.post<VoucherRedemptionResult>(
-      '/redeem-points',
+      '/vouchers/redeem',
       data: {
         'voucher_id': voucherId,
-        'reward_type': 'voucher',
-        'points': 0, // Server calculates from voucher
       },
       fromJson: (json) =>
           VoucherRedemptionResult.fromJson(json as Map<String, dynamic>),
@@ -62,11 +63,14 @@ class VoucherRepository {
   /// Fetches vouchers the user has already redeemed (owned).
   Future<List<Voucher>> getMyVouchers() async {
     return _apiClient.get<List<Voucher>>(
-      '/redeem-points',
-      queryParameters: {'action': 'my_vouchers'},
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => Voucher.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      '/vouchers/mine',
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        final list = map['vouchers'] as List<dynamic>? ?? [];
+        return list
+            .map((e) => Voucher.fromJson(e as Map<String, dynamic>))
+            .toList();
+      },
     );
   }
 }

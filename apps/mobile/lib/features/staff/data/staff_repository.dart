@@ -18,9 +18,13 @@ class StaffRepository {
         'action': 'list',
         if (branchId != null) 'branch_id': branchId,
       },
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => StaffMember.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        final list = map['staff'] as List<dynamic>? ?? [];
+        return list
+            .map((e) => StaffMember.fromJson(e as Map<String, dynamic>))
+            .toList();
+      },
     );
   }
 

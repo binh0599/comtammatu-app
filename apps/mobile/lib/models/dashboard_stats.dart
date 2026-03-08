@@ -9,8 +9,10 @@ class DailyRevenue {
 
   factory DailyRevenue.fromJson(Map<String, dynamic> json) {
     return DailyRevenue(
-      day: json['day'] as String,
-      amount: json['amount'] as int,
+      day: json['day'] as String? ?? '',
+      amount: (json['amount'] as num?)?.toInt() ??
+          (json['revenue'] as num?)?.toInt() ??
+          0,
     );
   }
 
@@ -35,9 +37,13 @@ class PopularItem {
 
   factory PopularItem.fromJson(Map<String, dynamic> json) {
     return PopularItem(
-      name: json['name'] as String,
-      count: json['count'] as int,
-      revenue: json['revenue'] as int,
+      name: json['name'] as String? ?? '',
+      count: (json['count'] as num?)?.toInt() ??
+          (json['total_quantity'] as num?)?.toInt() ??
+          0,
+      revenue: (json['revenue'] as num?)?.toInt() ??
+          (json['total_revenue'] as num?)?.toInt() ??
+          0,
     );
   }
 
@@ -77,20 +83,22 @@ class DashboardStats {
 
   factory DashboardStats.fromJson(Map<String, dynamic> json) {
     return DashboardStats(
-      todayRevenue: json['today_revenue'] as int,
-      todayOrders: json['today_orders'] as int,
-      avgOrderValue: json['avg_order_value'] as int,
-      completedOrders: json['completed_orders'] as int,
-      cancelledOrders: json['cancelled_orders'] as int,
-      pendingOrders: json['pending_orders'] as int,
-      weeklyRevenue: (json['weekly_revenue'] as List<dynamic>)
-          .map((e) => DailyRevenue.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      popularItems: (json['popular_items'] as List<dynamic>)
-          .map((e) => PopularItem.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      customerCount: json['customer_count'] as int,
-      newCustomersToday: json['new_customers_today'] as int,
+      todayRevenue: (json['today_revenue'] as num?)?.toInt() ?? 0,
+      todayOrders: (json['today_orders'] as num?)?.toInt() ?? 0,
+      avgOrderValue: (json['avg_order_value'] as num?)?.toInt() ?? 0,
+      completedOrders: (json['completed_count'] as num?)?.toInt() ?? 0,
+      cancelledOrders: (json['cancelled_count'] as num?)?.toInt() ?? 0,
+      pendingOrders: (json['pending_count'] as num?)?.toInt() ?? 0,
+      weeklyRevenue: (json['weekly_revenue'] as List<dynamic>?)
+              ?.map((e) => DailyRevenue.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      popularItems: (json['popular_items'] as List<dynamic>?)
+              ?.map((e) => PopularItem.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      customerCount: (json['customer_count'] as num?)?.toInt() ?? 0,
+      newCustomersToday: (json['new_customers_today'] as num?)?.toInt() ?? 0,
     );
   }
 
