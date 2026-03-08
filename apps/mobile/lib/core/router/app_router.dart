@@ -12,6 +12,9 @@ import '../../features/menu/presentation/menu_screen.dart';
 import '../../features/cart/presentation/cart_screen.dart';
 import '../../features/loyalty/presentation/loyalty_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/delivery/presentation/delivery_tracking_screen.dart';
+import '../../features/stores/presentation/store_locator_screen.dart';
+import '../../features/order/presentation/order_history_screen.dart';
 
 /// Route paths as constants
 class AppRoutes {
@@ -68,6 +71,11 @@ class _ScaffoldWithNavBar extends StatelessWidget {
             label: 'Tích điểm',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.store_outlined),
+            activeIcon: Icon(Icons.store),
+            label: 'Cửa hàng',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             activeIcon: Icon(Icons.person),
             label: 'Tài khoản',
@@ -82,7 +90,8 @@ class _ScaffoldWithNavBar extends StatelessWidget {
     if (location.startsWith(AppRoutes.menu)) return 1;
     if (location.startsWith(AppRoutes.cart)) return 2;
     if (location.startsWith(AppRoutes.loyalty)) return 3;
-    if (location.startsWith(AppRoutes.profile)) return 4;
+    if (location.startsWith(AppRoutes.storeLocator)) return 4;
+    if (location.startsWith(AppRoutes.profile)) return 5;
     return 0;
   }
 
@@ -97,6 +106,8 @@ class _ScaffoldWithNavBar extends StatelessWidget {
       case 3:
         context.go(AppRoutes.loyalty);
       case 4:
+        context.go(AppRoutes.storeLocator);
+      case 5:
         context.go(AppRoutes.profile);
     }
   }
@@ -181,8 +192,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.orders,
             name: 'orders',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Đơn hàng'),
+            builder: (context, state) => const OrderHistoryScreen(),
           ),
           GoRoute(
             path: AppRoutes.loyalty,
@@ -193,7 +203,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: AppRoutes.delivery,
             name: 'delivery',
             builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Giao hàng'),
+                const DeliveryTrackingScreen(orderId: ''),
+            routes: [
+              GoRoute(
+                path: ':orderId',
+                name: 'deliveryTracking',
+                builder: (context, state) {
+                  final orderId = state.pathParameters['orderId'] ?? '';
+                  return DeliveryTrackingScreen(orderId: orderId);
+                },
+              ),
+            ],
           ),
           GoRoute(
             path: AppRoutes.profile,
@@ -209,8 +229,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.storeLocator,
             name: 'storeLocator',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Tìm cửa hàng'),
+            builder: (context, state) => const StoreLocatorScreen(),
           ),
         ],
       ),
