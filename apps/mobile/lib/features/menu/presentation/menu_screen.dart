@@ -201,8 +201,8 @@ class MenuNotifier extends StateNotifier<MenuLoadState> {
       if (cached.isNotEmpty) {
         final items = cached.map((e) => MenuItem.fromJson(e)).toList();
         state = MenuLoaded(items, fromCache: true);
-        // Still fetch fresh data in background
-        _refreshFromApi();
+        // Still fetch fresh data in background — errors are non-fatal here
+        _refreshFromApi().ignore();
         return;
       }
     }
@@ -211,51 +211,58 @@ class MenuNotifier extends StateNotifier<MenuLoadState> {
 
     // Try API
     try {
-      await _refreshFromApi();
-    } catch (_) {
-      // Fallback to cache even if expired
-      final cached = cacheService.getCachedMenu();
-      if (cached.isNotEmpty) {
-        final items = cached.map((e) => MenuItem.fromJson(e)).toList();
-        state = MenuLoaded(items, fromCache: true);
-      } else {
-        // Last resort: sample data
-        state = const MenuLoaded(_kSampleItems);
+      final items = await _refreshFromApi();
+      if (items != null && items.isNotEmpty) {
+        state = MenuLoaded(items);
+        return;
       }
+    } catch (_) {
+      // Fall through to cache fallback
+    }
+
+    // Fallback to persistent cache (even if expired)
+    final cached = cacheService.getCachedMenu();
+    if (cached.isNotEmpty) {
+      final items = cached.map((e) => MenuItem.fromJson(e)).toList();
+      state = MenuLoaded(items, fromCache: true);
+    } else {
+      // Last resort: sample data
+      state = const MenuLoaded(_kSampleItems);
     }
   }
 
-  Future<void> _refreshFromApi() async {
-    try {
-      final items = await apiClient.get<List<MenuItem>>(
-        '/get-menu',
-        queryParameters: {'branch_id': '1'},
-        fromJson: (json) {
-          final map = json as Map<String, dynamic>;
-          final categories = map['categories'] as List<dynamic>? ?? [];
-          final allItems = <MenuItem>[];
-          for (final cat in categories) {
-            final catMap = cat as Map<String, dynamic>;
-            final catName = catMap['name'] as String? ?? '';
-            final catItems = catMap['items'] as List<dynamic>? ?? [];
-            for (final item in catItems) {
-              allItems.add(MenuItem.fromJson(
-                item as Map<String, dynamic>,
-                categoryName: catName,
-              ));
-            }
+  /// Fetches menu from API, persists to cache on success, and returns the
+  /// parsed items. Returns `null` on empty response. Rethrows on failure so
+  /// callers can fall back to cached data.
+  Future<List<MenuItem>?> _refreshFromApi() async {
+    final items = await apiClient.get<List<MenuItem>>(
+      '/get-menu',
+      queryParameters: {'branch_id': '1'},
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        final categories = map['categories'] as List<dynamic>? ?? [];
+        final allItems = <MenuItem>[];
+        for (final cat in categories) {
+          final catMap = cat as Map<String, dynamic>;
+          final catName = catMap['name'] as String? ?? '';
+          final catItems = catMap['items'] as List<dynamic>? ?? [];
+          for (final item in catItems) {
+            allItems.add(MenuItem.fromJson(
+              item as Map<String, dynamic>,
+              categoryName: catName,
+            ));
           }
-          return allItems;
-        },
-      );
-      if (items.isNotEmpty) {
-        final jsonData = items.map((e) => e.toJson()).toList();
-        await cacheService.cacheMenu(jsonData);
-        state = MenuLoaded(items);
-      }
-    } catch (_) {
-      // Silent fail for background refresh
+        }
+        return allItems;
+      },
+    );
+    if (items.isNotEmpty) {
+      final jsonData = items.map((e) => e.toJson()).toList();
+      await cacheService.cacheMenu(jsonData);
+      state = MenuLoaded(items);
+      return items;
     }
+    return null;
   }
 }
 
