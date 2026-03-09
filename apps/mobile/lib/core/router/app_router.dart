@@ -91,7 +91,8 @@ class _ScaffoldWithNavBar extends StatelessWidget {
     if (location.startsWith(AppRoutes.cart)) return 2;
     if (location.startsWith(AppRoutes.loyalty)) return 3;
     if (location.startsWith(AppRoutes.storeLocator)) return 4;
-    if (location.startsWith(AppRoutes.profile)) return 5;
+    if (location.startsWith(AppRoutes.profile) ||
+        location.startsWith(AppRoutes.orders)) return 5;
     return 0;
   }
 
@@ -133,10 +134,22 @@ class _PlaceholderScreen extends StatelessWidget {
   }
 }
 
+/// Listenable that notifies GoRouter when auth state changes.
+class _AuthChangeNotifier extends ChangeNotifier {
+  _AuthChangeNotifier(Ref ref) {
+    ref.listen<AppAuthState>(authNotifierProvider, (_, __) {
+      notifyListeners();
+    });
+  }
+}
+
 final appRouterProvider = Provider<GoRouter>((ref) {
+  final authChangeNotifier = _AuthChangeNotifier(ref);
+
   return GoRouter(
     initialLocation: AppRoutes.home,
     debugLogDiagnostics: true,
+    refreshListenable: authChangeNotifier,
     redirect: (context, state) {
       final authState = ref.read(authNotifierProvider);
       final isLoggedIn = authState is Authenticated;

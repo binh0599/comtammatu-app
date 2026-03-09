@@ -40,10 +40,13 @@ class _LoyaltyScreenState extends ConsumerState<LoyaltyScreen> {
   @override
   void initState() {
     super.initState();
-    // Load dashboard data on first visit
-    Future.microtask(
-      () => ref.read(loyaltyNotifierProvider.notifier).loadDashboard(),
-    );
+    // Only fetch if we haven't loaded yet — avoids refetch on tab switch
+    Future.microtask(() {
+      final state = ref.read(loyaltyNotifierProvider);
+      if (state is LoyaltyInitial) {
+        ref.read(loyaltyNotifierProvider.notifier).loadDashboard();
+      }
+    });
   }
 
   @override
@@ -325,7 +328,7 @@ class _TierProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final progress = (nextTier.progressPercent / 100).clamp(0.0, 1.0);
+    final double progress = (nextTier.progressPercent / 100).clamp(0.0, 1.0).toDouble();
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(6),
