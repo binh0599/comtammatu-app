@@ -165,8 +165,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'otp',
         builder: (context, state) {
           final phone = state.uri.queryParameters['phone'] ?? '';
-          final type = state.uri.queryParameters['type'] ?? 'signup';
-          return OtpScreen(phone: phone, type: type);
+          return OtpScreen(phoneNumber: phone);
         },
       ),
 
