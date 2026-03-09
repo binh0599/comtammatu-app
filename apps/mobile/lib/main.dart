@@ -10,6 +10,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+import 'firebase_options.dart';
+
 import 'core/cache/cache_service.dart';
 import 'core/config/env_config.dart';
 import 'core/router/app_router.dart';
@@ -55,7 +57,9 @@ Future<void> main() async {
   );
 
   // Initialize Firebase
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // Set global error widget before runApp
   ErrorWidget.builder = (FlutterErrorDetails details) {
