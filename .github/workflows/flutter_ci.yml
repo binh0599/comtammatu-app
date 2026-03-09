@@ -71,7 +71,11 @@ jobs:
         run: flutter pub get
       - name: Build APK
         working-directory: apps/mobile
-        run: flutter build apk --release
+        run: |
+          flutter build apk --release \
+            --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }} \
+            --dart-define=SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
+            --dart-define=POSTHOG_API_KEY=${{ secrets.POSTHOG_API_KEY }}
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
@@ -95,4 +99,8 @@ jobs:
         run: flutter pub get
       - name: Build iOS (no codesign)
         working-directory: apps/mobile
-        run: flutter build ios --release --no-codesign
+        run: |
+          flutter build ios --release --no-codesign \
+            --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }} \
+            --dart-define=SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
+            --dart-define=POSTHOG_API_KEY=${{ secrets.POSTHOG_API_KEY }}
