@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cơm Tấm Má Tư — App Mockups</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap');
+
+  :root {
+    --primary: #D4442A;
+    --primary-light: #E8735E;
+    --primary-dark: #A03320;
+    --secondary: #F5A623;
+    --secondary-light: #FFCA57;
+    --bg: #FAF8F5;
+    --surface: #FFFFFF;
+    --border: #E0DCD7;
+    --divider: #EDE9E4;
+    --text-primary: #1C1917;
+    --text-secondary: #78716C;
+    --text-hint: #A8A29E;
+    --success: #2E7D32;
+    --warning: #F9A825;
+    --error: #D32F2F;
+    --info: #1976D2;
+    --bronze: #CD7F32;
+    --silver: #C0C0C0;
+    --gold: #FFD700;
+    --diamond: #B9F2FF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: #2C2C2C;
+    color: var(--text-primary);
+    padding: 40px 20px;
+  }
+
+  h1.page-title {
+    text-align: center;
+    color: #fff;
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+  .page-subtitle {
+    text-align: center;
+    color: #aaa;
+    font-size: 16px;
+    margin-bottom: 48px;
+  }
+
+  .screen-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 60px;
+  }
+
+  .screen-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .screen-label {
+    color: #ccc;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Phone frame */
+  .phone {
+    width: 375px;
+    height: 812px;
+    background: var(--bg);
+    border-radius: 40px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 0 0 3px #444;
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 54px;
+    background: var(--primary);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 28px 8px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .status-bar.light {
+    background: var(--bg);
+    color: var(--text-primary);
+  }
+
+  /* App bar */
+  .app-bar {
+    height: 56px;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .app-bar.transparent {
+    background: transparent;
+    color: var(--text-primary);
+  }
+
+  /* Bottom nav */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-top: 1px solid var(--border);
+    padding-bottom: 16px;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 10px;
+    color: var(--text-hint);
+  }
+  .nav-item.active { color: var(--primary); }
+  .nav-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  /* Content area */
+  .content {
+    padding: 16px;
+    overflow-y: auto;
+    height: calc(100% - 54px - 56px - 80px);
+  }
+  .content.no-appbar {
+    height: calc(100% - 54px - 80px);
+  }
+  .content.no-nav {
+    height: calc(100% - 54px - 56px);
+  }
+  .content.full {
+    height: calc(100% - 54px);
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+  .card.elevated {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: none;
+  }
+
+  /* Loyalty card */
+  .loyalty-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border-radius: 16px;
+    padding: 24px;
+    color: #fff;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .loyalty-card::after {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 120px;
+    height: 120px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+  }
+  .loyalty-card .points { font-size: 40px; font-weight: 700; }
+  .loyalty-card .label { font-size: 13px; opacity: 0.85; margin-bottom: 4px; }
+  .loyalty-card .tier-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+  .progress-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--secondary);
+    border-radius: 3px;
+    width: 65%;
+  }
+
+  /* Quick actions */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 8px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .action-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: #FEE8E4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--primary);
+  }
+
+  /* Section header */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .section-title { font-size: 18px; font-weight: 600; }
+  .section-link { font-size: 13px; color: var(--primary); font-weight: 500; }
+
+  /* Promo cards */
+  .promo-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    margin-bottom: 20px;
+    padding-bottom: 4px;
+  }
+  .promo-card {
+    min-width: 260px;
+    height: 130px;
+    border-radius: 12px;
+    padding: 16px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .promo-card.orange { background: linear-gradient(135deg, #F5A623, #E8891A); }
+  .promo-card.red { background: linear-gradient(135deg, #E8735E, #D4442A); }
+  .promo-card.green { background: linear-gradient(135deg, #4CAF50, #2E7D32); }
+  .promo-card .promo-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .promo-card .promo-desc { font-size: 12px; opacity: 0.9; }
+  .promo-card .promo-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(255,255,255,0.25);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* Transaction items */
+  .tx-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--divider);
+  }
+  .tx-item:last-child { border-bottom: none; }
+  .tx-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .tx-icon.earn { background: #E8F5E9; color: var(--success); }
+  .tx-icon.spend { background: #FFEBEE; color: var(--error); }
+  .tx-info { flex: 1; }
+  .tx-title { font-size: 14px; font-weight: 500; }
+  .tx-date { font-size: 12px; color: var(--text-hint); }
+  .tx-points { font-size: 14px; font-weight: 600; text-align: right; }
+  .tx-points.earn { color: var(--success); }
+  .tx-points.spend { color: var(--error); }
+
+  /* Form elements */
+  .input-field {
+    width: 100%;
+    height: 52px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 0 16px;
+    font-size: 15px;
+    background: var(--surface);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    color: var(--text-hint);
+  }
+  .input-field.filled { color: var(--text-primary); }
+
+  .btn-primary {
+    width: 100%;
+    height: 50px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .btn-outlined {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Menu items */
+  .menu-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
+  }
+  .menu-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    background: #FEE8E4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+  .menu-info { flex: 1; }
+  .menu-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .menu-desc { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; line-height: 1.4; }
+  .menu-price { font-size: 15px; font-weight: 700; color: var(--primary); }
+  .menu-add {
+    padding: 4px 14px;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    align-self: flex-end;
+    white-space: nowrap;
+  }
+  .menu-bottom { display: flex; justify-content: space-between; align-items: center; }
+
+  /* Category chips */
+  .chip-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+  }
+  .chip {
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+  .chip.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+  }
+
+  /* Search bar */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    height: 46px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 14px;
+    color: var(--text-hint);
+    font-size: 14px;
+  }
+
+  /* Order card */
+  .order-card {
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .order-id { font-size: 15px; font-weight: 600; }
+  .status-badge {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .status-badge.delivered { background: #E8F5E9; color: var(--success); }
+  .status-badge.delivering { background: #E3F2FD; color: var(--info); }
+  .status-badge.cancelled { background: #FFEBEE; color: var(--error); }
+  .order-meta { font-size: 12px; color: var(--text-hint); margin-bottom: 6px; }
+  .order-items { font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; }
+  .order-footer { display: flex; justify-content: space-between; align-items: center; }
+  .order-total { font-size: 16px; font-weight: 700; color: var(--primary); }
+  .order-action {
+    padding: 6px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+  }
+  .order-action.track { background: var(--info); color: #fff; }
+  .order-action.reorder { background: #E8F5E9; color: var(--success); }
+
+  /* Cart item */
+  .cart-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
+    align-items: center;
+  }
+  .qty-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .qty-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--surface);
+  }
+  .qty-num { font-size: 16px; font-weight: 600; min-width: 20px; text-align: center; }
+
+  /* Sticky bottom */
+  .sticky-bottom {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    padding: 14px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Profile */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #FEE8E4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--primary);
+  }
+  .profile-name { font-size: 18px; font-weight: 600; }
+  .profile-phone { font-size: 13px; color: var(--text-secondary); }
+  .profile-tier {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .menu-list-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid var(--divider);
+    font-size: 15px;
+    gap: 12px;
+  }
+  .menu-list-item .icon { font-size: 20px; color: var(--text-secondary); width: 28px; text-align: center; }
+  .menu-list-item .arrow { margin-left: auto; color: var(--text-hint); }
+
+  /* Delivery tracking */
+  .stepper {
+    padding: 8px 0;
+  }
+  .step {
+    display: flex;
+    gap: 14px;
+    padding-bottom: 20px;
+    position: relative;
+  }
+  .step::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 32px;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+  .step:last-child::before { display: none; }
+  .step.done::before { background: var(--success); }
+  .step-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .step.done .step-dot { background: var(--success); color: #fff; }
+  .step.current .step-dot { background: var(--info); color: #fff; }
+  .step-text { font-size: 14px; color: var(--text-hint); padding-top: 6px; }
+  .step.done .step-text { color: var(--text-primary); font-weight: 500; }
+  .step.current .step-text { color: var(--info); font-weight: 600; }
+
+  /* Driver card */
+  .driver-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .driver-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #E3F2FD;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+  .call-btn {
+    margin-left: auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--success);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  /* Map placeholder */
+  .map-placeholder {
+    height: 180px;
+    background: #E8E4DF;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-hint);
+    margin-bottom: 14px;
+    font-size: 14px;
+    gap: 6px;
+  }
+
+  /* ETA card */
+  .eta-card {
+    background: #E3F2FD;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .eta-time {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--info);
+  }
+  .eta-label { font-size: 13px; color: var(--text-secondary); }
+
+  /* OTP boxes */
+  .otp-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 24px 0;
+  }
+  .otp-box {
+    width: 48px;
+    height: 56px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    background: var(--surface);
+  }
+  .otp-box.filled { border-color: var(--primary); }
+
+  /* Store card */
+  .store-card {
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .store-name { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .store-detail {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+  }
+  .store-btn {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 16px;
+    border: 1.5px solid var(--primary);
+    border-radius: 8px;
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* Tier progress visual */
+  .tier-progress {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 16px 0;
+    position: relative;
+  }
+  .tier-segment {
+    flex: 1;
+    height: 8px;
+    position: relative;
+  }
+  .tier-segment .fill-seg {
+    height: 100%;
+    border-radius: 4px;
+  }
+  .tier-label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-hint);
+    margin-top: 4px;
+  }
+
+  /* Payment option */
+  .payment-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  .payment-option.selected { border-color: var(--primary); background: #FEF5F3; }
+  .radio {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+  }
+  .radio.on { border-color: var(--primary); background: radial-gradient(circle, var(--primary) 40%, transparent 41%); }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .summary-row.total {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    border-top: 1px solid var(--divider);
+    padding-top: 10px;
+    margin-top: 4px;
+  }
+
+  /* Login specific */
+  .brand-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #FEE8E4;
+    margin: 20px auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+  }
+  .brand-name {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 32px;
+  }
+  .link-text {
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 16px;
+  }
+  .link-text a { color: var(--primary); font-weight: 600; text-decoration: none; }
+
+  /* Loyalty screen specific */
+  .points-card {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+  .points-big { font-size: 48px; font-weight: 700; }
+  .points-label { font-size: 14px; opacity: 0.85; margin-top: 4px; }
+
+  .benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .benefit-check { color: var(--success); font-size: 16px; }
+
+  /* Notch */
+  .notch {
+    width: 160px;
+    height: 34px;
+    background: #1C1917;
+    border-radius: 0 0 20px 20px;
+    margin: 0 auto;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+
+  .section-divider {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    margin: 20px 0 36px;
+    padding-top: 20px;
+    border-top: 1px solid #444;
+  }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">🍚 Cơm Tấm Má Tư</h1>
+<p class="page-subtitle">Mobile Loyalty App — Visual Mockups (11 Screens)</p>
+
+<!-- ==================== ROW 1: AUTH ==================== -->
+<div class="section-divider">Đăng Nhập & Đăng Ký</div>
+
+<div class="screen-row">
+
+<!-- LOGIN SCREEN -->
+<div class="screen-wrapper">
+  <div class="screen-label">Đăng Nhập</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar light">
+      <span>9:41</span>
+      <span>📶 🔋</span>
+    </div>
+    <div class="content full" style="padding-top: 24px;">
+      <div class="brand-icon">🍚</div>
+      <div class="brand-name">Cơm Tấm Má Tư</div>
+
+      <div class="input-field filled">📱 &nbsp; 0901 234 567</div>
+      <div class="input-field">🔒 &nbsp; Mật khẩu</div>
+
+      <div style="text-align: right; margin-bottom: 20px;">
+        <span style="font-size: 13px; color: var(--primary); font-weight: 500;">Quên mật khẩu?</span>
+      </div>
+
+      <div class="btn-primary">Đăng Nhập</div>
+
+      <div class="link-text">
+        Chưa có tài khoản? <a href="#">Đăng ký ngay</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER SCREEN -->
+<div class="screen-wrapper">
+  <div class="screen-label">Đăng Ký</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar light">
+      <span>9:41</span>
+      <span>📶 🔋</span>
+    </div>
+    <div class="app-bar transparent">← &nbsp; Đăng Ký</div>
+    <div class="content no-nav" style="padding-top: 8px;">
+      <div class="input-field filled">👤 &nbsp; Nguyễn Văn Anh</div>
+      <div class="input-field filled">📱 &nbsp; 0901 234 567</div>
+      <div class="input-field">🔒 &nbsp; Mật khẩu (tối thiểu 6 ký tự)</div>
+      <div class="input-field">🔒 &nbsp; Xác nhận mật khẩu</div>
+      <div class="input-field">🎁 &nbsp; Mã giới thiệu (không bắt buộc)</div>
+
+      <div style="height: 20px;"></div>
+      <div class="btn-primary">Đăng Ký</div>
+
+      <div class="link-text">
+        Đã có tài khoản? <a href="#">Đăng nhập</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OTP SCREEN -->
+<div class="screen-wrapper">
+  <div class="screen-label">Xác Thực OTP</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar light">
+      <span>9:42</span>
+      <span>📶 🔋</span>
+    </div>
+    <div class="app-bar transparent">← &nbsp; Xác Thực</div>
+    <div class="content no-nav" style="text-align: center; padding-top: 32px;">
+      <div style="font-size: 48px; margin-bottom: 16px;">💬</div>
+      <div style="font-size: 15px; color: var(--text-secondary); margin-bottom: 4px;">
+        Mã xác thực đã gửi đến
+      </div>
+      <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">0901 234 567</div>
+
+      <div class="otp-row">
+        <div class="otp-box filled">4</div>
+        <div class="otp-box filled">7</div>
+        <div class="otp-box filled">2</div>
+        <div class="otp-box">_</div>
+        <div class="otp-box"></div>
+        <div class="otp-box"></div>
+      </div>
+
+      <div style="font-size: 13px; color: var(--text-hint); margin-bottom: 24px;">
+        Gửi lại mã sau <span style="color: var(--primary); font-weight: 600;">0:45</span>
+      </div>
+
+      <div class="btn-primary">Xác Nhận</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ==================== ROW 2: HOME + LOYALTY ==================== -->
+<div class="section-divider">Trang Chủ & Loyalty</div>
+
+<div class="screen-row">
+
+<!-- HOME SCREEN -->
+<div class="screen-wrapper">
+  <div class="screen-label">Trang Chủ</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>📶 🔋</span>
+    </div>
+    <div class="app-bar">🍚 &nbsp; Cơm Tấm Má Tư</div>
+    <div class="content">
+      <!-- Loyalty Card -->
+      <div class="loyalty-card">
+        <div class="label">Điểm tích lũy</div>
+        <div class="points">2,450</div>
+        <div class="tier-badge">⭐ Hạng Vàng</div>
+        <div class="progress-bar"><div class="fill"></div></div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 6px;">Còn 550 điểm nữa lên hạng Kim Cương</div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <div class="action-btn">
+          <div class="action-icon">📷</div>
+          Check-in
+        </div>
+        <div class="action-btn">
+          <div class="action-icon">📋</div>
+          Thực đơn
+        </div>
+        <div class="action-btn">
+          <div class="action-icon">🚚</div>
+          Giao hàng
+        </div>
+        <div class="action-btn">
+          <div class="action-icon">📍</div>
+          Cửa hàng
+        </div>
+      </div>
+
+      <!-- Promotions -->
+      <div class="section-header">
+        <span class="section-title">Khuyến mãi</span>
+        <span class="section-link">Xem tất cả →</span>
+      </div>
+      <div class="promo-scroll">
+        <div class="promo-card orange">
+          <div class="promo-title">Giảm 20% Thứ 3</div>
+          <div class="promo-desc">Áp dụng cho tất cả món cơm tấm</div>
+          <div class="promo-badge">Đủ điều kiện</div>
+        </div>
+        <div class="promo-card red">
+          <div class="promo-title">Tích x2 Điểm</div>
+          <div class="promo-desc">Cuối tuần - đơn từ 80k</div>
+          <div class="promo-badge">Hạng Vàng+</div>
+        </div>
+      </div>
+
+      <!-- Recent transactions -->
+      <div class="section-header">
+        <span class="section-title">Giao dịch gần đây</span>
+        <span class="section-link">Xem tất cả →</span>
+      </div>
+      <div class="card">
+        <div class="tx-item">
+          <div class="tx-icon earn">+</div>
+          <div class="tx-info">
+            <div class="tx-title">Check-in CN Lê Văn Sỹ</div>
+            <div class="tx-date">Hôm nay, 11:30</div>
+          </div>
+          <div class="tx-points earn">+50</div>
+        </div>
+        <div class="tx-item">
+          <div class="tx-icon earn">+</div>
+          <div class="tx-info">
+            <div class="tx-title">Mua hàng — 185.000₫</div>
+            <div class="tx-date">Hôm qua, 12:15</div>
+          </div>
+          <div class="tx-points earn">+185</div>
+        </div>
+        <div class="tx-item">
+          <div class="tx-icon spend">−</div>
+          <div class="tx-info">
+            <div class="tx-title">Đổi trà đá miễn phí</div>
+            <div class="tx-date">06/03, 13:00</div>
+          </div>
+          <div class="tx-points spend">−100</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item active"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item"><div class="nav-icon">📋</div>Menu</div>
+      <div class="nav-item"><div class="nav-icon">🛒</div>Giỏ</div>
+      <div class="nav-item"><div class="nav-icon">⭐</div>Loyalty</div>
+      <div class="nav-item"><div class="nav-icon">🏪</div>Store</div>
+      <div class="nav-item"><div class="nav-icon">👤</div>Tôi</div>
+    </div>
+  </div>
+</div>
+
+<!-- LOYALTY SCREEN -->
+<div class="screen-wrapper">
+  <div class="screen-label">Loyalty & Hạng Thành Viên</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>📶 🔋</span>
+    </div>
+    <div class="app-bar">⭐ &nbsp; Loyalty</div>
+    <div class="content">
+      <!-- Points card -->
+      <div class="points-card">
+        <div class="points-big">2,450</div>
+        <div class="points-label">điểm khả dụng</div>
+        <div style="margin-top: 14px;">
+          <span style="background: rgba(255,255,255,0.2); padding: 8px 24px; border-radius: 24px; font-size: 14px; font-weight: 600;">Check-in ngay</span>
+        </div>
+      </div>
+
+      <!-- Tier progress -->
+      <div class="card">
+        <div style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Tiến trình hạng</div>
+        <div style="display: flex; height: 10px; border-radius: 5px; overflow: hidden; margin-bottom: 8px;">
+          <div style="flex: 1; background: var(--bronze);"></div>
+          <div style="flex: 1; background: var(--silver);"></div>
+          <div style="flex: 0.65; background: var(--gold);"></div>
+          <div style="flex: 0.35; background: #E0DCD7;"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-hint);">
+          <span>Đồng</span><span>Bạc</span><span>Vàng ⬆</span><span>Kim Cương</span>
+        </div>
+        <div style="text-align: center; margin-top: 10px; font-size: 13px; color: var(--text-secondary);">
+          Còn <strong style="color: var(--primary);">550 điểm</strong> nữa lên Kim Cương
+        </div>
+      </div>
+
+      <!-- Benefits -->
+      <div class="card">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+          <span style="font-size: 20px;">🥇</span>
+          <div>
+            <div style="font-size: 15px; font-weight: 600;">Hạng Vàng</div>
+            <div style="font-size: 12px; color: var(--text-hint);">Nhân x1.5 điểm</div>
+          </div>
+        </div>
+        <div class="benefit-item"><span class="benefit-check">✓</span> Tích điểm x1.5 mỗi giao dịch</div>
+        <div class="benefit-item"><span class="benefit-check">✓</span> Hoàn tiền 5% đơn giao hàng</div>
+        <div class="benefit-item"><span class="benefit-check">✓</span> Ưu tiên đặt bàn cuối tuần</div>
+        <div class="benefit-item"><span class="benefit-check">✓</span> Quà sinh nhật đặc biệt</div>
+      </div>
+
+      <!-- Recent tx -->
+      <div class="section-header">
+        <span class="section-title">Lịch sử giao dịch</span>
+      </div>
+      <div class="card">
+        <div class="tx-item">
+          <div class="tx-icon earn">+</div>
+          <div class="tx-info">
+            <div class="tx-title">Check-in CN Lê Văn Sỹ</div>
+            <div class="tx-date">09/03/2026, 11:30</div>
+          </div>
+          <div class="tx-points earn">+50</div>
+        </div>
+        <div class="tx-item">
+          <div class="tx-icon earn">+</div>
+          <div class="tx-info">
+            <div class="tx-title">Mua hàng — 185.000₫</div>
+            <div class="tx-date">08/03/2026, 12:15</div>
+          </div>
+          <div class="tx-points earn">+185</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item"><div class="nav-icon">📋</div>Menu</div>
+      <div class="nav-item"><div class="nav-icon">🛒</div>Giỏ</div>
+      <div class="nav-item active"><div class="nav-icon">⭐</div>Loyalty</div>
+      <div class="nav-item"><div class="nav-icon">🏪</div>Store</div>
+      <div class="nav-item"><div class="nav-icon">👤</div>Tôi</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ==================== ROW 3: MENU + CART ==================== -->
+<div class="section-divider">Thực Đơn & Giỏ Hàng</div>
+
+<div class="screen-row">
+
+<!-- MENU SCREEN -->
+<div class="screen-wrapper">
+  <div class="screen-label">Thực Đơn</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>📶 🔋</span>
+    </div>
+    <div class="app-bar">📋 &nbsp; Thực Đơn</div>
+    <div class="content">
+      <div class="search-bar">🔍 &nbsp; Tìm món ăn...</div>
+      <div class="chip-row">
+        <div class="chip active">Cơm tấm</div>
+        <div class="chip">Món thêm</div>
+        <div class="chip">Nước uống</div>
+        <div class="chip">Tráng miệng</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-img">🍖</div>
+        <div class="menu-info">
+          <div class="menu-name">Cơm Tấm Sườn Nướng</div>
+          <div class="menu-desc">Sườn nướng than hoa, trứng ốp la, bì, đồ chua</div>
+          <div class="menu-bottom">
+            <div class="menu-price">55.000₫</div>
+            <div class="menu-add">+ Thêm</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-img">🥚</div>
+        <div class="menu-info">
+          <div class="menu-name">Cơm Tấm Bì Chả</div>
+          <div class="menu-desc">Bì heo, chả trứng hấp, đồ chua, nước mắm</div>
+          <div class="menu-bottom">
+            <div class="menu-price">45.000₫</div>
+            <div class="menu-add">+ Thêm</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-img">🍗</div>
+        <div class="menu-info">
+          <div class="menu-name">Cơm Tấm Đặc Biệt</div>
+          <div class="menu-desc">Sườn, bì, chả, trứng, đồ chua đầy đủ</div>
+          <div class="menu-bottom">
+            <div class="menu-price">65.000₫</div>
+            <div class="menu-add">+ Thêm</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-img">🥩</div>
+        <div class="menu-info">
+          <div class="menu-name">Cơm Tấm Sườn Bì</div>
+          <div class="menu-desc">Sườn nướng, bì heo, đồ chua</div>
+          <div class="menu-bottom">
+            <div class="menu-price">50.000₫</div>
+            <div class="menu-add">+ Thêm</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item active"><div class="nav-icon">📋</div>Menu</div>
+      <div class="nav-item"><div class="nav-icon">🛒</div>Giỏ</div>
+      <div class="nav-item"><div class="nav-icon">⭐</div>Loyalty</div>
+      <div class="nav-item"><div class="nav-icon">🏪</div>Store</div>
+      <div class="nav-item"><div class="nav-icon">👤</div>Tôi</div>
+    </div>
+  </div>
+</div>
+
+<!-- CART SCREEN -->
+<div class="screen-wrapper">
+  <div class="screen-label">Giỏ Hàng & Thanh Toán</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>📶 🔋</span>
+    </div>
+    <div class="app-bar">🛒 &nbsp; Giỏ Hàng</div>
+    <div class="content" style="height: calc(100% - 54px - 56px - 80px - 64px); overflow-y: auto;">
+      <!-- Cart items -->
+      <div class="cart-item">
+        <div style="flex: 1;">
+          <div style="font-size: 15px; font-weight: 600;">Cơm Tấm Sườn Nướng</div>
+          <div style="font-size: 13px; color: var(--text-hint); margin: 2px 0;">55.000₫/phần</div>
+          <div style="font-size: 12px; color: var(--text-hint); font-style: italic;">Ghi chú: Nhiều nước mắm</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="qty-control">
+            <div class="qty-btn">−</div>
+            <div class="qty-num">2</div>
+            <div class="qty-btn">+</div>
+          </div>
+          <div style="font-size: 15px; font-weight: 700; color: var(--primary); margin-top: 6px;">110.000₫</div>
+        </div>
+      </div>
+
+      <div class="cart-item">
+        <div style="flex: 1;">
+          <div style="font-size: 15px; font-weight: 600;">Cơm Tấm Đặc Biệt</div>
+          <div style="font-size: 13px; color: var(--text-hint); margin: 2px 0;">65.000₫/phần</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="qty-control">
+            <div class="qty-btn">−</div>
+            <div class="qty-num">1</div>
+            <div class="qty-btn">+</div>
+          </div>
+          <div style="font-size: 15px; font-weight: 700; color: var(--primary); margin-top: 6px;">65.000₫</div>
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div class="card" style="margin-top: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 14px;">
+          <span>📍</span>
+          <span style="color: var(--text-hint);">Chọn địa chỉ giao hàng</span>
+          <span style="margin-left: auto; color: var(--primary); font-weight: 500; font-size: 13px;">Chọn →</span>
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div style="font-size: 15px; font-weight: 600; margin: 14px 0 8px;">Thanh toán</div>
+      <div class="payment-option selected">
+        <div class="radio on"></div>
+        <span>💵</span> Tiền mặt (COD)
+      </div>
+      <div class="payment-option">
+        <div class="radio"></div>
+        <span>📱</span> Ví MoMo
+      </div>
+      <div class="payment-option">
+        <div class="radio"></div>
+        <span>💳</span> ZaloPay
+      </div>
+
+      <!-- Summary -->
+      <div class="card" style="margin-top: 14px;">
+        <div class="summary-row"><span>Tạm tính</span><span>175.000₫</span></div>
+        <div class="summary-row"><span>Phí giao hàng</span><span>15.000₫</span></div>
+        <div class="summary-row"><span>Giảm giá</span><span style="color: var(--success);">−10.000₫</span></div>
+        <div class="summary-row total"><span>Tổng cộng</span><span>180.000₫</span></div>
+      </div>
+    </div>
+
+    <!-- Sticky CTA -->
+    <div class="sticky-bottom">
+      <div>
+        <div style="font-size: 12px; color: var(--text-hint);">Tổng cộng</div>
+        <div style="font-size: 20px; font-weight: 700; color: var(--primary);">180.000₫</div>
+      </div>
+      <div style="background: var(--primary); color: #fff; padding: 12px 28px; border-radius: 12px; font-weight: 600; font-size: 15px;">
+        Đặt Hàng
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item"><div class="nav-icon">📋</div>Menu</div>
+      <div class="nav-item active"><div class="nav-icon">🛒</div>Giỏ</div>
+      <div class="nav-item"><div class="nav-icon">⭐</div>Loyalty</div>
+      <div class="nav-item"><div class="nav-icon">🏪</div>Store</div>
+      <div class="nav-item"><div class="nav-icon">👤</div>Tôi</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ==================== ROW 4: ORDERS + DELIVERY ==================== -->
+<div class="section-divider">Đơn Hàng & Theo Dõi Giao Hàng</div>
+
+<div class="screen-row">
+
+<!-- ORDER HISTORY -->
+<div class="screen-wrapper">
+  <div class="screen-label">Lịch Sử Đơn Hàng</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>📶 🔋</span>
+    </div>
+    <div class="app-bar">📦 &nbsp; Đơn Hàng</div>
+    <div class="content">
+      <div class="order-card">
+        <div class="order-header">
+          <span class="order-id">#ORD-10234</span>
+          <span class="status-badge delivering">🚚 Đang giao</span>
+        </div>
+        <div class="order-meta">📅 09/03/2026, 11:45</div>
+        <div class="order-items">Cơm Tấm Sườn Nướng x2, Cơm Tấm Đặc Biệt x1</div>
+        <div class="order-footer">
+          <span class="order-total">180.000₫</span>
+          <span class="order-action track">Theo dõi</span>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-header">
+          <span class="order-id">#ORD-10198</span>
+          <span class="status-badge delivered">✓ Hoàn thành</span>
+        </div>
+        <div class="order-meta">📅 07/03/2026, 12:30</div>
+        <div class="order-items">Cơm Tấm Bì Chả x1, Nước Mía x2</div>
+        <div class="order-footer">
+          <span class="order-total">75.000₫</span>
+          <span class="order-action reorder">Đặt lại</span>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-header">
+          <span class="order-id">#ORD-10156</span>
+          <span class="status-badge delivered">✓ Hoàn thành</span>
+        </div>
+        <div class="order-meta">📅 05/03/2026, 18:15</div>
+        <div class="order-items">Cơm Tấm Đặc Biệt x2, Chè Đậu x2</div>
+        <div class="order-footer">
+          <span class="order-total">150.000₫</span>
+          <span class="order-action reorder">Đặt lại</span>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-header">
+          <span class="order-id">#ORD-10102</span>
+          <span class="status-badge cancelled">✕ Đã hủy</span>
+        </div>
+        <div class="order-meta">📅 03/03/2026, 13:00</div>
+        <div class="order-items">Cơm Tấm Sườn Bì x1</div>
+        <div class="order-footer">
+          <span class="order-total">50.000₫</span>
+          <span class="order-action reorder">Đặt lại</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item"><div class="nav-icon">📋</div>Menu</div>
+      <div class="nav-item"><div class="nav-icon">🛒</div>Giỏ</div>
+      <div class="nav-item"><div class="nav-icon">⭐</div>Loyalty</div>
+      <div class="nav-item"><div class="nav-icon">🏪</div>Store</div>
+      <div class="nav-item"><div class="nav-icon">👤</div>Tôi</div>
+    </div>
+  </div>
+</div>
+
+<!-- DELIVERY TRACKING -->
+<div class="screen-wrapper">
+  <div class="screen-label">Theo Dõi Giao Hàng</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>📶 🔋</span>
+    </div>
+    <div class="app-bar">← &nbsp; Theo Dõi #ORD-10234</div>
+    <div class="content no-nav" style="overflow-y: auto;">
+      <!-- Stepper -->
+      <div class="stepper">
+        <div class="step done">
+          <div class="step-dot">✓</div>
+          <div class="step-text">Đang tìm tài xế</div>
+        </div>
+        <div class="step done">
+          <div class="step-dot">✓</div>
+          <div class="step-text">Tài xế đã nhận đơn</div>
+        </div>
+        <div class="step done">
+          <div class="step-dot">✓</div>
+          <div class="step-text">Đã lấy hàng</div>
+        </div>
+        <div class="step current">
+          <div class="step-dot">🚚</div>
+          <div class="step-text">Đang giao hàng</div>
+        </div>
+        <div class="step">
+          <div class="step-dot">📍</div>
+          <div class="step-text">Đã đến nơi</div>
+        </div>
+        <div class="step">
+          <div class="step-dot">✓</div>
+          <div class="step-text">Hoàn thành</div>
+        </div>
+      </div>
+
+      <!-- Driver -->
+      <div class="driver-card">
+        <div class="driver-avatar">🏍️</div>
+        <div>
+          <div style="font-size: 15px; font-weight: 600;">Trần Minh Tuấn</div>
+          <div style="font-size: 13px; color: var(--text-hint);">0912 345 678</div>
+        </div>
+        <div class="call-btn">📞</div>
+      </div>
+
+      <!-- Map -->
+      <div class="map-placeholder">
+        <span style="font-size: 28px;">🗺️</span>
+        <span>Bản đồ theo dõi thời gian thực</span>
+        <span style="font-size: 11px;">10.7769° N, 106.7009° E</span>
+      </div>
+
+      <!-- ETA -->
+      <div class="eta-card">
+        <span style="font-size: 24px;">⏱️</span>
+        <div>
+          <div class="eta-label">Dự kiến đến nơi</div>
+          <div class="eta-time">15 phút</div>
+        </div>
+        <div style="margin-left: auto; font-size: 14px; font-weight: 600; color: var(--text-secondary);">12:00</div>
+      </div>
+
+      <!-- Order summary -->
+      <div class="card">
+        <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">Chi tiết đơn hàng</div>
+        <div style="font-size: 13px; color: var(--text-secondary);">
+          Cơm Tấm Sườn Nướng x2, Cơm Tấm Đặc Biệt x1
+        </div>
+        <div style="font-size: 15px; font-weight: 700; color: var(--primary); margin-top: 6px;">180.000₫</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ==================== ROW 5: STORE + PROFILE ==================== -->
+<div class="section-divider">Cửa Hàng & Tài Khoản</div>
+
+<div class="screen-row">
+
+<!-- STORE LOCATOR -->
+<div class="screen-wrapper">
+  <div class="screen-label">Tìm Cửa Hàng</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>📶 🔋</span>
+    </div>
+    <div class="app-bar">🏪 &nbsp; Cửa Hàng</div>
+    <div class="content">
+      <div class="map-placeholder" style="height: 200px; margin-bottom: 16px;">
+        <span style="font-size: 36px;">🗺️</span>
+        <span>Google Maps — Vị trí cửa hàng</span>
+        <div style="display: flex; gap: 8px; margin-top: 4px;">
+          <span style="background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 10px;">📍 CN 1</span>
+          <span style="background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 10px;">📍 CN 2</span>
+          <span style="background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 10px;">📍 CN 3</span>
+        </div>
+      </div>
+
+      <div class="store-card">
+        <div class="store-name">Cơm Tấm Má Tư — Lê Văn Sỹ</div>
+        <div class="store-detail">📍 123 Lê Văn Sỹ, Phường 13, Quận 3, TP.HCM</div>
+        <div class="store-detail">📞 028 3820 1234</div>
+        <div class="store-detail">🕐 6:00 — 21:00</div>
+        <div class="store-btn">Chỉ đường →</div>
+      </div>
+
+      <div class="store-card">
+        <div class="store-name">Cơm Tấm Má Tư — Nguyễn Trãi</div>
+        <div class="store-detail">📍 456 Nguyễn Trãi, Phường 8, Quận 5, TP.HCM</div>
+        <div class="store-detail">📞 028 3855 5678</div>
+        <div class="store-detail">🕐 6:00 — 22:00</div>
+        <div class="store-btn">Chỉ đường →</div>
+      </div>
+
+      <div class="store-card">
+        <div class="store-name">Cơm Tấm Má Tư — Phan Xích Long</div>
+        <div class="store-detail">📍 78 Phan Xích Long, Phường 2, Quận Phú Nhuận</div>
+        <div class="store-detail">📞 028 3990 9012</div>
+        <div class="store-detail">🕐 6:00 — 21:30</div>
+        <div class="store-btn">Chỉ đường →</div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item"><div class="nav-icon">📋</div>Menu</div>
+      <div class="nav-item"><div class="nav-icon">🛒</div>Giỏ</div>
+      <div class="nav-item"><div class="nav-icon">⭐</div>Loyalty</div>
+      <div class="nav-item active"><div class="nav-icon">🏪</div>Store</div>
+      <div class="nav-item"><div class="nav-icon">👤</div>Tôi</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE SCREEN -->
+<div class="screen-wrapper">
+  <div class="screen-label">Tài Khoản</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>📶 🔋</span>
+    </div>
+    <div class="app-bar">👤 &nbsp; Tài Khoản</div>
+    <div class="content">
+      <!-- Profile header -->
+      <div class="card elevated" style="padding: 20px;">
+        <div class="profile-header">
+          <div class="avatar">👤</div>
+          <div>
+            <div class="profile-name">Nguyễn Văn Anh</div>
+            <div class="profile-phone">0901 234 567</div>
+            <div class="profile-tier" style="background: linear-gradient(135deg, #FFD700, #FFC107); color: #5D4037;">
+              🥇 Hạng Vàng
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #FFF8E1; border-radius: 10px;">
+          <span style="font-size: 20px;">⭐</span>
+          <div>
+            <div style="font-size: 12px; color: var(--text-hint);">Tổng điểm tích lũy</div>
+            <div style="font-size: 20px; font-weight: 700; color: #F57F17;">12,850</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menu items -->
+      <div class="card" style="padding: 0; margin-top: 16px;">
+        <div class="menu-list-item">
+          <span class="icon">📦</span>
+          Lịch sử đơn hàng
+          <span class="arrow">→</span>
+        </div>
+        <div class="menu-list-item">
+          <span class="icon">📍</span>
+          Địa chỉ đã lưu
+          <span class="arrow">→</span>
+        </div>
+        <div class="menu-list-item">
+          <span class="icon">⚙️</span>
+          Cài đặt
+          <span class="arrow">→</span>
+        </div>
+        <div class="menu-list-item">
+          <span class="icon">❓</span>
+          Hỗ trợ / Trợ giúp
+          <span class="arrow">→</span>
+        </div>
+        <div class="menu-list-item" style="border-bottom: none;">
+          <span class="icon">🚪</span>
+          <span style="color: var(--error); font-weight: 500;">Đăng xuất</span>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 24px; font-size: 13px; color: var(--text-hint);">
+        Cơm Tấm Má Tư v1.0.0
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item"><div class="nav-icon">📋</div>Menu</div>
+      <div class="nav-item"><div class="nav-icon">🛒</div>Giỏ</div>
+      <div class="nav-item"><div class="nav-icon">⭐</div>Loyalty</div>
+      <div class="nav-item"><div class="nav-icon">🏪</div>Store</div>
+      <div class="nav-item active"><div class="nav-icon">👤</div>Tôi</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ==================== DESIGN SYSTEM ==================== -->
+<div class="section-divider">Design System — Bảng Màu & Typography</div>
+
+<div class="screen-row">
+<div class="screen-wrapper" style="max-width: 800px;">
+  <div class="screen-label">Bảng Màu (Color Palette)</div>
+  <div style="background: #3a3a3a; border-radius: 16px; padding: 32px; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px;">
+    <div>
+      <div style="width: 100%; height: 60px; background: #D4442A; border-radius: 8px;"></div>
+      <div style="color: #fff; font-size: 12px; margin-top: 6px;">Primary<br><code>#D4442A</code></div>
+    </div>
+    <div>
+      <div style="width: 100%; height: 60px; background: #E8735E; border-radius: 8px;"></div>
+      <div style="color: #fff; font-size: 12px; margin-top: 6px;">Primary Light<br><code>#E8735E</code></div>
+    </div>
+    <div>
+      <div style="width: 100%; height: 60px; background: #A03320; border-radius: 8px;"></div>
+      <div style="color: #fff; font-size: 12px; margin-top: 6px;">Primary Dark<br><code>#A03320</code></div>
+    </div>
+    <div>
+      <div style="width: 100%; height: 60px; background: #F5A623; border-radius: 8px;"></div>
+      <div style="color: #fff; font-size: 12px; margin-top: 6px;">Secondary<br><code>#F5A623</code></div>
+    </div>
+    <div>
+      <div style="width: 100%; height: 60px; background: #CD7F32; border-radius: 8px;"></div>
+      <div style="color: #fff; font-size: 12px; margin-top: 6px;">Hạng Đồng<br><code>#CD7F32</code></div>
+    </div>
+    <div>
+      <div style="width: 100%; height: 60px; background: #C0C0C0; border-radius: 8px;"></div>
+      <div style="color: #fff; font-size: 12px; margin-top: 6px;">Hạng Bạc<br><code>#C0C0C0</code></div>
+    </div>
+    <div>
+      <div style="width: 100%; height: 60px; background: #FFD700; border-radius: 8px;"></div>
+      <div style="color: #fff; font-size: 12px; margin-top: 6px;">Hạng Vàng<br><code>#FFD700</code></div>
+    </div>
+    <div>
+      <div style="width: 100%; height: 60px; background: linear-gradient(135deg, #B9F2FF, #7DD3E8); border-radius: 8px;"></div>
+      <div style="color: #fff; font-size: 12px; margin-top: 6px;">Kim Cương<br><code>#B9F2FF</code></div>
+    </div>
+    <div>
+      <div style="width: 100%; height: 60px; background: #2E7D32; border-radius: 8px;"></div>
+      <div style="color: #fff; font-size: 12px; margin-top: 6px;">Success<br><code>#2E7D32</code></div>
+    </div>
+    <div>
+      <div style="width: 100%; height: 60px; background: #D32F2F; border-radius: 8px;"></div>
+      <div style="color: #fff; font-size: 12px; margin-top: 6px;">Error<br><code>#D32F2F</code></div>
+    </div>
+    <div>
+      <div style="width: 100%; height: 60px; background: #1976D2; border-radius: 8px;"></div>
+      <div style="color: #fff; font-size: 12px; margin-top: 6px;">Info<br><code>#1976D2</code></div>
+    </div>
+    <div>
+      <div style="width: 100%; height: 60px; background: #FAF8F5; border-radius: 8px; border: 1px solid #555;"></div>
+      <div style="color: #fff; font-size: 12px; margin-top: 6px;">Background<br><code>#FAF8F5</code></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div style="text-align: center; color: #666; font-size: 13px; padding: 40px 0 60px; border-top: 1px solid #444; margin-top: 40px;">
+  Cơm Tấm Má Tư — Flutter 3.x + Riverpod 2 + Supabase<br>
+  11 Screens · Material 3 Design · Offline-First Architecture<br>
+  <span style="color: #888; font-size: 11px;">Mockups generated from codebase — March 2026</span>
+</div>
+
+</body>
+</html>
