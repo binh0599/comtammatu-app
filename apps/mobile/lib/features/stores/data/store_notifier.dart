@@ -73,7 +73,7 @@ final storeNotifierProvider =
 final sampleStoresProvider = Provider<List<StoreInfo>>((ref) {
   return const [
     StoreInfo(
-      id: 'store-1',
+      id: 1,
       name: 'Cơm Tấm Má Tư - Quận 1',
       address: '123 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP.HCM',
       phone: '0901234567',
@@ -84,7 +84,7 @@ final sampleStoresProvider = Provider<List<StoreInfo>>((ref) {
       isActive: true,
     ),
     StoreInfo(
-      id: 'store-2',
+      id: 2,
       name: 'Cơm Tấm Má Tư - Quận 3',
       address: '456 Võ Văn Tần, Phường 5, Quận 3, TP.HCM',
       phone: '0907654321',
@@ -95,7 +95,7 @@ final sampleStoresProvider = Provider<List<StoreInfo>>((ref) {
       isActive: true,
     ),
     StoreInfo(
-      id: 'store-3',
+      id: 3,
       name: 'Cơm Tấm Má Tư - Quận 7',
       address: '789 Nguyễn Thị Thập, Phường Tân Phú, Quận 7, TP.HCM',
       phone: '0912345678',
@@ -106,7 +106,7 @@ final sampleStoresProvider = Provider<List<StoreInfo>>((ref) {
       isActive: true,
     ),
     StoreInfo(
-      id: 'store-4',
+      id: 4,
       name: 'Cơm Tấm Má Tư - Bình Thạnh',
       address: '321 Điện Biên Phủ, Phường 15, Quận Bình Thạnh, TP.HCM',
       phone: '0923456789',
@@ -117,7 +117,7 @@ final sampleStoresProvider = Provider<List<StoreInfo>>((ref) {
       isActive: true,
     ),
     StoreInfo(
-      id: 'store-5',
+      id: 5,
       name: 'Cơm Tấm Má Tư - Gò Vấp',
       address: '654 Quang Trung, Phường 11, Quận Gò Vấp, TP.HCM',
       phone: '0934567890',
