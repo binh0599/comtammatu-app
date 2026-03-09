@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/cache/cache_service.dart';
 import '../../../core/network/api_client.dart';
+import '../../../core/storage/app_database.dart';
 import '../../../core/theme/app_colors.dart';
 
 // -- Data models ----------------------------------------------------------
@@ -266,12 +267,12 @@ final menuNotifierProvider =
     final cacheService = ref.watch(cacheServiceProvider);
     return MenuNotifier(apiClient: apiClient, cacheService: cacheService);
   } catch (_) {
-    // Fallback if providers not yet initialized
+    // Fallback: use Drift-backed CacheService for offline-first menu access
+    // when SharedPreferences or cacheServiceProvider is not yet ready.
+    final db = ref.watch(appDatabaseProvider);
     return MenuNotifier(
       apiClient: ApiClient(),
-      cacheService: CacheService(
-        prefs: throw UnimplementedError('SharedPreferences not ready'),
-      ),
+      cacheService: CacheService.fromDrift(db: db),
     );
   }
 });
