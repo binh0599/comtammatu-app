@@ -1,29 +1,48 @@
 default_platform(:android)
 
 platform :android do
-  desc "Build and distribute to Firebase App Distribution"
-  lane :beta do
-    # Build APK
-    sh("cd ../.. && flutter build apk --release")
-
-    # Upload to Firebase App Distribution
-    firebase_app_distribution(
-      app: ENV["FIREBASE_ANDROID_APP_ID"],
-      groups: "internal-testers",
-      release_notes: changelog_from_git_commits(commits_count: 5),
-      apk_path: "../../build/app/outputs/flutter-apk/app-release.apk"
+  desc "Build and upload to Play Store internal track"
+  lane :internal do
+    upload_to_play_store(
+      track: "internal",
+      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      json_key: ENV["GOOGLE_PLAY_JSON_KEY_PATH"] || "play-store-service-account.json",
+      package_name: "com.comtammatu.app",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: false
     )
   end
 
-  desc "Deploy to Google Play (internal track)"
+  desc "Promote internal build to beta track"
+  lane :beta do
+    upload_to_play_store(
+      track: "internal",
+      track_promote_to: "beta",
+      json_key: ENV["GOOGLE_PLAY_JSON_KEY_PATH"] || "play-store-service-account.json",
+      package_name: "com.comtammatu.app",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: false
+    )
+  end
+
+  desc "Deploy to Google Play (production with 10% rollout)"
   lane :deploy do
     sh("cd ../.. && flutter build appbundle --release")
 
     upload_to_play_store(
-      track: "internal",
-      aab: "../../build/app/outputs/bundle/release/app-release.aab",
-      json_key: ENV["GOOGLE_PLAY_JSON_KEY_PATH"],
-      package_name: "com.comtammatu.app"
+      track: "beta",
+      track_promote_to: "production",
+      json_key: ENV["GOOGLE_PLAY_JSON_KEY_PATH"] || "play-store-service-account.json",
+      package_name: "com.comtammatu.app",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: false,
+      rollout: "0.1"
     )
   end
 end
