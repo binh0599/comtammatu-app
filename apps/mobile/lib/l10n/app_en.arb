@@ -25,5 +25,65 @@
   "delivery": "Delivery",
   "storeLocator": "Store locator",
   "notifications": "Notifications",
-  "settings": "Settings"
+  "settings": "Settings",
+  "vouchers": "Vouchers",
+  "feedback": "Feedback",
+  "dashboard": "Dashboard",
+  "staffManagement": "Staff Management",
+  "inventory": "Inventory",
+  "savedAddresses": "Saved Addresses",
+  "editProfile": "Edit Profile",
+  "orderHistory": "Order History",
+  "deliveryTracking": "Delivery Tracking",
+  "redeemPoints": "Redeem Points",
+  "earnPoints": "Earn Points",
+  "scanQR": "Scan QR",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "search": "Search",
+  "filter": "Filter",
+  "sortBy": "Sort by",
+  "all": "All",
+  "today": "Today",
+  "thisWeek": "This week",
+  "thisMonth": "This month",
+  "totalRevenue": "Total Revenue",
+  "totalOrders": "Total Orders",
+  "newMembers": "New Members",
+  "lowStock": "Low Stock",
+  "restock": "Restock",
+  "welcomeBack": "Welcome back!",
+  "seeAll": "See all",
+  "noNotifications": "No notifications",
+  "noOrders": "You have no orders yet",
+  "emptyCart": "Cart is empty",
+  "continueOrdering": "Continue ordering",
+  "orderSuccess": "Order placed successfully!",
+  "pointsEarned": "You earned {points} points",
+  "@pointsEarned": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "itemCount": "{count} items",
+  "@itemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "priceFormat": "{price}đ",
+  "@priceFormat": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  }
 }

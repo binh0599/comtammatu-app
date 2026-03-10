@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 
 // -- Screen ---------------------------------------------------------------
@@ -14,6 +16,12 @@ class ProfileScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tài khoản'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined),
+            onPressed: () => context.push(AppRoutes.notifications),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -24,6 +32,11 @@ class ProfileScreen extends ConsumerWidget {
             const _UserHeader(),
 
             const SizedBox(height: 24),
+
+            // Quick actions
+            const _QuickActions(),
+
+            const SizedBox(height: 16),
 
             // Menu items
             const _MenuSection(),
@@ -60,79 +73,189 @@ class _UserHeader extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(color: AppColors.border),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              // Avatar
-              CircleAvatar(
-                radius: 40,
-                backgroundColor: AppColors.primary.withOpacity(0.1),
-                child: Icon(
-                  Icons.person,
-                  size: 44,
-                  color: AppColors.primary,
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              // Name
-              Text(
-                'Nguyễn Văn A',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                '0901 234 567',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-              ),
-              const SizedBox(height: 12),
-
-              // Tier badge
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.tierBronze,
-                      AppColors.tierBronze.withOpacity(0.7),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () => context.push(AppRoutes.profileEdit),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                // Avatar
+                Stack(
                   children: [
-                    const Icon(
-                      Icons.workspace_premium,
-                      size: 18,
-                      color: Colors.white,
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                      child: Icon(
+                        Icons.person,
+                        size: 44,
+                        color: AppColors.primary,
+                      ),
                     ),
-                    const SizedBox(width: 6),
-                    Text(
-                      'Hạng Đồng',
-                      style:
-                          Theme.of(context).textTheme.labelMedium?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                              ),
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: const Icon(
+                          Icons.edit,
+                          size: 14,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '1.250 điểm tích lũy',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.textSecondary,
+                const SizedBox(height: 12),
+
+                // Name
+                Text(
+                  'Nguyễn Văn A',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '0901 234 567',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                ),
+                const SizedBox(height: 12),
+
+                // Tier badge
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.tierBronze,
+                        AppColors.tierBronze.withValues(alpha: 0.7),
+                      ],
                     ),
-              ),
-            ],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.workspace_premium,
+                        size: 18,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Hạng Đồng',
+                        style:
+                            Theme.of(context).textTheme.labelMedium?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '1.250 điểm tích lũy',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// -- Quick actions --------------------------------------------------------
+
+class _QuickActions extends StatelessWidget {
+  const _QuickActions();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          _QuickActionItem(
+            icon: Icons.receipt_long_outlined,
+            label: 'Đơn hàng',
+            onTap: () => context.go(AppRoutes.orders),
+          ),
+          const SizedBox(width: 12),
+          _QuickActionItem(
+            icon: Icons.local_offer_outlined,
+            label: 'Ưu đãi',
+            onTap: () => context.push(AppRoutes.vouchers),
+          ),
+          const SizedBox(width: 12),
+          _QuickActionItem(
+            icon: Icons.store_outlined,
+            label: 'Cửa hàng',
+            onTap: () => context.go(AppRoutes.storeLocator),
+          ),
+          const SizedBox(width: 12),
+          _QuickActionItem(
+            icon: Icons.star_outline,
+            label: 'Tích điểm',
+            onTap: () => context.go(AppRoutes.loyalty),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _QuickActionItem extends StatelessWidget {
+  const _QuickActionItem({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Card(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: AppColors.border),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            child: Column(
+              children: [
+                Icon(icon, color: AppColors.primary, size: 28),
+                const SizedBox(height: 6),
+                Text(
+                  label,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -159,34 +282,39 @@ class _MenuSection extends StatelessWidget {
         child: Column(
           children: [
             _ProfileMenuItem(
-              icon: Icons.receipt_long_outlined,
-              label: 'Lịch sử đơn hàng',
-              onTap: () {
-                // TODO: Navigate to order history
-              },
+              icon: Icons.person_outline,
+              label: 'Chỉnh sửa thông tin',
+              onTap: () => context.push(AppRoutes.profileEdit),
             ),
             const Divider(height: 1, indent: 56),
             _ProfileMenuItem(
               icon: Icons.location_on_outlined,
               label: 'Địa chỉ đã lưu',
-              onTap: () {
-                // TODO: Navigate to saved addresses
-              },
+              onTap: () => context.push(AppRoutes.savedAddresses),
+            ),
+            const Divider(height: 1, indent: 56),
+            _ProfileMenuItem(
+              icon: Icons.local_offer_outlined,
+              label: 'Ưu đãi của tôi',
+              onTap: () => context.push(AppRoutes.vouchers),
             ),
             const Divider(height: 1, indent: 56),
             _ProfileMenuItem(
               icon: Icons.settings_outlined,
               label: 'Cài đặt',
-              onTap: () {
-                // TODO: Navigate to settings
-              },
+              onTap: () => context.push(AppRoutes.settings),
             ),
             const Divider(height: 1, indent: 56),
             _ProfileMenuItem(
               icon: Icons.help_outline,
               label: 'Hỗ trợ',
               onTap: () {
-                // TODO: Navigate to support
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Liên hệ hotline: 1900 1234'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
               },
             ),
             const Divider(height: 1, indent: 56),
@@ -210,7 +338,7 @@ class _MenuSection extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           Navigator.of(ctx).pop();
-                          // TODO: Call auth sign out
+                          context.go(AppRoutes.login);
                         },
                         child: Text(
                           'Đăng xuất',

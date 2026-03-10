@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/network/api_client.dart';
+import '../../../models/notification_model.dart';
 import 'models/device_token_model.dart';
 
-/// Repository for managing push notification device tokens.
+/// Repository for managing push notifications and device tokens.
 class NotificationRepository {
   const NotificationRepository({required ApiClient apiClient})
       : _apiClient = apiClient;
@@ -13,28 +14,52 @@ class NotificationRepository {
   /// Registers a device token for push notifications.
   Future<DeviceToken> registerToken(String token, String platform) async {
     return _apiClient.post<DeviceToken>(
-      '/device-tokens',
+      '/push-register',
       data: {
         'token': token,
         'platform': platform,
       },
-      fromJson: (json) =>
-          DeviceToken.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        return DeviceToken.fromJson(
+          map['subscription'] as Map<String, dynamic>,
+        );
+      },
     );
   }
 
   /// Unregisters (deactivates) a device token.
   Future<void> unregisterToken(String token) async {
-    await _apiClient.delete<dynamic>('/device-tokens/$token');
+    await _apiClient.delete<dynamic>(
+      '/push-register/$token',
+    );
   }
 
-  /// Fetches all registered tokens for the current user.
-  Future<List<DeviceToken>> getTokens() async {
-    return _apiClient.get<List<DeviceToken>>(
-      '/device-tokens',
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => DeviceToken.fromJson(e as Map<String, dynamic>))
-          .toList(),
+  /// Fetches notification inbox for the current user.
+  Future<List<NotificationItem>> getNotifications({
+    String? cursor,
+    int limit = 20,
+  }) async {
+    return _apiClient.get<List<NotificationItem>>(
+      '/notifications-inbox',
+      queryParameters: {
+        if (cursor != null) 'cursor': cursor,
+        'limit': limit,
+      },
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        final list = map['notifications'] as List<dynamic>? ?? [];
+        return list
+            .map((e) => NotificationItem.fromJson(e as Map<String, dynamic>))
+            .toList();
+      },
+    );
+  }
+
+  /// Marks a notification as read.
+  Future<void> markAsRead(int notificationId) async {
+    await _apiClient.put<dynamic>(
+      '/notifications-inbox/read/$notificationId',
     );
   }
 }

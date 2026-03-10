@@ -22,8 +22,12 @@ class DeliveryRepository {
     return _apiClient.get<DeliveryTracking>(
       '/delivery-tracking',
       queryParameters: {'order_id': orderId},
-      fromJson: (json) =>
-          DeliveryTracking.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        return DeliveryTracking.fromJson(
+          map['tracking'] as Map<String, dynamic>,
+        );
+      },
     );
   }
 

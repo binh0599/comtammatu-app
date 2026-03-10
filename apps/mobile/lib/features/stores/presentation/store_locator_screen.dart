@@ -132,8 +132,8 @@ class _StoreLocatorScreenState extends ConsumerState<StoreLocatorScreen> {
 
     final sorted = List<StoreInfo>.from(stores);
     sorted.sort((a, b) {
-      final distA = _squaredDist(userLat, userLng, a.latitude, a.longitude);
-      final distB = _squaredDist(userLat, userLng, b.latitude, b.longitude);
+      final distA = _squaredDist(userLat, userLng, a.latitude ?? 0, a.longitude ?? 0);
+      final distB = _squaredDist(userLat, userLng, b.latitude ?? 0, b.longitude ?? 0);
       return distA.compareTo(distB);
     });
     return sorted;

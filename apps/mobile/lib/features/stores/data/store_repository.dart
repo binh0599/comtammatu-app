@@ -16,9 +16,13 @@ class StoreRepository {
   Future<List<StoreInfo>> getStores() async {
     return _apiClient.get<List<StoreInfo>>(
       '/stores',
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => StoreInfo.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        final list = map['stores'] as List<dynamic>;
+        return list
+            .map((e) => StoreInfo.fromJson(e as Map<String, dynamic>))
+            .toList();
+      },
     );
   }
 
@@ -26,19 +30,26 @@ class StoreRepository {
   Future<List<StoreInfo>> getNearbyStores(double lat, double lng) async {
     return _apiClient.get<List<StoreInfo>>(
       '/stores',
-      queryParameters: {'latitude': lat, 'longitude': lng, 'sort': 'distance'},
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => StoreInfo.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      queryParameters: {'lat': lat, 'lng': lng},
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        final list = map['stores'] as List<dynamic>;
+        return list
+            .map((e) => StoreInfo.fromJson(e as Map<String, dynamic>))
+            .toList();
+      },
     );
   }
 
   /// Fetches a single store by its ID.
-  Future<StoreInfo> getStore(String id) async {
+  Future<StoreInfo> getStore(int id) async {
     return _apiClient.get<StoreInfo>(
-      '/stores/$id',
-      fromJson: (json) =>
-          StoreInfo.fromJson(json as Map<String, dynamic>),
+      '/stores',
+      queryParameters: {'id': id},
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        return StoreInfo.fromJson(map['store'] as Map<String, dynamic>);
+      },
     );
   }
 

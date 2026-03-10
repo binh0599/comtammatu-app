@@ -1,0 +1,23 @@
+flutter_native_splash:
+  # Cơm Tấm Má Tư - Native Splash Screen Config
+  color: "#FAF8F5"
+  color_dark: "#1C1917"
+
+  # App icon as splash image (replace with actual asset when available)
+  # image: assets/images/splash_logo.png
+
+  # Android 12+ splash
+  android_12:
+    color: "#FAF8F5"
+    color_dark: "#1C1917"
+    # image: assets/images/splash_logo.png
+    icon_background_color: "#FAF8F5"
+    icon_background_color_dark: "#1C1917"
+
+  # Platform settings
+  android: true
+  ios: true
+  web: false
+
+  # Fullscreen
+  fullscreen: true
