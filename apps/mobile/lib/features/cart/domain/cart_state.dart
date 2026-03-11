@@ -13,6 +13,8 @@ class CartState {
     this.note = '',
     this.couponCode,
     this.promotionId,
+    this.isSubmitting = false,
+    this.orderError,
   });
 
   final List<CartItem> items;
@@ -25,6 +27,8 @@ class CartState {
   final String note;
   final String? couponCode;
   final int? promotionId;
+  final bool isSubmitting;
+  final String? orderError;
 
   double get subtotal => items.fold(0, (sum, item) => sum + item.total);
 
@@ -45,6 +49,8 @@ class CartState {
     String? note,
     String? couponCode,
     int? promotionId,
+    bool? isSubmitting,
+    String? orderError,
   }) {
     return CartState(
       items: items ?? this.items,
@@ -57,6 +63,8 @@ class CartState {
       note: note ?? this.note,
       couponCode: couponCode ?? this.couponCode,
       promotionId: promotionId ?? this.promotionId,
+      isSubmitting: isSubmitting ?? this.isSubmitting,
+      orderError: orderError,
     );
   }
 }

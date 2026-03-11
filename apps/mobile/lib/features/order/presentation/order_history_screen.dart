@@ -7,170 +7,11 @@ import '../../../core/theme/app_colors.dart';
 import '../../../models/delivery_order.dart';
 import '../../../shared/utils/formatters.dart';
 import '../../../shared/widgets/app_button.dart';
-
-// -- Sample data for development --------------------------------------------
-
-final _kSampleOrders = [
-  DeliveryOrder(
-    orderId: 10245,
-    deliveryOrderId: 5012,
-    status: 'delivered',
-    items: const [
-      OrderItem(
-        menuItemId: 1,
-        name: 'Cơm tấm sườn bì chả',
-        quantity: 2,
-        unitPrice: 55000,
-        subtotal: 110000,
-      ),
-      OrderItem(
-        menuItemId: 9,
-        name: 'Trà đá',
-        quantity: 2,
-        unitPrice: 5000,
-        subtotal: 10000,
-      ),
-    ],
-    subtotal: 120000,
-    deliveryFee: 15000,
-    discount: 0,
-    total: 135000,
-    estimatedDeliveryAt: DateTime.now().subtract(const Duration(days: 2)),
-    pointsWillEarn: 135,
-    createdAt: DateTime.now().subtract(const Duration(days: 2)),
-  ),
-  DeliveryOrder(
-    orderId: 10300,
-    deliveryOrderId: 5067,
-    status: 'delivering',
-    items: const [
-      OrderItem(
-        menuItemId: 4,
-        name: 'Cơm tấm đặc biệt',
-        quantity: 1,
-        unitPrice: 65000,
-        subtotal: 65000,
-      ),
-      OrderItem(
-        menuItemId: 11,
-        name: 'Nước sâm',
-        quantity: 1,
-        unitPrice: 15000,
-        subtotal: 15000,
-      ),
-    ],
-    subtotal: 80000,
-    deliveryFee: 15000,
-    discount: 10000,
-    total: 85000,
-    estimatedDeliveryAt: DateTime.now().add(const Duration(minutes: 25)),
-    pointsWillEarn: 85,
-    createdAt: DateTime.now().subtract(const Duration(hours: 1)),
-  ),
-  DeliveryOrder(
-    orderId: 10189,
-    deliveryOrderId: 4950,
-    status: 'delivered',
-    items: const [
-      OrderItem(
-        menuItemId: 2,
-        name: 'Cơm tấm sườn nướng',
-        quantity: 1,
-        unitPrice: 45000,
-        subtotal: 45000,
-      ),
-    ],
-    subtotal: 45000,
-    deliveryFee: 15000,
-    discount: 0,
-    total: 60000,
-    estimatedDeliveryAt: DateTime.now().subtract(const Duration(days: 5)),
-    pointsWillEarn: 60,
-    createdAt: DateTime.now().subtract(const Duration(days: 5)),
-  ),
-  DeliveryOrder(
-    orderId: 10120,
-    deliveryOrderId: 4880,
-    status: 'cancelled',
-    items: const [
-      OrderItem(
-        menuItemId: 1,
-        name: 'Cơm tấm sườn bì chả',
-        quantity: 3,
-        unitPrice: 55000,
-        subtotal: 165000,
-      ),
-    ],
-    subtotal: 165000,
-    deliveryFee: 15000,
-    discount: 0,
-    total: 180000,
-    estimatedDeliveryAt: DateTime.now().subtract(const Duration(days: 7)),
-    pointsWillEarn: 0,
-    createdAt: DateTime.now().subtract(const Duration(days: 7)),
-  ),
-  DeliveryOrder(
-    orderId: 10050,
-    deliveryOrderId: 4800,
-    status: 'delivered',
-    items: const [
-      OrderItem(
-        menuItemId: 4,
-        name: 'Cơm tấm đặc biệt',
-        quantity: 2,
-        unitPrice: 65000,
-        subtotal: 130000,
-      ),
-      OrderItem(
-        menuItemId: 12,
-        name: 'Chè thập cẩm',
-        quantity: 2,
-        unitPrice: 20000,
-        subtotal: 40000,
-      ),
-    ],
-    subtotal: 170000,
-    deliveryFee: 0,
-    discount: 20000,
-    total: 150000,
-    estimatedDeliveryAt: DateTime.now().subtract(const Duration(days: 14)),
-    pointsWillEarn: 150,
-    createdAt: DateTime.now().subtract(const Duration(days: 14)),
-  ),
-];
+import '../domain/order_history_notifier.dart';
 
 // -- Filter ----------------------------------------------------------------
 
 enum OrderFilter { all, delivering, delivered, cancelled }
-
-// -- Providers --------------------------------------------------------------
-
-final orderHistoryProvider =
-    StateProvider<List<DeliveryOrder>>((ref) => _kSampleOrders);
-
-final orderFilterProvider =
-    StateProvider<OrderFilter>((ref) => OrderFilter.all);
-
-final filteredOrdersProvider = Provider<List<DeliveryOrder>>((ref) {
-  final orders = ref.watch(orderHistoryProvider);
-  final filter = ref.watch(orderFilterProvider);
-  return switch (filter) {
-    OrderFilter.all => orders,
-    OrderFilter.delivering => orders
-        .where((o) =>
-            o.status == 'delivering' ||
-            o.status == 'on_the_way' ||
-            o.status == 'picked_up' ||
-            o.status == 'pending' ||
-            o.status == 'confirmed' ||
-            o.status == 'preparing')
-        .toList(),
-    OrderFilter.delivered =>
-      orders.where((o) => o.status == 'delivered').toList(),
-    OrderFilter.cancelled =>
-      orders.where((o) => o.status == 'cancelled').toList(),
-  };
-});
 
 // -- Helpers ----------------------------------------------------------------
 
@@ -235,16 +76,49 @@ String _filterLabel(OrderFilter filter) {
   };
 }
 
+/// Maps an [OrderFilter] enum to the API status string (null = all).
+String? _filterToStatus(OrderFilter filter) {
+  return switch (filter) {
+    OrderFilter.all => null,
+    OrderFilter.delivering => 'delivering',
+    OrderFilter.delivered => 'delivered',
+    OrderFilter.cancelled => 'cancelled',
+  };
+}
+
 // -- Screen -----------------------------------------------------------------
 
 /// Order history screen showing past orders with status filters and actions.
-class OrderHistoryScreen extends ConsumerWidget {
+class OrderHistoryScreen extends ConsumerStatefulWidget {
   const OrderHistoryScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final orders = ref.watch(filteredOrdersProvider);
-    final activeFilter = ref.watch(orderFilterProvider);
+  ConsumerState<OrderHistoryScreen> createState() =>
+      _OrderHistoryScreenState();
+}
+
+class _OrderHistoryScreenState extends ConsumerState<OrderHistoryScreen> {
+  OrderFilter _activeFilter = OrderFilter.all;
+
+  @override
+  void initState() {
+    super.initState();
+    // Trigger initial load after the first frame.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(orderHistoryNotifierProvider.notifier).loadOrders();
+    });
+  }
+
+  void _onFilterSelected(OrderFilter filter) {
+    setState(() => _activeFilter = filter);
+    ref
+        .read(orderHistoryNotifierProvider.notifier)
+        .setFilter(_filterToStatus(filter));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final historyState = ref.watch(orderHistoryNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -262,12 +136,11 @@ class OrderHistoryScreen extends ConsumerWidget {
               separatorBuilder: (_, __) => const SizedBox(width: 8),
               itemBuilder: (context, index) {
                 final filter = OrderFilter.values[index];
-                final isSelected = activeFilter == filter;
+                final isSelected = _activeFilter == filter;
                 return ChoiceChip(
                   label: Text(_filterLabel(filter)),
                   selected: isSelected,
-                  onSelected: (_) =>
-                      ref.read(orderFilterProvider.notifier).state = filter,
+                  onSelected: (_) => _onFilterSelected(filter),
                   selectedColor: AppColors.primary,
                   labelStyle: TextStyle(
                     color: isSelected ? Colors.white : AppColors.textPrimary,
@@ -284,20 +157,108 @@ class OrderHistoryScreen extends ConsumerWidget {
             ),
           ),
 
-          // Orders list
+          // Content area
           Expanded(
-            child: orders.isEmpty
-                ? _buildEmptyState(context, activeFilter)
-                : ListView.separated(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: orders.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      return _OrderCard(order: orders[index]);
-                    },
-                  ),
+            child: _buildContent(context, historyState),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, OrderHistoryState state) {
+    // Loading state
+    if (state.isLoading) {
+      return _buildLoadingShimmer();
+    }
+
+    // Error state
+    if (state.error != null) {
+      return _buildErrorState(context, state.error!);
+    }
+
+    // Empty state
+    if (state.orders.isEmpty) {
+      return _buildEmptyState(context, _activeFilter);
+    }
+
+    // Orders list with pull-to-refresh
+    return RefreshIndicator(
+      onRefresh: ref.read(orderHistoryNotifierProvider.notifier).refresh,
+      child: ListView.separated(
+        padding: const EdgeInsets.all(16),
+        itemCount: state.orders.length + (state.hasMore ? 1 : 0),
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        itemBuilder: (context, index) {
+          if (index == state.orders.length) {
+            // Load more trigger
+            _triggerLoadMore();
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+          return _OrderCard(order: state.orders[index]);
+        },
+      ),
+    );
+  }
+
+  void _triggerLoadMore() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(orderHistoryNotifierProvider.notifier).loadMore();
+    });
+  }
+
+  Widget _buildLoadingShimmer() {
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: 4,
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      itemBuilder: (_, __) => _ShimmerCard(),
+    );
+  }
+
+  Widget _buildErrorState(BuildContext context, String error) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.error_outline,
+              size: 64,
+              color: AppColors.error,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Không thể tải đơn hàng',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              error,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textHint,
+                  ),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 24),
+            AppButton(
+              label: 'Thử lại',
+              icon: Icons.refresh,
+              fullWidth: false,
+              onPressed: () {
+                ref.read(orderHistoryNotifierProvider.notifier).refresh();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -347,6 +308,63 @@ class OrderHistoryScreen extends ConsumerWidget {
             ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+// -- Shimmer placeholder card -----------------------------------------------
+
+class _ShimmerCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(color: AppColors.border),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _shimmerBox(width: 100, height: 16),
+                _shimmerBox(width: 72, height: 22, radius: 20),
+              ],
+            ),
+            const SizedBox(height: 12),
+            _shimmerBox(width: 140, height: 12),
+            const SizedBox(height: 8),
+            _shimmerBox(width: double.infinity, height: 12),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _shimmerBox(width: 90, height: 16),
+                _shimmerBox(width: 80, height: 28),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _shimmerBox({
+    required double height,
+    double? width,
+    double radius = 4,
+  }) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: AppColors.border.withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(radius),
       ),
     );
   }

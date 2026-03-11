@@ -116,25 +116,40 @@ class CartNotifier extends StateNotifier<CartState> {
   }
 
   /// Place the delivery order.
+  ///
+  /// Sets [isSubmitting] to `true` while the request is in flight and resets
+  /// it on completion. On failure the [orderError] field contains the message.
   Future<void> placeOrder() async {
     final address = state.deliveryAddress;
     final lat = state.latitude;
     final lng = state.longitude;
 
     if (address == null || lat == null || lng == null) {
-      throw StateError('Vui lòng chọn địa chỉ giao hàng');
+      state = state.copyWith(
+        orderError: 'Vui lòng chọn địa chỉ giao hàng',
+      );
+      return;
     }
 
-    await _orderRepository.createDeliveryOrder(
-      items: state.items,
-      deliveryAddress: address,
-      latitude: lat,
-      longitude: lng,
-      note: state.note.isEmpty ? null : state.note,
-      promotionId: state.promotionId,
-    );
+    state = state.copyWith(isSubmitting: true);
 
-    clearCart();
+    try {
+      await _orderRepository.createDeliveryOrder(
+        items: state.items,
+        deliveryAddress: address,
+        latitude: lat,
+        longitude: lng,
+        note: state.note.isEmpty ? null : state.note,
+        promotionId: state.promotionId,
+      );
+
+      clearCart();
+    } on Exception catch (e) {
+      state = state.copyWith(
+        isSubmitting: false,
+        orderError: e.toString(),
+      );
+    }
   }
 }
 

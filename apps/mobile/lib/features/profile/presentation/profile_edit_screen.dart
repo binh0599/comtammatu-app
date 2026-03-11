@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_text_field.dart';
+import '../data/profile_repository.dart';
 
 // -- Screen ---------------------------------------------------------------
 
@@ -24,17 +25,23 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
 
   DateTime? _selectedDate;
   String _selectedGender = 'Nam';
+  bool _isSaving = false;
 
   final List<String> _genderOptions = ['Nam', 'Nữ', 'Khác'];
 
   @override
   void initState() {
     super.initState();
-    // Pre-fill with sample data
-    _nameController = TextEditingController(text: 'Nguyễn Văn A');
-    _phoneController = TextEditingController(text: '0901234567');
-    _emailController = TextEditingController(text: 'nguyenvana@email.com');
-    _selectedDate = DateTime(1995, 6, 15);
+    _nameController = TextEditingController();
+    _phoneController = TextEditingController();
+    _emailController = TextEditingController();
+
+    // Load actual user data from ProfileRepository
+    final profile = ref.read(profileRepositoryProvider).getCurrentProfile();
+    if (profile != null) {
+      _nameController.text = profile.fullName;
+      _phoneController.text = profile.phone;
+    }
   }
 
   @override
@@ -69,18 +76,41 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
     }
   }
 
-  void _onSave() {
-    if (_formKey.currentState?.validate() ?? false) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Cập nhật thông tin thành công'),
-          backgroundColor: AppColors.success,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+  Future<void> _onSave() async {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+    setState(() => _isSaving = true);
+    try {
+      await ref.read(profileRepositoryProvider).updateProfile(
+            fullName: _nameController.text.trim(),
+          );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Cập nhật thông tin thành công'),
+            backgroundColor: AppColors.success,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
-        ),
-      );
+        );
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Lỗi: ${e.toString()}'),
+            backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSaving = false);
     }
   }
 
@@ -188,7 +218,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
               // Save button
               AppButton(
                 label: 'Lưu thay đổi',
-                onPressed: _onSave,
+                onPressed: _isSaving ? null : _onSave,
+                isLoading: _isSaving,
                 icon: Icons.save_outlined,
               ),
               const SizedBox(height: 16),

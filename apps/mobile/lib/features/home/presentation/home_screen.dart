@@ -67,9 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: _QuickAction(
                         icon: Icons.qr_code_scanner,
                         label: 'Điểm danh',
-                        onTap: () {
-                          // TODO: QR check-in flow
-                        },
+                        onTap: () => context.push(AppRoutes.checkin),
                       ),
                     ),
                     const SizedBox(width: 12),

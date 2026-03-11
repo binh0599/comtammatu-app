@@ -13,6 +13,7 @@ import '../../features/delivery/presentation/delivery_tracking_screen.dart';
 import '../../features/feedback/presentation/feedback_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/inventory/presentation/inventory_screen.dart';
+import '../../features/loyalty/presentation/checkin_screen.dart';
 import '../../features/loyalty/presentation/loyalty_screen.dart';
 import '../../features/menu/presentation/menu_screen.dart';
 import '../../features/notifications/presentation/notification_inbox_screen.dart';
@@ -51,6 +52,7 @@ class AppRoutes {
   static const String storeLocator = '/store-locator';
   static const String feedback = '/feedback';
   static const String vouchers = '/vouchers';
+  static const String checkin = '/checkin';
 
   // Management routes (owner/manager)
   static const String dashboard = '/dashboard';
@@ -354,6 +356,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: AppRoutes.settings,
             name: 'settings',
             builder: (context, state) => const SettingsScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.checkin,
+            name: 'checkin',
+            builder: (context, state) => const CheckinScreen(),
           ),
         ],
       ),

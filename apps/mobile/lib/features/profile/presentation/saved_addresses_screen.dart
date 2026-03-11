@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/address_model.dart';
 import '../../../shared/widgets/empty_view.dart';
+import '../domain/address_notifier.dart';
 
 // -- Screen ---------------------------------------------------------------
 
@@ -17,39 +18,22 @@ class SavedAddressesScreen extends ConsumerStatefulWidget {
 }
 
 class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
-  List<Address> _addresses = [
-    const Address(
-      id: 1,
-      label: 'home',
-      addressLine: '123 Nguyễn Trãi',
-      ward: 'Phường Bến Thành',
-      district: 'Quận 1',
-      city: 'TP. Hồ Chí Minh',
-      isDefault: true,
-      lat: 10.7726,
-      lng: 106.6981,
-    ),
-    const Address(
-      id: 2,
-      label: 'work',
-      addressLine: '456 Lê Văn Việt',
-      ward: 'Phường Tăng Nhơn Phú A',
-      district: 'Quận 9',
-      city: 'TP. Hồ Chí Minh',
-      lat: 10.8483,
-      lng: 106.7830,
-    ),
-  ];
-
-  void _setDefault(int index) {
-    setState(() {
-      _addresses = _addresses.asMap().entries.map((entry) {
-        return entry.value.copyWith(isDefault: entry.key == index);
-      }).toList();
-    });
+  @override
+  void initState() {
+    super.initState();
+    // Load addresses from the API on first build
+    Future.microtask(
+      () => ref.read(addressNotifierProvider.notifier).loadAddresses(),
+    );
   }
 
-  void _deleteAddress(int index) {
+  void _setDefault(Address address) {
+    if (address.id == null) return;
+    ref.read(addressNotifierProvider.notifier).setDefault(address.id!);
+  }
+
+  void _deleteAddress(Address address) {
+    if (address.id == null) return;
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -63,9 +47,9 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
           TextButton(
             onPressed: () {
               Navigator.of(ctx).pop();
-              setState(() {
-                _addresses.removeAt(index);
-              });
+              ref
+                  .read(addressNotifierProvider.notifier)
+                  .deleteAddress(address.id!);
             },
             child: const Text(
               'Xóa',
@@ -77,25 +61,22 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
     );
   }
 
-  void _showAddEditDialog({Address? address, int? index}) {
+  void _showAddEditDialog({Address? address}) {
     showDialog<void>(
       context: context,
       builder: (ctx) => _AddEditAddressDialog(
         address: address,
         onSave: (newAddress) {
-          setState(() {
-            if (index != null) {
-              _addresses[index] = newAddress.copyWith(
-                id: _addresses[index].id,
-                isDefault: _addresses[index].isDefault,
-              );
-            } else {
-              _addresses.add(newAddress.copyWith(
-                id: _addresses.length + 1,
-                isDefault: _addresses.isEmpty,
-              ));
-            }
-          });
+          final notifier = ref.read(addressNotifierProvider.notifier);
+          if (address != null) {
+            // Editing — preserve id and isDefault from original
+            notifier.updateAddress(newAddress.copyWith(
+              id: address.id,
+              isDefault: address.isDefault,
+            ));
+          } else {
+            notifier.addAddress(newAddress);
+          }
         },
       ),
     );
@@ -103,6 +84,9 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final addressState = ref.watch(addressNotifierProvider);
+    final addresses = addressState.addresses;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Địa chỉ đã lưu'),
@@ -112,28 +96,57 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.add, color: Colors.white),
       ),
-      body: _addresses.isEmpty
-          ? const EmptyView(
-              icon: Icons.location_off_outlined,
-              message: 'Bạn chưa lưu địa chỉ nào',
-            )
-          : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: _addresses.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                final address = _addresses[index];
-                return _AddressCard(
-                  address: address,
-                  onEdit: () => _showAddEditDialog(
-                    address: address,
-                    index: index,
-                  ),
-                  onDelete: () => _deleteAddress(index),
-                  onSetDefault: () => _setDefault(index),
-                );
-              },
+      body: _buildBody(addressState, addresses),
+    );
+  }
+
+  Widget _buildBody(AddressState state, List<Address> addresses) {
+    if (state.isLoading && addresses.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.error != null && addresses.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+            const SizedBox(height: 16),
+            Text(
+              'Không thể tải địa chỉ',
+              style: Theme.of(context).textTheme.titleMedium,
             ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () =>
+                  ref.read(addressNotifierProvider.notifier).loadAddresses(),
+              child: const Text('Thử lại'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (addresses.isEmpty) {
+      return const EmptyView(
+        icon: Icons.location_off_outlined,
+        message: 'Bạn chưa lưu địa chỉ nào',
+      );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: addresses.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        final address = addresses[index];
+        return _AddressCard(
+          address: address,
+          onEdit: () => _showAddEditDialog(address: address),
+          onDelete: () => _deleteAddress(address),
+          onSetDefault: () => _setDefault(address),
+        );
+      },
     );
   }
 }

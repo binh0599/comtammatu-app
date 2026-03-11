@@ -1,67 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../models/cart_item.dart';
 import '../../../shared/widgets/app_button.dart';
+import '../domain/cart_notifier.dart';
 
-// -- Data models ----------------------------------------------------------
-
-class CartItem {
-  CartItem({
-    required this.id,
-    required this.name,
-    required this.unitPrice,
-    this.quantity = 1,
-    this.note = '',
-  });
-
-  final int id;
-  final String name;
-  final int unitPrice;
-  int quantity;
-  String note;
-
-  int get subtotal => unitPrice * quantity;
-}
+// -- Data models kept for UI only -----------------------------------------
 
 enum PaymentMethod { cod, momo, zalopay }
 
-// -- Sample data ----------------------------------------------------------
-
-final _kSampleCart = [
-  CartItem(id: 1, name: 'Cơm tấm sườn bì chả', unitPrice: 55000, quantity: 2),
-  CartItem(id: 2, name: 'Trà đá', unitPrice: 5000, quantity: 2),
-  CartItem(id: 3, name: 'Chả trứng', unitPrice: 10000),
-];
-
-// -- Providers ------------------------------------------------------------
-
-final cartItemsProvider =
-    StateProvider<List<CartItem>>((ref) => List.of(_kSampleCart));
-
-final selectedPaymentProvider =
-    StateProvider<PaymentMethod>((ref) => PaymentMethod.cod);
-
-final deliveryFeeProvider = Provider<int>((ref) => 15000);
-
-final discountProvider = Provider<int>((ref) => 0);
-
-final cartSubtotalProvider = Provider<int>((ref) {
-  final items = ref.watch(cartItemsProvider);
-  return items.fold<int>(0, (sum, item) => sum + item.subtotal);
-});
-
-final cartTotalProvider = Provider<int>((ref) {
-  final subtotal = ref.watch(cartSubtotalProvider);
-  final delivery = ref.watch(deliveryFeeProvider);
-  final discount = ref.watch(discountProvider);
-  return subtotal + delivery - discount;
-});
-
 // -- Helpers --------------------------------------------------------------
 
-String _formatPrice(int price) {
-  final str = price.toString();
+String _formatPrice(double price) {
+  final intPrice = price.round();
+  final str = intPrice.toString();
   final buffer = StringBuffer();
   for (var i = 0; i < str.length; i++) {
     if (i > 0 && (str.length - i) % 3 == 0) buffer.write('.');
@@ -74,9 +29,9 @@ String _formatPrice(int price) {
 String _paymentLabel(PaymentMethod method) {
   switch (method) {
     case PaymentMethod.cod:
-      return 'Thanh toán khi nhận hàng';
+      return 'Thanh to\u00e1n khi nh\u1eadn h\u00e0ng';
     case PaymentMethod.momo:
-      return 'Ví MoMo';
+      return 'V\u00ed MoMo';
     case PaymentMethod.zalopay:
       return 'ZaloPay';
   }
@@ -93,6 +48,29 @@ IconData _paymentIcon(PaymentMethod method) {
   }
 }
 
+/// Maps [PaymentMethod] enum to the string value stored in [CartState].
+String _paymentMethodToString(PaymentMethod method) {
+  switch (method) {
+    case PaymentMethod.cod:
+      return 'cod';
+    case PaymentMethod.momo:
+      return 'momo';
+    case PaymentMethod.zalopay:
+      return 'zalopay';
+  }
+}
+
+PaymentMethod _paymentMethodFromString(String value) {
+  switch (value) {
+    case 'momo':
+      return PaymentMethod.momo;
+    case 'zalopay':
+      return PaymentMethod.zalopay;
+    default:
+      return PaymentMethod.cod;
+  }
+}
+
 // -- Screen ---------------------------------------------------------------
 
 /// Cart screen with item list, order summary, and checkout.
@@ -101,25 +79,25 @@ class CartScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final items = ref.watch(cartItemsProvider);
+    final cartState = ref.watch(cartNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Giỏ hàng'),
+        title: const Text('Gi\u1ecf h\u00e0ng'),
         actions: [
-          if (items.isNotEmpty)
+          if (!cartState.isEmpty)
             TextButton(
               onPressed: () {
-                ref.read(cartItemsProvider.notifier).state = [];
+                ref.read(cartNotifierProvider.notifier).clearCart();
               },
               child: const Text(
-                'Xóa tất cả',
+                'X\u00f3a t\u1ea5t c\u1ea3',
                 style: TextStyle(color: AppColors.error),
               ),
             ),
         ],
       ),
-      body: items.isEmpty ? const _EmptyCart() : const _CartContent(),
+      body: cartState.isEmpty ? const _EmptyCart() : const _CartContent(),
     );
   }
 }
@@ -144,14 +122,14 @@ class _EmptyCart extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Giỏ hàng trống',
+              'Gi\u1ecf h\u00e0ng tr\u1ed1ng',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: AppColors.textSecondary,
                   ),
             ),
             const SizedBox(height: 8),
             Text(
-              'Hãy thêm món ăn từ thực đơn\nđể bắt đầu đặt hàng nhé!',
+              'H\u00e3y th\u00eam m\u00f3n \u0103n t\u1eeb th\u1ef1c \u0111\u01a1n\n\u0111\u1ec3 b\u1eaft \u0111\u1ea7u \u0111\u1eb7t h\u00e0ng nh\u00e9!',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.textHint,
@@ -159,11 +137,11 @@ class _EmptyCart extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             AppButton(
-              label: 'Xem thực đơn',
+              label: 'Xem th\u1ef1c \u0111\u01a1n',
               icon: Icons.restaurant_menu,
               fullWidth: false,
               onPressed: () {
-                // TODO: Navigate to menu
+                context.go(AppRoutes.menu);
               },
             ),
           ],
@@ -180,12 +158,31 @@ class _CartContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final items = ref.watch(cartItemsProvider);
-    final subtotal = ref.watch(cartSubtotalProvider);
-    final deliveryFee = ref.watch(deliveryFeeProvider);
-    final discount = ref.watch(discountProvider);
-    final total = ref.watch(cartTotalProvider);
-    final selectedPayment = ref.watch(selectedPaymentProvider);
+    final cartState = ref.watch(cartNotifierProvider);
+    final items = cartState.items;
+    final subtotal = cartState.subtotal;
+    final deliveryFee = cartState.deliveryFee;
+    final discount = cartState.discount;
+    final total = cartState.total;
+    final selectedPayment =
+        _paymentMethodFromString(cartState.paymentMethod);
+    final isSubmitting = cartState.isSubmitting;
+
+    // Listen for orderError changes to show snackbar
+    ref.listen<String?>(
+      cartNotifierProvider.select((s) => s.orderError),
+      (previous, next) {
+        if (next != null && next.isNotEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(next),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+      },
+    );
 
     return Column(
       children: [
@@ -196,32 +193,26 @@ class _CartContent extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Cart items
-                ...items.asMap().entries.map(
-                      (entry) => _CartItemTile(
-                        item: entry.value,
-                        onQuantityChanged: (qty) {
-                          final updated = List<CartItem>.from(items);
-                          if (qty <= 0) {
-                            updated.removeAt(entry.key);
-                          } else {
-                            updated[entry.key].quantity = qty;
-                          }
-                          ref.read(cartItemsProvider.notifier).state =
-                              List.of(updated);
-                        },
-                        onNoteChanged: (note) {
-                          final updated = List<CartItem>.from(items);
-                          updated[entry.key].note = note;
-                          ref.read(cartItemsProvider.notifier).state =
-                              List.of(updated);
-                        },
-                        onRemove: () {
-                          final updated = List<CartItem>.from(items)
-                            ..removeAt(entry.key);
-                          ref.read(cartItemsProvider.notifier).state = updated;
-                        },
-                      ),
-                    ),
+                ...items.map(
+                  (item) => _CartItemTile(
+                    item: item,
+                    onQuantityChanged: (qty) {
+                      ref
+                          .read(cartNotifierProvider.notifier)
+                          .updateQuantity(item.menuItem.id, qty);
+                    },
+                    onNoteChanged: (note) {
+                      ref
+                          .read(cartNotifierProvider.notifier)
+                          .updateNote(item.menuItem.id, note);
+                    },
+                    onRemove: () {
+                      ref
+                          .read(cartNotifierProvider.notifier)
+                          .removeItem(item.menuItem.id);
+                    },
+                  ),
+                ),
 
                 const SizedBox(height: 20),
 
@@ -238,20 +229,20 @@ class _CartContent extends ConsumerWidget {
                       color: AppColors.primary,
                     ),
                     title: Text(
-                      'Địa chỉ giao hàng',
+                      '\u0110\u1ecba ch\u1ec9 giao h\u00e0ng',
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     subtitle: Text(
-                      'Chưa chọn địa chỉ',
+                      cartState.deliveryAddress ?? 'Ch\u01b0a ch\u1ecdn \u0111\u1ecba ch\u1ec9',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppColors.textHint,
                           ),
                     ),
                     trailing: TextButton(
                       onPressed: () {
-                        // TODO: Address picker
+                        context.push(AppRoutes.savedAddresses);
                       },
-                      child: const Text('Chọn địa chỉ'),
+                      child: const Text('Ch\u1ecdn \u0111\u1ecba ch\u1ec9'),
                     ),
                   ),
                 ),
@@ -260,7 +251,7 @@ class _CartContent extends ConsumerWidget {
 
                 // Payment method
                 Text(
-                  'Phương thức thanh toán',
+                  'Ph\u01b0\u01a1ng th\u1ee9c thanh to\u00e1n',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -270,7 +261,9 @@ class _CartContent extends ConsumerWidget {
                   groupValue: selectedPayment,
                   onChanged: (v) {
                     if (v != null) {
-                      ref.read(selectedPaymentProvider.notifier).state = v;
+                      ref
+                          .read(cartNotifierProvider.notifier)
+                          .setPaymentMethod(_paymentMethodToString(v));
                     }
                   },
                   child: Column(
@@ -292,19 +285,21 @@ class _CartContent extends ConsumerWidget {
                               value: method,
                               title: Text(
                                 _paymentLabel(method),
-                                style: Theme.of(context).textTheme.bodyMedium,
+                                style:
+                                    Theme.of(context).textTheme.bodyMedium,
                               ),
                               secondary: Icon(
                                 _paymentIcon(method),
                                 color: AppColors.textSecondary,
                               ),
-                              controlAffinity: ListTileControlAffinity.trailing,
+                              controlAffinity:
+                                  ListTileControlAffinity.trailing,
                               activeColor: AppColors.primary,
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                            ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12),
                           ),
-                        )
+                        ),
+                      )
                         .toList(),
                   ),
                 ),
@@ -324,7 +319,7 @@ class _CartContent extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Chi tiết đơn hàng',
+                          'Chi ti\u1ebft \u0111\u01a1n h\u00e0ng',
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall
@@ -332,18 +327,18 @@ class _CartContent extends ConsumerWidget {
                         ),
                         const SizedBox(height: 12),
                         _SummaryRow(
-                          label: 'Tạm tính',
+                          label: 'T\u1ea1m t\u00ednh',
                           value: _formatPrice(subtotal),
                         ),
                         const SizedBox(height: 8),
                         _SummaryRow(
-                          label: 'Phí giao hàng',
+                          label: 'Ph\u00ed giao h\u00e0ng',
                           value: _formatPrice(deliveryFee),
                         ),
                         if (discount > 0) ...[
                           const SizedBox(height: 8),
                           _SummaryRow(
-                            label: 'Giảm giá',
+                            label: 'Gi\u1ea3m gi\u00e1',
                             value: '-${_formatPrice(discount)}',
                             valueColor: AppColors.success,
                           ),
@@ -353,7 +348,7 @@ class _CartContent extends ConsumerWidget {
                           child: Divider(height: 1),
                         ),
                         _SummaryRow(
-                          label: 'Tổng cộng',
+                          label: 'T\u1ed5ng c\u1ed9ng',
                           value: _formatPrice(total),
                           isBold: true,
                         ),
@@ -390,7 +385,7 @@ class _CartContent extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Tổng cộng',
+                        'T\u1ed5ng c\u1ed9ng',
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -398,26 +393,23 @@ class _CartContent extends ConsumerWidget {
                       ),
                       Text(
                         _formatPrice(total),
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w700,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w700,
+                                ),
                       ),
                     ],
                   ),
                 ),
                 Expanded(
                   child: AppButton(
-                    label: 'Đặt hàng',
+                    label: '\u0110\u1eb7t h\u00e0ng',
                     icon: Icons.shopping_bag_outlined,
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Đang xử lý đơn hàng...'),
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
-                    },
+                    isLoading: isSubmitting,
+                    onPressed: isSubmitting
+                        ? null
+                        : () => _handleCheckout(context, ref),
                   ),
                 ),
               ],
@@ -426,6 +418,26 @@ class _CartContent extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _handleCheckout(BuildContext context, WidgetRef ref) async {
+    await ref.read(cartNotifierProvider.notifier).placeOrder();
+
+    if (!context.mounted) return;
+
+    final cartState = ref.read(cartNotifierProvider);
+
+    if (cartState.orderError == null && !cartState.isSubmitting) {
+      // Order succeeded — cart was cleared by placeOrder()
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('\u0110\u1eb7t h\u00e0ng th\u00e0nh c\u00f4ng!'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      context.go(AppRoutes.orders);
+    }
+    // Error case is handled by ref.listen in build()
   }
 }
 
@@ -463,7 +475,7 @@ class _CartItemTile extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    item.name,
+                    item.menuItem.name,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
@@ -479,7 +491,7 @@ class _CartItemTile extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              _formatPrice(item.unitPrice),
+              _formatPrice(item.menuItem.price),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppColors.textSecondary,
                   ),
@@ -503,7 +515,8 @@ class _CartItemTile extends StatelessWidget {
                         onTap: () => onQuantityChanged(item.quantity - 1),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 14),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 14),
                         child: Text(
                           '${item.quantity}',
                           style: Theme.of(context)
@@ -521,7 +534,7 @@ class _CartItemTile extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  _formatPrice(item.subtotal),
+                  _formatPrice(item.total),
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w700,
@@ -535,14 +548,17 @@ class _CartItemTile extends StatelessWidget {
             // Note field
             TextField(
               onChanged: onNoteChanged,
+              controller: TextEditingController(text: item.note ?? ''),
               decoration: InputDecoration(
-                hintText: 'Ghi chú (vd: ít hành, thêm nước mắm...)',
-                hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.textHint,
-                    ),
+                hintText:
+                    'Ghi ch\u00fa (vd: \u00edt h\u00e0nh, th\u00eam n\u01b0\u1edbc m\u1eafm...)',
+                hintStyle:
+                    Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.textHint,
+                        ),
                 isDense: true,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12, vertical: 10),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(color: AppColors.border),
