@@ -109,12 +109,67 @@ final _kSampleOrders = [
     pointsWillEarn: 0,
     createdAt: DateTime.now().subtract(const Duration(days: 7)),
   ),
+  DeliveryOrder(
+    orderId: 10050,
+    deliveryOrderId: 4800,
+    status: 'delivered',
+    items: const [
+      OrderItem(
+        menuItemId: 4,
+        name: 'Cơm tấm đặc biệt',
+        quantity: 2,
+        unitPrice: 65000,
+        subtotal: 130000,
+      ),
+      OrderItem(
+        menuItemId: 12,
+        name: 'Chè thập cẩm',
+        quantity: 2,
+        unitPrice: 20000,
+        subtotal: 40000,
+      ),
+    ],
+    subtotal: 170000,
+    deliveryFee: 0,
+    discount: 20000,
+    total: 150000,
+    estimatedDeliveryAt: DateTime.now().subtract(const Duration(days: 14)),
+    pointsWillEarn: 150,
+    createdAt: DateTime.now().subtract(const Duration(days: 14)),
+  ),
 ];
+
+// -- Filter ----------------------------------------------------------------
+
+enum OrderFilter { all, delivering, delivered, cancelled }
 
 // -- Providers --------------------------------------------------------------
 
 final orderHistoryProvider =
     StateProvider<List<DeliveryOrder>>((ref) => _kSampleOrders);
+
+final orderFilterProvider = StateProvider<OrderFilter>((ref) => OrderFilter.all);
+
+final filteredOrdersProvider = Provider<List<DeliveryOrder>>((ref) {
+  final orders = ref.watch(orderHistoryProvider);
+  final filter = ref.watch(orderFilterProvider);
+  return switch (filter) {
+    OrderFilter.all => orders,
+    OrderFilter.delivering => orders
+        .where((o) =>
+            o.status == 'delivering' ||
+            o.status == 'on_the_way' ||
+            o.status == 'picked_up' ||
+            o.status == 'pending' ||
+            o.status == 'confirmed' ||
+            o.status == 'preparing')
+        .toList(),
+    OrderFilter.delivered =>
+      orders.where((o) => o.status == 'delivered').toList(),
+    OrderFilter.cancelled =>
+      orders.where((o) => o.status == 'cancelled').toList(),
+  };
+});
 
 // -- Helpers ----------------------------------------------------------------
 
@@ -170,34 +225,90 @@ String _statusLabel(String status) {
   }
 }
 
+String _filterLabel(OrderFilter filter) {
+  return switch (filter) {
+    OrderFilter.all => 'Tất cả',
+    OrderFilter.delivering => 'Đang giao',
+    OrderFilter.delivered => 'Hoàn thành',
+    OrderFilter.cancelled => 'Đã hủy',
+  };
+}
+
 // -- Screen -----------------------------------------------------------------
 
-/// Order history screen showing past orders with status chips.
+/// Order history screen showing past orders with status filters and actions.
 class OrderHistoryScreen extends ConsumerWidget {
   const OrderHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final orders = ref.watch(orderHistoryProvider);
+    final orders = ref.watch(filteredOrdersProvider);
+    final activeFilter = ref.watch(orderFilterProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lịch sử đơn hàng'),
       ),
-      body: orders.isEmpty
-          ? _buildEmptyState(context)
-          : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: orders.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+      body: Column(
+        children: [
+          // Filter chips
+          SizedBox(
+            height: 48,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              itemCount: OrderFilter.values.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
               itemBuilder: (context, index) {
-                return _OrderCard(order: orders[index]);
+                final filter = OrderFilter.values[index];
+                final isSelected = activeFilter == filter;
+                return ChoiceChip(
+                  label: Text(_filterLabel(filter)),
+                  selected: isSelected,
+                  onSelected: (_) =>
+                      ref.read(orderFilterProvider.notifier).state = filter,
+                  selectedColor: AppColors.primary,
+                  labelStyle: TextStyle(
+                    color: isSelected ? Colors.white : AppColors.textPrimary,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                    fontSize: 13,
+                  ),
+                  backgroundColor: AppColors.surface,
+                  side: BorderSide(
+                    color: isSelected ? AppColors.primary : AppColors.border,
+                  ),
+                  showCheckmark: false,
+                );
               },
             ),
+          ),
+
+          // Orders list
+          Expanded(
+            child: orders.isEmpty
+                ? _buildEmptyState(context, activeFilter)
+                : ListView.separated(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: orders.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      return _OrderCard(order: orders[index]);
+                    },
+                  ),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildEmptyState(BuildContext context) {
+  Widget _buildEmptyState(BuildContext context, OrderFilter filter) {
+    final message = switch (filter) {
+      OrderFilter.all => 'Chưa có đơn hàng nào',
+      OrderFilter.delivering => 'Không có đơn đang giao',
+      OrderFilter.delivered => 'Chưa có đơn hoàn thành',
+      OrderFilter.cancelled => 'Không có đơn đã hủy',
+    };
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -211,26 +322,28 @@ class OrderHistoryScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Chưa có đơn hàng nào',
+              message,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: AppColors.textSecondary,
                   ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Hãy đặt món từ thực đơn\nđể bắt đầu nhé!',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textHint,
-                  ),
-            ),
-            const SizedBox(height: 24),
-            AppButton(
-              label: 'Xem thực đơn',
-              icon: Icons.restaurant_menu,
-              fullWidth: false,
-              onPressed: () => context.go(AppRoutes.menu),
-            ),
+            if (filter == OrderFilter.all) ...[
+              const SizedBox(height: 8),
+              Text(
+                'Hãy đặt món từ thực đơn\nđể bắt đầu nhé!',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textHint,
+                    ),
+              ),
+              const SizedBox(height: 24),
+              AppButton(
+                label: 'Xem thực đơn',
+                icon: Icons.restaurant_menu,
+                fullWidth: false,
+                onPressed: () => context.go(AppRoutes.menu),
+              ),
+            ],
           ],
         ),
       ),
@@ -262,8 +375,7 @@ class _OrderCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         onTap: isDelivering
             ? () {
-                context.go(
-                    '${AppRoutes.delivery}/${order.orderId}');
+                context.go('${AppRoutes.delivery}/${order.orderId}');
               }
             : null,
         child: Padding(
@@ -291,10 +403,11 @@ class _OrderCard extends StatelessWidget {
                     ),
                     child: Text(
                       _statusLabel(order.status),
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: _statusColor(order.status),
-                            fontWeight: FontWeight.w600,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.labelSmall?.copyWith(
+                                color: _statusColor(order.status),
+                                fontWeight: FontWeight.w600,
+                              ),
                     ),
                   ),
                 ],
@@ -322,16 +435,38 @@ class _OrderCard extends StatelessWidget {
 
               // Items summary
               Text(
-                order.items.map((i) => '${i.name} x${i.quantity}').join(', '),
+                order.items
+                    .map((i) => '${i.name} x${i.quantity}')
+                    .join(', '),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: AppColors.textSecondary,
                     ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
+
+              // Points earned
+              if (isCompleted && order.pointsWillEarn > 0) ...[
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Icon(Icons.star, size: 14, color: AppColors.secondary),
+                    const SizedBox(width: 4),
+                    Text(
+                      '+${order.pointsWillEarn} điểm',
+                      style:
+                          Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: AppColors.secondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                    ),
+                  ],
+                ),
+              ],
+
               const SizedBox(height: 8),
 
-              // Total + action
+              // Total + actions
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -342,42 +477,64 @@ class _OrderCard extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                   ),
-                  if (isDelivering)
-                    TextButton.icon(
-                      onPressed: () {
-                        context.go(
-                            '${AppRoutes.delivery}/${order.orderId}');
-                      },
-                      icon: const Icon(Icons.delivery_dining, size: 18),
-                      label: const Text('Theo dõi'),
-                      style: TextButton.styleFrom(
-                        foregroundColor: AppColors.primary,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 4),
-                        visualDensity: VisualDensity.compact,
-                      ),
-                    ),
-                  if (isCompleted)
-                    TextButton.icon(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content:
-                                Text('Đang thêm các món vào giỏ hàng...'),
-                            duration: Duration(seconds: 1),
-                            behavior: SnackBarBehavior.floating,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (isDelivering)
+                        TextButton.icon(
+                          onPressed: () {
+                            context.go(
+                                '${AppRoutes.delivery}/${order.orderId}');
+                          },
+                          icon: const Icon(Icons.delivery_dining, size: 18),
+                          label: const Text('Theo dõi'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppColors.primary,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 4),
+                            visualDensity: VisualDensity.compact,
                           ),
-                        );
-                      },
-                      icon: const Icon(Icons.replay, size: 18),
-                      label: const Text('Đặt lại'),
-                      style: TextButton.styleFrom(
-                        foregroundColor: AppColors.primary,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 4),
-                        visualDensity: VisualDensity.compact,
-                      ),
-                    ),
+                        ),
+                      if (isCompleted) ...[
+                        TextButton.icon(
+                          onPressed: () {
+                            context.push(
+                              '${AppRoutes.feedback}?orderId=${order.orderId}',
+                            );
+                          },
+                          icon: const Icon(Icons.rate_review_outlined,
+                              size: 18),
+                          label: const Text('Đánh giá'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppColors.secondary,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            visualDensity: VisualDensity.compact,
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Đang thêm các món vào giỏ hàng...'),
+                                duration: Duration(seconds: 1),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.replay, size: 18),
+                          label: const Text('Đặt lại'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppColors.primary,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            visualDensity: VisualDensity.compact,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 ],
               ),
             ],

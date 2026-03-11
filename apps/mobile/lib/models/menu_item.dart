@@ -14,20 +14,24 @@ class MenuItem {
     this.description,
     required this.price,
     this.imageUrl,
-    required this.category,
+    this.category = '',
     required this.available,
     this.tags,
   });
 
-  factory MenuItem.fromJson(Map<String, dynamic> json) {
+  factory MenuItem.fromJson(Map<String, dynamic> json, {String? categoryName}) {
     return MenuItem(
       id: json['id'] as int,
       name: json['name'] as String,
       description: json['description'] as String?,
-      price: (json['price'] as num).toDouble(),
+      price: (json['base_price'] as num?)?.toDouble() ??
+          (json['price'] as num?)?.toDouble() ??
+          0,
       imageUrl: json['image_url'] as String?,
-      category: json['category'] as String,
-      available: json['available'] as bool,
+      category: categoryName ?? json['category'] as String? ?? '',
+      available: json['is_available'] as bool? ??
+          json['available'] as bool? ??
+          true,
       tags: (json['tags'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -39,10 +43,10 @@ class MenuItem {
       'id': id,
       'name': name,
       'description': description,
-      'price': price,
+      'base_price': price,
       'image_url': imageUrl,
       'category': category,
-      'available': available,
+      'is_available': available,
       'tags': tags,
     };
   }
@@ -84,35 +88,45 @@ class MenuItem {
 }
 
 class MenuCategory {
+  final int? id;
   final String name;
   final List<MenuItem> items;
 
   const MenuCategory({
+    this.id,
     required this.name,
     required this.items,
   });
 
   factory MenuCategory.fromJson(Map<String, dynamic> json) {
+    final categoryName = json['name'] as String;
     return MenuCategory(
-      name: json['name'] as String,
+      id: json['id'] as int?,
+      name: categoryName,
       items: (json['items'] as List<dynamic>)
-          .map((e) => MenuItem.fromJson(e as Map<String, dynamic>))
+          .map((e) => MenuItem.fromJson(
+                e as Map<String, dynamic>,
+                categoryName: categoryName,
+              ))
           .toList(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'name': name,
       'items': items.map((e) => e.toJson()).toList(),
     };
   }
 
   MenuCategory copyWith({
+    int? id,
     String? name,
     List<MenuItem>? items,
   }) {
     return MenuCategory(
+      id: id ?? this.id,
       name: name ?? this.name,
       items: items ?? this.items,
     );
