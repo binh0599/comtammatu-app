@@ -5,12 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'package:uuid/uuid.dart';
+
 import 'core/cache/cache_service.dart';
 import 'core/config/env_config.dart';
+import 'core/network/api_client.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
@@ -60,6 +64,14 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Initialize PostHog analytics (staging/production only)
+  if (EnvConfig.enableAnalytics && EnvConfig.posthogApiKey.isNotEmpty) {
+    final posthogConfig = PostHogConfig(EnvConfig.posthogApiKey)
+      ..host = 'https://us.i.posthog.com'
+      ..captureApplicationLifecycleEvents = true;
+    await Posthog().setup(posthogConfig);
+  }
+
   // Set global error widget before runApp
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return MaterialApp(
@@ -107,11 +119,25 @@ Future<void> main() async {
   }
 }
 
+/// Returns a persistent device fingerprint (UUID), creating one if needed.
+String _getOrCreateDeviceFingerprint(SharedPreferences prefs) {
+  const key = 'device_fingerprint';
+  final existing = prefs.getString(key);
+  if (existing != null) return existing;
+
+  final fingerprint = const Uuid().v4();
+  prefs.setString(key, fingerprint);
+  return fingerprint;
+}
+
 void _runApp(SharedPreferences prefs) {
+  final deviceFingerprint = _getOrCreateDeviceFingerprint(prefs);
+
   runApp(
     ProviderScope(
       overrides: [
         cacheServiceProvider.overrideWithValue(CacheService(prefs: prefs)),
+        deviceFingerprintProvider.overrideWithValue(deviceFingerprint),
       ],
       child: const ComTamMaTuApp(),
     ),

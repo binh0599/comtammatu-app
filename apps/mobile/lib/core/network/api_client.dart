@@ -8,8 +8,11 @@ import 'api_exception.dart';
 
 /// Dio-based API client with auth, idempotency, and error handling.
 class ApiClient {
-  ApiClient({required Dio dio, required SupabaseClient supabase})
-      : _dio = dio,
+  ApiClient({
+    required Dio dio,
+    required SupabaseClient supabase,
+    String? deviceFingerprint,
+  })  : _dio = dio,
         _supabase = supabase {
     _dio.options
       ..baseUrl = AppConstants.apiBaseUrl
@@ -20,7 +23,10 @@ class ApiClient {
       ..sendTimeout = const Duration(milliseconds: AppConstants.sendTimeout);
 
     _dio.interceptors.addAll([
-      _AuthInterceptor(supabase: _supabase),
+      _AuthInterceptor(
+        supabase: _supabase,
+        deviceFingerprint: deviceFingerprint,
+      ),
       _IdempotencyInterceptor(),
       _ErrorInterceptor(),
     ]);
@@ -117,11 +123,15 @@ class ApiClient {
   }
 }
 
-/// Adds Bearer token from Supabase auth session.
+/// Adds Bearer token from Supabase auth session + standard headers.
 class _AuthInterceptor extends Interceptor {
-  _AuthInterceptor({required SupabaseClient supabase}) : _supabase = supabase;
+  _AuthInterceptor({
+    required SupabaseClient supabase,
+    this.deviceFingerprint,
+  }) : _supabase = supabase;
 
   final SupabaseClient _supabase;
+  final String? deviceFingerprint;
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -133,6 +143,10 @@ class _AuthInterceptor extends Interceptor {
     // Add standard headers
     options.headers['X-App-Version'] = '1.0.0';
     options.headers['X-Platform'] = 'mobile';
+
+    if (deviceFingerprint != null) {
+      options.headers['X-Device-Fingerprint'] = deviceFingerprint;
+    }
 
     handler.next(options);
   }
@@ -214,9 +228,17 @@ class _ErrorInterceptor extends Interceptor {
   }
 }
 
+/// Holds a persistent device fingerprint (UUID stored in SharedPreferences).
+final deviceFingerprintProvider = Provider<String?>((ref) => null);
+
 /// Riverpod provider for ApiClient.
 final apiClientProvider = Provider<ApiClient>((ref) {
   final dio = Dio();
   final supabase = Supabase.instance.client;
-  return ApiClient(dio: dio, supabase: supabase);
+  final fingerprint = ref.watch(deviceFingerprintProvider);
+  return ApiClient(
+    dio: dio,
+    supabase: supabase,
+    deviceFingerprint: fingerprint,
+  );
 });
