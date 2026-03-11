@@ -11,7 +11,7 @@ class MenuNotifier extends StateNotifier<MenuState> {
 
   final MenuRepository _menuRepository;
 
-  /// Load menu from API for a given branch.
+  /// Load menu with cache-first strategy for a given branch.
   Future<void> loadMenu({required int branchId}) async {
     state = const MenuLoading();
     try {
@@ -19,6 +19,21 @@ class MenuNotifier extends StateNotifier<MenuState> {
       state = MenuLoaded(categories: categories);
     } catch (e) {
       state = MenuError(message: e.toString());
+    }
+  }
+
+  /// Force refresh from network, bypassing cache.
+  Future<void> refreshMenu({required int branchId}) async {
+    final previous = state;
+    try {
+      final categories =
+          await _menuRepository.refreshMenu(branchId: branchId);
+      state = MenuLoaded(categories: categories);
+    } catch (e) {
+      // Keep previous loaded state if refresh fails
+      if (previous is! MenuLoaded) {
+        state = MenuError(message: e.toString());
+      }
     }
   }
 
