@@ -109,6 +109,7 @@ class _ScaffoldWithNavBar extends StatelessWidget {
     if (location.startsWith(AppRoutes.cart)) return 2;
     if (location.startsWith(AppRoutes.loyalty)) return 3;
     if (location.startsWith(AppRoutes.profile)) return 4;
+    if (location.startsWith(AppRoutes.orders)) return 4;
     return 0;
   }
 
