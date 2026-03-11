@@ -6,46 +6,53 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Build and upload to TestFlight"
+  desc "Build and distribute to Firebase App Distribution"
   lane :beta do
-    api_key = app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-      issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
-      key_content: Base64.decode64(ENV["APP_STORE_CONNECT_API_KEY_BASE64"]),
-      is_key_content_base64: false,
-      in_house: false
+    setup_ci if ENV["CI"]
+
+    match(
+      type: "adhoc",
+      app_identifier: "com.comtammatu.app",
+      readonly: true
     )
 
-    upload_to_testflight(
-      api_key: api_key,
-      ipa: "../build/ios/ipa/comtammatu.ipa",
-      skip_waiting_for_build_processing: true,
-      distribute_external: false,
-      changelog: "New build from CI"
+    build_ios_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "ad-hoc",
+      output_directory: "./build",
+      output_name: "ComTamMaTu.ipa"
+    )
+
+    firebase_app_distribution(
+      app: ENV["FIREBASE_IOS_APP_ID"],
+      groups: "internal-testers",
+      release_notes: changelog_from_git_commits(commits_count: 5),
+      ipa_path: "./build/ComTamMaTu.ipa"
     )
   end
 
-  desc "Submit the latest TestFlight build to App Store review"
-  lane :production do
-    api_key = app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-      issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
-      key_content: Base64.decode64(ENV["APP_STORE_CONNECT_API_KEY_BASE64"]),
-      is_key_content_base64: false,
-      in_house: false
+  desc "Deploy to App Store Connect (TestFlight)"
+  lane :deploy do
+    setup_ci if ENV["CI"]
+
+    match(
+      type: "appstore",
+      app_identifier: "com.comtammatu.app",
+      readonly: true
     )
 
-    deliver(
-      api_key: api_key,
-      submit_for_review: true,
-      automatic_release: false,
-      force: true,
-      skip_metadata: false,
-      skip_screenshots: true,
-      submission_information: {
-        add_id_info_uses_idfa: false
-      },
-      precheck_include_in_app_purchases: false
+    build_ios_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "app-store",
+      output_directory: "./build",
+      output_name: "ComTamMaTu.ipa"
+    )
+
+    upload_to_testflight(
+      ipa: "./build/ComTamMaTu.ipa",
+      skip_waiting_for_build_processing: true
     )
   end
 end

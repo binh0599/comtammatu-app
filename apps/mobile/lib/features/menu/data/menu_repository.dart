@@ -10,13 +10,15 @@ class MenuRepository {
 
   final ApiClient _apiClient;
 
-  /// Fetches the full menu grouped by category.
-  Future<List<MenuCategory>> getMenu() async {
+  /// Fetches the full menu grouped by category for a given branch.
+  Future<List<MenuCategory>> getMenu({required int branchId}) async {
     return _apiClient.get<List<MenuCategory>>(
       '/get-menu',
+      queryParameters: {'branch_id': branchId.toString()},
       fromJson: (json) {
-        final list = json as List<dynamic>;
-        return list
+        final map = json as Map<String, dynamic>;
+        final categories = map['categories'] as List<dynamic>;
+        return categories
             .map((e) => MenuCategory.fromJson(e as Map<String, dynamic>))
             .toList();
       },

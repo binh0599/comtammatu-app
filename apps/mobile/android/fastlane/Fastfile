@@ -33,8 +33,10 @@ platform :android do
     )
   end
 
-  desc "Promote beta build to production"
-  lane :production do
+  desc "Deploy to Google Play (production with 10% rollout)"
+  lane :deploy do
+    sh("cd ../.. && flutter build appbundle --release")
+
     upload_to_play_store(
       track: "beta",
       track_promote_to: "production",

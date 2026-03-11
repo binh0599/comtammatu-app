@@ -11,11 +11,11 @@ class MenuNotifier extends StateNotifier<MenuState> {
 
   final MenuRepository _menuRepository;
 
-  /// Load menu from API.
-  Future<void> loadMenu() async {
+  /// Load menu from API for a given branch.
+  Future<void> loadMenu({required int branchId}) async {
     state = const MenuLoading();
     try {
-      final categories = await _menuRepository.getMenu();
+      final categories = await _menuRepository.getMenu(branchId: branchId);
       state = MenuLoaded(categories: categories);
     } catch (e) {
       state = MenuError(message: e.toString());
