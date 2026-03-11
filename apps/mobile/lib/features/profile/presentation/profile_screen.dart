@@ -9,6 +9,17 @@ import '../../auth/domain/auth_state.dart';
 import '../../loyalty/domain/loyalty_notifier.dart';
 import '../../loyalty/domain/loyalty_state.dart';
 
+// -- Helpers --------------------------------------------------------------
+
+Color _tierColor(String tierCode) {
+  return switch (tierCode) {
+    'silver' => AppColors.tierSilver,
+    'gold' => AppColors.tierGold,
+    'diamond' => AppColors.tierDiamond,
+    _ => AppColors.tierBronze,
+  };
+}
+
 // -- Screen ---------------------------------------------------------------
 
 /// Profile screen with user info, tier badge, and settings menu.
@@ -298,15 +309,6 @@ class _QuickActionItem extends StatelessWidget {
       ),
     );
   }
-
-  Color _tierColor(String tierCode) {
-    return switch (tierCode) {
-      'silver' => AppColors.tierSilver,
-      'gold' => AppColors.tierGold,
-      'diamond' => AppColors.tierDiamond,
-      _ => AppColors.tierBronze,
-    };
-  }
 }
 
 // -- Menu section ---------------------------------------------------------
@@ -375,7 +377,7 @@ class _MenuSection extends ConsumerWidget {
               label: 'Đăng xuất',
               isDestructive: true,
               onTap: () {
-                showDialog(
+                showDialog<void>(
                   context: context,
                   builder: (ctx) => AlertDialog(
                     title: const Text('Đăng xuất'),
