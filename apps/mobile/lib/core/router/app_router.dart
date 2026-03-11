@@ -108,7 +108,8 @@ class _ScaffoldWithNavBar extends StatelessWidget {
     if (location.startsWith(AppRoutes.menu)) return 1;
     if (location.startsWith(AppRoutes.cart)) return 2;
     if (location.startsWith(AppRoutes.loyalty)) return 3;
-    if (location.startsWith(AppRoutes.profile)) return 4;
+    if (location.startsWith(AppRoutes.profile) ||
+        location.startsWith(AppRoutes.orders)) return 4;
     return 0;
   }
 
@@ -190,10 +191,26 @@ class _AdminScaffoldWithNavBar extends StatelessWidget {
   }
 }
 
+/// Listenable that notifies GoRouter when auth state changes.
+class _AuthChangeNotifier extends ChangeNotifier {
+  _AuthChangeNotifier(Ref ref) {
+    ref.listen<AppAuthState>(authNotifierProvider, (_, __) {
+      notifyListeners();
+    });
+  }
+}
+
 final appRouterProvider = Provider<GoRouter>((ref) {
-  return GoRouter(
+  final authChangeNotifier = _AuthChangeNotifier(ref);
+
+  ref.onDispose(() {
+    authChangeNotifier.dispose();
+  });
+
+  final router = GoRouter(
     initialLocation: AppRoutes.splash,
     debugLogDiagnostics: true,
+    refreshListenable: authChangeNotifier,
     redirect: (context, state) {
       final isSplash = state.uri.path == AppRoutes.splash;
       if (isSplash) return null; // Allow splash through
@@ -230,10 +247,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.otp,
         name: 'otp',
+        redirect: (context, state) {
+          final phone = state.extra as String?;
+          if (phone == null || phone.isEmpty) return AppRoutes.login;
+          return null;
+        },
         builder: (context, state) {
-          final phone = state.uri.queryParameters['phone'] ?? '';
-          final type = state.uri.queryParameters['type'] ?? 'signup';
-          return OtpScreen(phone: phone, type: type);
+          final phone = state.extra as String? ?? '';
+          return OtpScreen(phoneNumber: phone);
         },
       ),
 
@@ -382,4 +403,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
     ),
   );
+
+  ref.onDispose(() {
+    router.dispose();
+  });
+
+  return router;
 });

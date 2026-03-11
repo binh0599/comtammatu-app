@@ -1,3 +1,8 @@
+# Required environment variables:
+#   APP_STORE_CONNECT_API_KEY_ID     — App Store Connect API Key ID
+#   APP_STORE_CONNECT_ISSUER_ID      — App Store Connect Issuer ID
+#   APP_STORE_CONNECT_API_KEY_BASE64 — Base64-encoded App Store Connect API private key (.p8)
+
 default_platform(:ios)
 
 platform :ios do

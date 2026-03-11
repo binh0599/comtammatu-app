@@ -4,6 +4,21 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../auth/domain/auth_notifier.dart';
+import '../../auth/domain/auth_state.dart';
+import '../../loyalty/domain/loyalty_notifier.dart';
+import '../../loyalty/domain/loyalty_state.dart';
+
+// -- Helpers --------------------------------------------------------------
+
+Color _tierColor(String tierCode) {
+  return switch (tierCode) {
+    'silver' => AppColors.tierSilver,
+    'gold' => AppColors.tierGold,
+    'diamond' => AppColors.tierDiamond,
+    _ => AppColors.tierBronze,
+  };
+}
 
 // -- Screen ---------------------------------------------------------------
 
@@ -60,11 +75,42 @@ class ProfileScreen extends ConsumerWidget {
 
 // -- User header ----------------------------------------------------------
 
-class _UserHeader extends StatelessWidget {
+class _UserHeader extends ConsumerWidget {
   const _UserHeader();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authNotifierProvider);
+    final loyaltyState = ref.watch(loyaltyNotifierProvider);
+
+    // Extract user info from auth state
+    final String displayName;
+    final String displayPhone;
+    if (authState is Authenticated) {
+      final user = authState.user;
+      displayName = user.userMetadata?['full_name'] as String? ?? 'Người dùng';
+      displayPhone = user.phone ?? '';
+    } else {
+      displayName = 'Người dùng';
+      displayPhone = '';
+    }
+
+    // Extract loyalty info
+    final String tierName;
+    final String pointsText;
+    final Color tierColor;
+    if (loyaltyState is LoyaltyLoaded) {
+      final dashboard = loyaltyState.dashboard;
+      tierName = 'Hạng ${dashboard.tier.name}';
+      final pts = dashboard.member.availablePoints.toInt();
+      pointsText = '$pts điểm tích lũy';
+      tierColor = _tierColor(dashboard.tier.tierCode);
+    } else {
+      tierName = '';
+      pointsText = '';
+      tierColor = AppColors.tierBronze;
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Card(
@@ -115,60 +161,62 @@ class _UserHeader extends StatelessWidget {
 
                 // Name
                 Text(
-                  'Nguyễn Văn A',
+                  displayName,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '0901 234 567',
+                  displayPhone,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textSecondary,
                       ),
                 ),
                 const SizedBox(height: 12),
 
-                // Tier badge
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.tierBronze,
-                        AppColors.tierBronze.withValues(alpha: 0.7),
+                // Tier badge (only show if loyalty data loaded)
+                if (tierName.isNotEmpty) ...[
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          tierColor,
+                          tierColor.withValues(alpha: 0.7),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.workspace_premium,
+                          size: 18,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          tierName,
+                          style:
+                              Theme.of(context).textTheme.labelMedium?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.workspace_premium,
-                        size: 18,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        'Hạng Đồng',
-                        style:
-                            Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                      ),
-                    ],
+                  const SizedBox(height: 8),
+                  Text(
+                    pointsText,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '1.250 điểm tích lũy',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                ),
+                ],
               ],
             ),
           ),
@@ -265,11 +313,11 @@ class _QuickActionItem extends StatelessWidget {
 
 // -- Menu section ---------------------------------------------------------
 
-class _MenuSection extends StatelessWidget {
+class _MenuSection extends ConsumerWidget {
   const _MenuSection();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Card(
@@ -281,6 +329,12 @@ class _MenuSection extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: Column(
           children: [
+            _ProfileMenuItem(
+              icon: Icons.receipt_long_outlined,
+              label: 'Lịch sử đơn hàng',
+              onTap: () => context.push(AppRoutes.orders),
+            ),
+            const Divider(height: 1, indent: 56),
             _ProfileMenuItem(
               icon: Icons.person_outline,
               label: 'Chỉnh sửa thông tin',
@@ -323,7 +377,7 @@ class _MenuSection extends StatelessWidget {
               label: 'Đăng xuất',
               isDestructive: true,
               onTap: () {
-                showDialog(
+                showDialog<void>(
                   context: context,
                   builder: (ctx) => AlertDialog(
                     title: const Text('Đăng xuất'),
@@ -338,7 +392,7 @@ class _MenuSection extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           Navigator.of(ctx).pop();
-                          context.go(AppRoutes.login);
+                          ref.read(authNotifierProvider.notifier).signOut();
                         },
                         child: Text(
                           'Đăng xuất',
