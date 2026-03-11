@@ -203,7 +203,11 @@ class _AuthChangeNotifier extends ChangeNotifier {
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authChangeNotifier = _AuthChangeNotifier(ref);
 
-  return GoRouter(
+  ref.onDispose(() {
+    authChangeNotifier.dispose();
+  });
+
+  final router = GoRouter(
     initialLocation: AppRoutes.splash,
     debugLogDiagnostics: true,
     refreshListenable: authChangeNotifier,
@@ -243,8 +247,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.otp,
         name: 'otp',
+        redirect: (context, state) {
+          final phone = state.extra as String?;
+          if (phone == null || phone.isEmpty) return AppRoutes.login;
+          return null;
+        },
         builder: (context, state) {
-          final phone = state.uri.queryParameters['phone'] ?? '';
+          final phone = state.extra as String? ?? '';
           return OtpScreen(phoneNumber: phone);
         },
       ),
@@ -394,4 +403,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
     ),
   );
+
+  ref.onDispose(() {
+    router.dispose();
+  });
+
+  return router;
 });
