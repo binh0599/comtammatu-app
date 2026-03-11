@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 part 'app_database.g.dart';
 
@@ -71,11 +75,20 @@ class AppDatabase extends _$AppDatabase {
   }
 }
 
+/// Opens a persistent SQLite database in the app's data directory.
+LazyDatabase _openConnection() {
+  return LazyDatabase(() async {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final file = File(p.join(dbFolder.path, 'comtammatu.db'));
+    return NativeDatabase.createInBackground(file);
+  });
+}
+
 /// Riverpod provider for the Drift [AppDatabase].
 ///
-/// Uses a lazy native SQLite database stored in the app's data directory.
+/// Uses a persistent SQLite database stored in the app's data directory.
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  final db = AppDatabase(NativeDatabase.memory());
+  final db = AppDatabase(_openConnection());
   ref.onDispose(db.close);
   return db;
 });

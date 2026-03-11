@@ -54,10 +54,10 @@ class MenuItem {
 
 const _kCategories = [
   'Tất cả',
-  'Cơm Tấm',
-  'Món Khác',
-  'Ăn Kèm',
-  'Giải Khát',
+  'Cơm tấm',
+  'Món thêm',
+  'Nước uống',
+  'Tráng miệng',
 ];
 
 const _kSampleItems = [
