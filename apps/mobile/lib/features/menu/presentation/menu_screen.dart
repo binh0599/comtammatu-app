@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -522,14 +523,21 @@ class _MenuItemCard extends StatelessWidget {
                   child: item.imageUrl != null
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            item.imageUrl!,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Icon(
-                              Icons.restaurant,
-                              size: 36,
-                              color: AppColors.primary.withValues(alpha: 0.4),
+                          child: CachedNetworkImage(
+                            imageUrl: item.imageUrl!,
+                            placeholder: (context, url) => const Center(
+                              child:
+                                  CircularProgressIndicator(strokeWidth: 2),
                             ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(
+                              Icons.broken_image_outlined,
+                              size: 36,
+                              color: Colors.grey,
+                            ),
+                            fit: BoxFit.cover,
+                            width: 80,
+                            height: 80,
                           ),
                         )
                       : Icon(
