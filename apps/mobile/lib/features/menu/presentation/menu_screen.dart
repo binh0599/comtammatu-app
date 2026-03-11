@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/cache/cache_service.dart';
 import '../../../core/network/api_client.dart';
@@ -27,7 +29,9 @@ class MenuItem {
   final String? imageUrl;
   final bool isPopular;
 
-  factory MenuItem.fromJson(Map<String, dynamic> json, {String? categoryName}) => MenuItem(
+  factory MenuItem.fromJson(Map<String, dynamic> json,
+          {String? categoryName}) =>
+      MenuItem(
         id: json['id'] as int,
         name: json['name'] as String,
         price: (json['base_price'] as num?)?.toInt() ??
@@ -200,7 +204,7 @@ class MenuNotifier extends StateNotifier<MenuLoadState> {
     if (cacheService.isCacheValid('cache_menu', _cacheMaxAge)) {
       final cached = cacheService.getCachedMenu();
       if (cached.isNotEmpty) {
-        final items = cached.map((e) => MenuItem.fromJson(e)).toList();
+        final items = cached.map(MenuItem.fromJson).toList();
         state = MenuLoaded(items, fromCache: true);
         // Still fetch fresh data in background — errors are non-fatal here
         _refreshFromApi().ignore();
@@ -224,7 +228,7 @@ class MenuNotifier extends StateNotifier<MenuLoadState> {
     // Fallback to persistent cache (even if expired)
     final cached = cacheService.getCachedMenu();
     if (cached.isNotEmpty) {
-      final items = cached.map((e) => MenuItem.fromJson(e)).toList();
+      final items = cached.map(MenuItem.fromJson).toList();
       state = MenuLoaded(items, fromCache: true);
     } else {
       // Last resort: sample data
@@ -277,16 +281,17 @@ final menuNotifierProvider =
     // Fallback: use Drift-backed CacheService for offline-first menu access
     // when SharedPreferences or cacheServiceProvider is not yet ready.
     final db = ref.watch(appDatabaseProvider);
+    final dio = Dio();
+    final supabase = Supabase.instance.client;
     return MenuNotifier(
-      apiClient: ApiClient(),
+      apiClient: ApiClient(dio: dio, supabase: supabase),
       cacheService: CacheService.fromDrift(db: db),
     );
   }
 });
 
 // Fallback providers for when MenuNotifier isn't initialized
-final menuItemsProvider =
-    Provider<List<MenuItem>>((ref) => _kSampleItems);
+final menuItemsProvider = Provider<List<MenuItem>>((ref) => _kSampleItems);
 
 final menuSearchQueryProvider = StateProvider<String>((ref) => '');
 
@@ -358,10 +363,10 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
         title: const Text('Thực đơn'),
         actions: [
           if (menuState is MenuLoaded && menuState.fromCache)
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
+            const Padding(
+              padding: EdgeInsets.only(right: 8),
               child: Chip(
-                label: const Text(
+                label: Text(
                   'Ngoại tuyến',
                   style: TextStyle(fontSize: 11, color: Colors.white),
                 ),
@@ -385,14 +390,14 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
                 fillColor: AppColors.surface,
-                contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                contentPadding: const EdgeInsets.symmetric(),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: AppColors.border),
+                  borderSide: const BorderSide(color: AppColors.border),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: AppColors.border),
+                  borderSide: const BorderSide(color: AppColors.border),
                 ),
               ),
             ),
@@ -418,8 +423,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                   selectedColor: AppColors.primary,
                   labelStyle: TextStyle(
                     color: isSelected ? Colors.white : AppColors.textPrimary,
-                    fontWeight:
-                        isSelected ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   ),
                   backgroundColor: AppColors.surface,
                   side: BorderSide(
@@ -446,7 +450,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.search_off,
                             size: 64,
                             color: AppColors.textHint,
@@ -454,12 +458,10 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                           const SizedBox(height: 12),
                           Text(
                             'Không tìm thấy món ăn',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      color: AppColors.textSecondary,
+                                    ),
                           ),
                         ],
                       ),
@@ -475,8 +477,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                       child: ListView.separated(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                         itemCount: filteredItems.length,
-                        separatorBuilder: (_, __) =>
-                            const SizedBox(height: 12),
+                        separatorBuilder: (_, __) => const SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           return _MenuItemCard(item: filteredItems[index]);
                         },
@@ -502,7 +503,7 @@ class _MenuItemCard extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.border),
+        side: const BorderSide(color: AppColors.border),
       ),
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -577,10 +578,9 @@ class _MenuItemCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       item.description,
-                      style:
-                          Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),

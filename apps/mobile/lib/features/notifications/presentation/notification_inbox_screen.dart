@@ -97,9 +97,7 @@ class _NotificationInboxScreenState
     super.initState();
     // Load notifications on first build.
     Future.microtask(() {
-      ref
-          .read(notificationInboxNotifierProvider.notifier)
-          .loadNotifications();
+      ref.read(notificationInboxNotifierProvider.notifier).loadNotifications();
     });
   }
 
@@ -140,7 +138,8 @@ class _NotificationInboxScreenState
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.error_outline, size: 64, color: AppColors.textHint),
+              const Icon(Icons.error_outline,
+                  size: 64, color: AppColors.textHint),
               const SizedBox(height: 16),
               Text(
                 'Không thể tải thông báo',
@@ -176,7 +175,7 @@ class _NotificationInboxScreenState
         child: ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 8),
           itemCount: state.notifications.length,
-          separatorBuilder: (_, __) => Divider(
+          separatorBuilder: (_, __) => const Divider(
             height: 1,
             color: AppColors.divider,
             indent: 72,
@@ -227,7 +226,7 @@ class _NotificationInboxScreenState
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            const Icon(
               Icons.notifications_none_outlined,
               size: 64,
               color: AppColors.textHint,

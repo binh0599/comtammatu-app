@@ -116,8 +116,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildLoyaltyCard(BuildContext context, LoyaltyState loyaltyState) {
-    String pointsText = '---';
-    String tierName = '---';
+    var pointsText = '---';
+    var tierName = '---';
     double progressPercent = 0;
 
     if (loyaltyState is LoyaltyLoaded) {
@@ -326,9 +326,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ...transactions.take(3).map((txn) => ListTile(
               contentPadding: EdgeInsets.zero,
               leading: CircleAvatar(
-                backgroundColor: txn.type == 'earn' || txn.type == 'checkin_bonus'
-                    ? AppColors.success.withValues(alpha: 0.1)
-                    : AppColors.error.withValues(alpha: 0.1),
+                backgroundColor:
+                    txn.type == 'earn' || txn.type == 'checkin_bonus'
+                        ? AppColors.success.withValues(alpha: 0.1)
+                        : AppColors.error.withValues(alpha: 0.1),
                 child: Icon(
                   txn.type == 'earn' || txn.type == 'checkin_bonus'
                       ? Icons.add

@@ -82,8 +82,7 @@ class NotificationInboxNotifier extends StateNotifier<NotificationInboxState> {
   void deleteNotification(String id) {
     final current = state;
     if (current is NotificationInboxLoaded) {
-      final updated =
-          current.notifications.where((n) => n.id != id).toList();
+      final updated = current.notifications.where((n) => n.id != id).toList();
       state = NotificationInboxLoaded(notifications: updated);
     }
   }
@@ -91,8 +90,9 @@ class NotificationInboxNotifier extends StateNotifier<NotificationInboxState> {
 
 // -- Providers ----------------------------------------------------------------
 
-final notificationInboxNotifierProvider = StateNotifierProvider<
-    NotificationInboxNotifier, NotificationInboxState>((ref) {
+final notificationInboxNotifierProvider =
+    StateNotifierProvider<NotificationInboxNotifier, NotificationInboxState>(
+        (ref) {
   final repo = ref.watch(notificationRepositoryProvider);
   return NotificationInboxNotifier(repository: repo);
 });

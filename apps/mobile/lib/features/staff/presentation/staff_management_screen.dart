@@ -6,9 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/staff_member.dart';
 import '../../../shared/widgets/empty_view.dart';
-import '../../../shared/widgets/error_view.dart';
-import '../../../shared/widgets/loading_indicator.dart';
-import '../domain/staff_notifier.dart';
 
 // ---------------------------------------------------------------------------
 // Sample data provider (thay thế bằng API thực tế sau)
@@ -21,7 +18,6 @@ final _sampleStaffProvider = Provider<List<StaffMember>>((ref) {
       name: 'Nguyễn Văn An',
       phone: '0901234567',
       role: StaffRole.manager,
-      isActive: true,
       hireDate: DateTime(2023, 1, 15),
       branchId: 1,
       branchName: 'Chi nhánh Quận 1',
@@ -31,7 +27,6 @@ final _sampleStaffProvider = Provider<List<StaffMember>>((ref) {
       name: 'Trần Thị Bích',
       phone: '0912345678',
       role: StaffRole.cashier,
-      isActive: true,
       hireDate: DateTime(2023, 3, 20),
       branchId: 1,
       branchName: 'Chi nhánh Quận 1',
@@ -41,7 +36,6 @@ final _sampleStaffProvider = Provider<List<StaffMember>>((ref) {
       name: 'Lê Minh Châu',
       phone: '0923456789',
       role: StaffRole.chef,
-      isActive: true,
       hireDate: DateTime(2023, 5, 10),
       branchId: 1,
       branchName: 'Chi nhánh Quận 1',
@@ -51,8 +45,7 @@ final _sampleStaffProvider = Provider<List<StaffMember>>((ref) {
       name: 'Phạm Đức Dũng',
       phone: '0934567890',
       role: StaffRole.waiter,
-      isActive: true,
-      hireDate: DateTime(2023, 7, 1),
+      hireDate: DateTime(2023, 7),
       branchId: 1,
       branchName: 'Chi nhánh Quận 1',
     ),
@@ -71,7 +64,6 @@ final _sampleStaffProvider = Provider<List<StaffMember>>((ref) {
       name: 'Võ Thanh Hải',
       phone: '0956789012',
       role: StaffRole.waiter,
-      isActive: true,
       hireDate: DateTime(2023, 9, 15),
       branchId: 2,
       branchName: 'Chi nhánh Quận 3',
@@ -81,7 +73,6 @@ final _sampleStaffProvider = Provider<List<StaffMember>>((ref) {
       name: 'Đặng Thị Mai',
       phone: '0967890123',
       role: StaffRole.inventory,
-      isActive: true,
       hireDate: DateTime(2024, 1, 5),
       branchId: 2,
       branchName: 'Chi nhánh Quận 3',
@@ -440,7 +431,7 @@ class _StaffCard extends StatelessWidget {
                 // Avatar
                 CircleAvatar(
                   radius: 24,
-                  backgroundColor: color.withOpacity(0.15),
+                  backgroundColor: color.withValues(alpha: 0.15),
                   child: Text(
                     initial,
                     style: TextStyle(
@@ -499,7 +490,7 @@ class _StaffCard extends StatelessWidget {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: color.withOpacity(0.12),
+                              color: color.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
@@ -512,7 +503,7 @@ class _StaffCard extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Icon(
+                          const Icon(
                             Icons.location_on_outlined,
                             size: 14,
                             color: AppColors.textHint,
@@ -535,7 +526,7 @@ class _StaffCard extends StatelessWidget {
                 ),
 
                 const SizedBox(width: 4),
-                Icon(
+                const Icon(
                   Icons.chevron_right,
                   color: AppColors.textHint,
                 ),
@@ -591,7 +582,7 @@ void _showDetailBottomSheet(
             // Avatar
             CircleAvatar(
               radius: 36,
-              backgroundColor: color.withOpacity(0.15),
+              backgroundColor: color.withValues(alpha: 0.15),
               child: Text(
                 initial,
                 style: TextStyle(
@@ -617,7 +608,7 @@ void _showDetailBottomSheet(
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.12),
+                color: color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(
@@ -705,9 +696,7 @@ void _showDetailBottomSheet(
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  ref
-                      .read(_staffListProvider.notifier)
-                      .toggleActive(member.id);
+                  ref.read(_staffListProvider.notifier).toggleActive(member.id);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -728,14 +717,11 @@ void _showDetailBottomSheet(
                       : Icons.person_add_outlined,
                 ),
                 label: Text(
-                  member.isActive
-                      ? 'Đánh dấu nghỉ việc'
-                      : 'Kích hoạt lại',
+                  member.isActive ? 'Đánh dấu nghỉ việc' : 'Kích hoạt lại',
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: member.isActive
-                      ? AppColors.error
-                      : AppColors.success,
+                  backgroundColor:
+                      member.isActive ? AppColors.error : AppColors.success,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
@@ -800,9 +786,9 @@ class _DetailInfoRow extends StatelessWidget {
 void _showAddStaffDialog(BuildContext context, WidgetRef ref) {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
-  StaffRole selectedRole = StaffRole.waiter;
-  int selectedBranchId = 1;
-  String selectedBranchName = 'Chi nhánh Quận 1';
+  var selectedRole = StaffRole.waiter;
+  var selectedBranchId = 1;
+  var selectedBranchName = 'Chi nhánh Quận 1';
   final formKey = GlobalKey<FormState>();
 
   showDialog<void>(
@@ -856,7 +842,7 @@ void _showAddStaffDialog(BuildContext context, WidgetRef ref) {
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<StaffRole>(
-                      value: selectedRole,
+                      initialValue: selectedRole,
                       decoration: const InputDecoration(
                         labelText: 'Vai trò',
                         prefixIcon: Icon(Icons.badge_outlined),
@@ -878,7 +864,7 @@ void _showAddStaffDialog(BuildContext context, WidgetRef ref) {
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<int>(
-                      value: selectedBranchId,
+                      initialValue: selectedBranchId,
                       decoration: const InputDecoration(
                         labelText: 'Chi nhánh',
                         prefixIcon: Icon(Icons.store_outlined),
@@ -929,7 +915,6 @@ void _showAddStaffDialog(BuildContext context, WidgetRef ref) {
                       name: nameController.text.trim(),
                       phone: phoneController.text.trim(),
                       role: selectedRole,
-                      isActive: true,
                       hireDate: DateTime.now(),
                       branchId: selectedBranchId,
                       branchName: selectedBranchName,
@@ -973,9 +958,9 @@ void _showEditStaffDialog(
 ) {
   final nameController = TextEditingController(text: member.name);
   final phoneController = TextEditingController(text: member.phone);
-  StaffRole selectedRole = member.role;
-  int selectedBranchId = member.branchId;
-  String selectedBranchName = member.branchName;
+  var selectedRole = member.role;
+  var selectedBranchId = member.branchId;
+  var selectedBranchName = member.branchName;
   final formKey = GlobalKey<FormState>();
 
   showDialog<void>(
@@ -1027,7 +1012,7 @@ void _showEditStaffDialog(
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<StaffRole>(
-                      value: selectedRole,
+                      initialValue: selectedRole,
                       decoration: const InputDecoration(
                         labelText: 'Vai trò',
                         prefixIcon: Icon(Icons.badge_outlined),
@@ -1049,7 +1034,7 @@ void _showEditStaffDialog(
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<int>(
-                      value: selectedBranchId,
+                      initialValue: selectedBranchId,
                       decoration: const InputDecoration(
                         labelText: 'Chi nhánh',
                         prefixIcon: Icon(Icons.store_outlined),

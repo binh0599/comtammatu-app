@@ -253,6 +253,240 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Cài đặt'**
   String get settings;
+
+  /// No description provided for @vouchers.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ưu đãi'**
+  String get vouchers;
+
+  /// No description provided for @feedback.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đánh giá'**
+  String get feedback;
+
+  /// No description provided for @dashboard.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bảng điều khiển'**
+  String get dashboard;
+
+  /// No description provided for @staffManagement.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quản lý nhân viên'**
+  String get staffManagement;
+
+  /// No description provided for @inventory.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kho hàng'**
+  String get inventory;
+
+  /// No description provided for @savedAddresses.
+  ///
+  /// In vi, this message translates to:
+  /// **'Địa chỉ đã lưu'**
+  String get savedAddresses;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chỉnh sửa hồ sơ'**
+  String get editProfile;
+
+  /// No description provided for @orderHistory.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lịch sử đơn hàng'**
+  String get orderHistory;
+
+  /// No description provided for @deliveryTracking.
+  ///
+  /// In vi, this message translates to:
+  /// **'Theo dõi giao hàng'**
+  String get deliveryTracking;
+
+  /// No description provided for @redeemPoints.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đổi điểm'**
+  String get redeemPoints;
+
+  /// No description provided for @earnPoints.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tích điểm'**
+  String get earnPoints;
+
+  /// No description provided for @scanQR.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quét mã QR'**
+  String get scanQR;
+
+  /// No description provided for @cancel.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hủy'**
+  String get cancel;
+
+  /// No description provided for @confirm.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xác nhận'**
+  String get confirm;
+
+  /// No description provided for @save.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lưu'**
+  String get save;
+
+  /// No description provided for @delete.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xóa'**
+  String get delete;
+
+  /// No description provided for @edit.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sửa'**
+  String get edit;
+
+  /// No description provided for @search.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tìm kiếm'**
+  String get search;
+
+  /// No description provided for @filter.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lọc'**
+  String get filter;
+
+  /// No description provided for @sortBy.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sắp xếp theo'**
+  String get sortBy;
+
+  /// No description provided for @all.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tất cả'**
+  String get all;
+
+  /// No description provided for @today.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hôm nay'**
+  String get today;
+
+  /// No description provided for @thisWeek.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tuần này'**
+  String get thisWeek;
+
+  /// No description provided for @thisMonth.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tháng này'**
+  String get thisMonth;
+
+  /// No description provided for @totalRevenue.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tổng doanh thu'**
+  String get totalRevenue;
+
+  /// No description provided for @totalOrders.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tổng đơn hàng'**
+  String get totalOrders;
+
+  /// No description provided for @newMembers.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thành viên mới'**
+  String get newMembers;
+
+  /// No description provided for @lowStock.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sắp hết hàng'**
+  String get lowStock;
+
+  /// No description provided for @restock.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhập hàng'**
+  String get restock;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chào mừng trở lại!'**
+  String get welcomeBack;
+
+  /// No description provided for @seeAll.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xem tất cả'**
+  String get seeAll;
+
+  /// No description provided for @noNotifications.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không có thông báo nào'**
+  String get noNotifications;
+
+  /// No description provided for @noOrders.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn chưa có đơn hàng nào'**
+  String get noOrders;
+
+  /// No description provided for @emptyCart.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giỏ hàng trống'**
+  String get emptyCart;
+
+  /// No description provided for @continueOrdering.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiếp tục đặt hàng'**
+  String get continueOrdering;
+
+  /// No description provided for @orderSuccess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đặt hàng thành công!'**
+  String get orderSuccess;
+
+  /// No description provided for @pointsEarned.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn đã nhận được {points} điểm'**
+  String pointsEarned(int points);
+
+  /// No description provided for @itemCount.
+  ///
+  /// In vi, this message translates to:
+  /// **'{count} món'**
+  String itemCount(int count);
+
+  /// No description provided for @priceFormat.
+  ///
+  /// In vi, this message translates to:
+  /// **'{price}đ'**
+  String priceFormat(String price);
 }
 
 class _AppLocalizationsDelegate

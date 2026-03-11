@@ -1,59 +1,24 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'menu_item.dart';
 
-class CartItem {
-  final MenuItem menuItem;
-  final int quantity;
-  final String? note;
+part 'cart_item.freezed.dart';
+part 'cart_item.g.dart';
 
-  const CartItem({
-    required this.menuItem,
-    required this.quantity,
-    this.note,
-  });
+@freezed
+class CartItem with _$CartItem {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory CartItem({
+    required MenuItem menuItem,
+    required int quantity,
+    String? note,
+  }) = _CartItem;
+
+  const CartItem._();
+
+  factory CartItem.fromJson(Map<String, dynamic> json) =>
+      _$CartItemFromJson(json);
 
   /// Total price for this cart line (unit price * quantity).
   double get total => menuItem.price * quantity;
-
-  factory CartItem.fromJson(Map<String, dynamic> json) {
-    return CartItem(
-      menuItem: MenuItem.fromJson(json['menu_item'] as Map<String, dynamic>),
-      quantity: json['quantity'] as int,
-      note: json['note'] as String?,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'menu_item': menuItem.toJson(),
-      'quantity': quantity,
-      'note': note,
-    };
-  }
-
-  CartItem copyWith({
-    MenuItem? menuItem,
-    int? quantity,
-    String? note,
-  }) {
-    return CartItem(
-      menuItem: menuItem ?? this.menuItem,
-      quantity: quantity ?? this.quantity,
-      note: note ?? this.note,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CartItem &&
-          runtimeType == other.runtimeType &&
-          menuItem.id == other.menuItem.id &&
-          note == other.note;
-
-  @override
-  int get hashCode => menuItem.id.hashCode ^ note.hashCode;
-
-  @override
-  String toString() =>
-      'CartItem(name: ${menuItem.name}, qty: $quantity, total: $total)';
 }

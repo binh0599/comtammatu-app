@@ -117,7 +117,7 @@ class _UserHeader extends ConsumerWidget {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: AppColors.border),
+          side: const BorderSide(color: AppColors.border),
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
@@ -132,7 +132,7 @@ class _UserHeader extends ConsumerWidget {
                     CircleAvatar(
                       radius: 40,
                       backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-                      child: Icon(
+                      child: const Icon(
                         Icons.person,
                         size: 44,
                         color: AppColors.primary,
@@ -287,7 +287,7 @@ class _QuickActionItem extends StatelessWidget {
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: AppColors.border),
+            side: const BorderSide(color: AppColors.border),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 14),
@@ -324,7 +324,7 @@ class _MenuSection extends ConsumerWidget {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: AppColors.border),
+          side: const BorderSide(color: AppColors.border),
         ),
         clipBehavior: Clip.antiAlias,
         child: Column(
@@ -394,7 +394,7 @@ class _MenuSection extends ConsumerWidget {
                           Navigator.of(ctx).pop();
                           ref.read(authNotifierProvider.notifier).signOut();
                         },
-                        child: Text(
+                        child: const Text(
                           'Đăng xuất',
                           style: TextStyle(color: AppColors.error),
                         ),
@@ -440,7 +440,7 @@ class _ProfileMenuItem extends StatelessWidget {
       ),
       trailing: isDestructive
           ? null
-          : Icon(
+          : const Icon(
               Icons.chevron_right,
               color: AppColors.textHint,
             ),

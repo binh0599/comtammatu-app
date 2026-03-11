@@ -42,8 +42,7 @@ class OrderRepository {
         if (note != null) 'note': note,
         if (promotionId != null) 'promotion_id': promotionId,
       },
-      fromJson: (json) =>
-          DeliveryOrder.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => DeliveryOrder.fromJson(json as Map<String, dynamic>),
     );
   }
 }

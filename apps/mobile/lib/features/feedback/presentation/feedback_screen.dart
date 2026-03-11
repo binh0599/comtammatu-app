@@ -28,8 +28,8 @@ const _kRatingLabels = {
 /// Feedback screen for rating a completed order.
 class FeedbackScreen extends ConsumerStatefulWidget {
   const FeedbackScreen({
-    super.key,
     required this.orderId,
+    super.key,
   });
 
   final int orderId;
@@ -69,7 +69,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
   }
 
   void _showSuccessDialog() {
-    showDialog(
+    showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
@@ -208,7 +208,8 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.textOnPrimary,
-                  disabledBackgroundColor: AppColors.primary.withOpacity(0.5),
+                  disabledBackgroundColor:
+                      AppColors.primary.withValues(alpha: 0.5),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -264,7 +265,7 @@ class _OrderInfoCard extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Icon(
@@ -411,7 +412,7 @@ class _FeedbackTagsCard extends StatelessWidget {
                   label: Text(tag),
                   selected: isSelected,
                   onSelected: (_) => onTagToggled(tag),
-                  selectedColor: AppColors.primary.withOpacity(0.15),
+                  selectedColor: AppColors.primary.withValues(alpha: 0.15),
                   checkmarkColor: AppColors.primary,
                   labelStyle: TextStyle(
                     color: isSelected
@@ -421,8 +422,7 @@ class _FeedbackTagsCard extends StatelessWidget {
                         isSelected ? FontWeight.w600 : FontWeight.normal,
                   ),
                   side: BorderSide(
-                    color:
-                        isSelected ? AppColors.primary : AppColors.border,
+                    color: isSelected ? AppColors.primary : AppColors.border,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),

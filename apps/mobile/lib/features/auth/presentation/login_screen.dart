@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/auth_repository.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_text_field.dart';
-import '../../../core/theme/app_colors.dart';
+import '../data/auth_repository.dart';
 
 /// Login screen with phone + password authentication.
 class LoginScreen extends ConsumerStatefulWidget {
@@ -69,7 +69,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               children: [
                 const SizedBox(height: 48),
                 // Logo / Brand
-                Icon(
+                const Icon(
                   Icons.restaurant,
                   size: 80,
                   color: AppColors.primary,
@@ -149,7 +149,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     padding: const EdgeInsets.only(bottom: 16),
                     child: Text(
                       _errorMessage!,
-                      style: TextStyle(color: AppColors.error),
+                      style: const TextStyle(color: AppColors.error),
                       textAlign: TextAlign.center,
                     ),
                   ),

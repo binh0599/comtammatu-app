@@ -5,26 +5,26 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/domain/auth_notifier.dart';
 import '../../features/auth/domain/auth_state.dart';
 import '../../features/auth/presentation/login_screen.dart';
-import '../../features/auth/presentation/register_screen.dart';
 import '../../features/auth/presentation/otp_screen.dart';
-import '../../features/home/presentation/home_screen.dart';
-import '../../features/menu/presentation/menu_screen.dart';
+import '../../features/auth/presentation/register_screen.dart';
 import '../../features/cart/presentation/cart_screen.dart';
+import '../../features/dashboard/presentation/dashboard_screen.dart';
+import '../../features/delivery/presentation/delivery_tracking_screen.dart';
+import '../../features/feedback/presentation/feedback_screen.dart';
+import '../../features/home/presentation/home_screen.dart';
+import '../../features/inventory/presentation/inventory_screen.dart';
 import '../../features/loyalty/presentation/loyalty_screen.dart';
-import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/menu/presentation/menu_screen.dart';
+import '../../features/notifications/presentation/notification_inbox_screen.dart';
+import '../../features/order/presentation/order_history_screen.dart';
 import '../../features/profile/presentation/profile_edit_screen.dart';
+import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/profile/presentation/saved_addresses_screen.dart';
 import '../../features/profile/presentation/settings_screen.dart';
-import '../../features/delivery/presentation/delivery_tracking_screen.dart';
-import '../../features/stores/presentation/store_locator_screen.dart';
-import '../../features/order/presentation/order_history_screen.dart';
-import '../../features/feedback/presentation/feedback_screen.dart';
-import '../../features/voucher/presentation/voucher_screen.dart';
-import '../../features/notifications/presentation/notification_inbox_screen.dart';
-import '../../features/dashboard/presentation/dashboard_screen.dart';
-import '../../features/staff/presentation/staff_management_screen.dart';
-import '../../features/inventory/presentation/inventory_screen.dart';
 import '../../features/splash/presentation/splash_screen.dart';
+import '../../features/staff/presentation/staff_management_screen.dart';
+import '../../features/stores/presentation/store_locator_screen.dart';
+import '../../features/voucher/presentation/voucher_screen.dart';
 
 /// Route paths as constants
 class AppRoutes {
@@ -109,7 +109,9 @@ class _ScaffoldWithNavBar extends StatelessWidget {
     if (location.startsWith(AppRoutes.cart)) return 2;
     if (location.startsWith(AppRoutes.loyalty)) return 3;
     if (location.startsWith(AppRoutes.profile) ||
-        location.startsWith(AppRoutes.orders)) return 4;
+        location.startsWith(AppRoutes.orders)) {
+      return 4;
+    }
     return 0;
   }
 
@@ -203,9 +205,7 @@ class _AuthChangeNotifier extends ChangeNotifier {
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authChangeNotifier = _AuthChangeNotifier(ref);
 
-  ref.onDispose(() {
-    authChangeNotifier.dispose();
-  });
+  ref.onDispose(authChangeNotifier.dispose);
 
   final router = GoRouter(
     initialLocation: AppRoutes.splash,
@@ -341,8 +341,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: 'feedback',
             builder: (context, state) {
               final orderId =
-                  int.tryParse(state.uri.queryParameters['orderId'] ?? '') ??
-                      0;
+                  int.tryParse(state.uri.queryParameters['orderId'] ?? '') ?? 0;
               return FeedbackScreen(orderId: orderId);
             },
           ),
@@ -404,9 +403,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ),
   );
 
-  ref.onDispose(() {
-    router.dispose();
-  });
+  ref.onDispose(router.dispose);
 
   return router;
 });

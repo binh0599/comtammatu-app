@@ -26,8 +26,7 @@ class CartState {
   final String? couponCode;
   final int? promotionId;
 
-  double get subtotal =>
-      items.fold(0, (sum, item) => sum + item.total);
+  double get subtotal => items.fold(0, (sum, item) => sum + item.total);
 
   double get total => subtotal + deliveryFee - discount;
 

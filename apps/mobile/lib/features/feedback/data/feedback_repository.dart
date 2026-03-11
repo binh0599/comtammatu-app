@@ -15,7 +15,7 @@ class FeedbackRepository {
     required String comment,
     List<String> tags = const [],
   }) async {
-    await _client.post('/feedback', data: {
+    await _client.post<Map<String, dynamic>>('/feedback', data: {
       'order_id': orderId,
       'rating': rating,
       'comment': comment,

@@ -42,12 +42,14 @@ class PaginatedTransactions {
 
   const PaginatedTransactions({
     required this.transactions,
-    this.nextCursor,
     required this.hasMore,
+    this.nextCursor,
   });
 
   factory PaginatedTransactions.fromJson(Map<String, dynamic> json) {
-    final data = json['transactions'] as List<dynamic>? ?? json['items'] as List<dynamic>? ?? [];
+    final data = json['transactions'] as List<dynamic>? ??
+        json['items'] as List<dynamic>? ??
+        [];
     return PaginatedTransactions(
       transactions: data
           .map((e) => PointTransaction.fromJson(e as Map<String, dynamic>))
@@ -89,8 +91,7 @@ class LoyaltyRepository {
         if (latitude != null) 'latitude': latitude,
         if (longitude != null) 'longitude': longitude,
       },
-      fromJson: (json) =>
-          CheckinResult.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => CheckinResult.fromJson(json as Map<String, dynamic>),
     );
   }
 

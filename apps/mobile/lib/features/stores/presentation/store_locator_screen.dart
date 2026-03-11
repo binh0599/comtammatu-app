@@ -13,8 +13,7 @@ class StoreLocatorScreen extends ConsumerStatefulWidget {
   const StoreLocatorScreen({super.key});
 
   @override
-  ConsumerState<StoreLocatorScreen> createState() =>
-      _StoreLocatorScreenState();
+  ConsumerState<StoreLocatorScreen> createState() => _StoreLocatorScreenState();
 }
 
 class _StoreLocatorScreenState extends ConsumerState<StoreLocatorScreen> {
@@ -42,7 +41,7 @@ class _StoreLocatorScreenState extends ConsumerState<StoreLocatorScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.store_outlined,
                           size: 64,
                           color: AppColors.textHint,
@@ -100,7 +99,7 @@ class _StoreLocatorScreenState extends ConsumerState<StoreLocatorScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.map_outlined,
             size: 56,
             color: AppColors.textHint,
@@ -130,12 +129,14 @@ class _StoreLocatorScreenState extends ConsumerState<StoreLocatorScreen> {
     const userLat = 10.7769;
     const userLng = 106.7009;
 
-    final sorted = List<StoreInfo>.from(stores);
-    sorted.sort((a, b) {
-      final distA = _squaredDist(userLat, userLng, a.latitude ?? 0, a.longitude ?? 0);
-      final distB = _squaredDist(userLat, userLng, b.latitude ?? 0, b.longitude ?? 0);
-      return distA.compareTo(distB);
-    });
+    final sorted = List<StoreInfo>.from(stores)
+      ..sort((a, b) {
+        final distA =
+            _squaredDist(userLat, userLng, a.latitude ?? 0, a.longitude ?? 0);
+        final distB =
+            _squaredDist(userLat, userLng, b.latitude ?? 0, b.longitude ?? 0);
+        return distA.compareTo(distB);
+      });
     return sorted;
   }
 
@@ -160,7 +161,7 @@ class _StoreCard extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.border),
+        side: const BorderSide(color: AppColors.border),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -180,7 +181,7 @@ class _StoreCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
+                const Icon(
                   Icons.location_on_outlined,
                   size: 18,
                   color: AppColors.textSecondary,
@@ -201,7 +202,7 @@ class _StoreCard extends StatelessWidget {
             // Phone
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.phone_outlined,
                   size: 18,
                   color: AppColors.textSecondary,
@@ -219,8 +220,8 @@ class _StoreCard extends StatelessWidget {
                     launchUrl(Uri.parse('tel:${store.phone}'));
                   },
                   borderRadius: BorderRadius.circular(8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
+                  child: const Padding(
+                    padding: EdgeInsets.all(4),
                     child: Icon(
                       Icons.phone,
                       size: 20,
@@ -235,7 +236,7 @@ class _StoreCard extends StatelessWidget {
             // Opening hours
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.access_time,
                   size: 18,
                   color: AppColors.textSecondary,

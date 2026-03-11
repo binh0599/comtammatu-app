@@ -53,9 +53,8 @@ class InventoryLoaded extends InventoryState {
     // Tìm kiếm
     if (searchQuery.isNotEmpty) {
       final query = searchQuery.toLowerCase();
-      result = result
-          .where((i) => i.name.toLowerCase().contains(query))
-          .toList();
+      result =
+          result.where((i) => i.name.toLowerCase().contains(query)).toList();
     }
 
     // Sắp xếp

@@ -46,8 +46,7 @@ class StaffRepository {
         'branch_id': branchId,
         'branch_name': branchName,
       },
-      fromJson: (json) =>
-          StaffMember.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => StaffMember.fromJson(json as Map<String, dynamic>),
     );
   }
 
@@ -71,8 +70,7 @@ class StaffRepository {
         if (branchId != null) 'branch_id': branchId,
         if (branchName != null) 'branch_name': branchName,
       },
-      fromJson: (json) =>
-          StaffMember.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => StaffMember.fromJson(json as Map<String, dynamic>),
     );
   }
 
@@ -84,8 +82,7 @@ class StaffRepository {
         'action': 'toggle_active',
         'staff_id': staffId,
       },
-      fromJson: (json) =>
-          StaffMember.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => StaffMember.fromJson(json as Map<String, dynamic>),
     );
   }
 }

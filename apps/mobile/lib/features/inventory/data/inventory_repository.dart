@@ -39,8 +39,7 @@ class InventoryRepository {
         'quantity': quantity,
         if (note != null) 'note': note,
       },
-      fromJson: (json) =>
-          InventoryItem.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => InventoryItem.fromJson(json as Map<String, dynamic>),
     );
   }
 
@@ -53,8 +52,7 @@ class InventoryRepository {
         'item_id': id,
         'current_stock': newStock,
       },
-      fromJson: (json) =>
-          InventoryItem.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => InventoryItem.fromJson(json as Map<String, dynamic>),
     );
   }
 }

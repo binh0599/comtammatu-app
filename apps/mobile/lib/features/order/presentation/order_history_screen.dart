@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../models/delivery_order.dart';
 import '../../../shared/utils/formatters.dart';
 import '../../../shared/widgets/app_button.dart';
-import '../../../models/delivery_order.dart';
 
 // -- Sample data for development --------------------------------------------
 
@@ -148,7 +148,8 @@ enum OrderFilter { all, delivering, delivered, cancelled }
 final orderHistoryProvider =
     StateProvider<List<DeliveryOrder>>((ref) => _kSampleOrders);
 
-final orderFilterProvider = StateProvider<OrderFilter>((ref) => OrderFilter.all);
+final orderFilterProvider =
+    StateProvider<OrderFilter>((ref) => OrderFilter.all);
 
 final filteredOrdersProvider = Provider<List<DeliveryOrder>>((ref) {
   final orders = ref.watch(orderHistoryProvider);
@@ -315,7 +316,7 @@ class OrderHistoryScreen extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            const Icon(
               Icons.receipt_long_outlined,
               size: 80,
               color: AppColors.textHint,
@@ -369,7 +370,7 @@ class _OrderCard extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.border),
+        side: const BorderSide(color: AppColors.border),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
@@ -394,20 +395,18 @@ class _OrderCard extends StatelessWidget {
                         ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color:
-                          _statusColor(order.status).withValues(alpha: 0.1),
+                      color: _statusColor(order.status).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       _statusLabel(order.status),
-                      style:
-                          Theme.of(context).textTheme.labelSmall?.copyWith(
-                                color: _statusColor(order.status),
-                                fontWeight: FontWeight.w600,
-                              ),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: _statusColor(order.status),
+                            fontWeight: FontWeight.w600,
+                          ),
                     ),
                   ),
                 ],
@@ -417,7 +416,7 @@ class _OrderCard extends StatelessWidget {
               // Date
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.calendar_today_outlined,
                     size: 14,
                     color: AppColors.textSecondary,
@@ -435,9 +434,7 @@ class _OrderCard extends StatelessWidget {
 
               // Items summary
               Text(
-                order.items
-                    .map((i) => '${i.name} x${i.quantity}')
-                    .join(', '),
+                order.items.map((i) => '${i.name} x${i.quantity}').join(', '),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: AppColors.textSecondary,
                     ),
@@ -450,15 +447,15 @@ class _OrderCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    Icon(Icons.star, size: 14, color: AppColors.secondary),
+                    const Icon(Icons.star,
+                        size: 14, color: AppColors.secondary),
                     const SizedBox(width: 4),
                     Text(
                       '+${order.pointsWillEarn} điểm',
-                      style:
-                          Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.secondary,
-                                fontWeight: FontWeight.w600,
-                              ),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.secondary,
+                            fontWeight: FontWeight.w600,
+                          ),
                     ),
                   ],
                 ),
@@ -483,8 +480,8 @@ class _OrderCard extends StatelessWidget {
                       if (isDelivering)
                         TextButton.icon(
                           onPressed: () {
-                            context.go(
-                                '${AppRoutes.delivery}/${order.orderId}');
+                            context
+                                .go('${AppRoutes.delivery}/${order.orderId}');
                           },
                           icon: const Icon(Icons.delivery_dining, size: 18),
                           label: const Text('Theo dõi'),
@@ -502,8 +499,8 @@ class _OrderCard extends StatelessWidget {
                               '${AppRoutes.feedback}?orderId=${order.orderId}',
                             );
                           },
-                          icon: const Icon(Icons.rate_review_outlined,
-                              size: 18),
+                          icon:
+                              const Icon(Icons.rate_review_outlined, size: 18),
                           label: const Text('Đánh giá'),
                           style: TextButton.styleFrom(
                             foregroundColor: AppColors.secondary,
@@ -516,8 +513,8 @@ class _OrderCard extends StatelessWidget {
                           onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text(
-                                    'Đang thêm các món vào giỏ hàng...'),
+                                content:
+                                    Text('Đang thêm các món vào giỏ hàng...'),
                                 duration: Duration(seconds: 1),
                                 behavior: SnackBarBehavior.floating,
                               ),

@@ -54,7 +54,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   Future<void> _pickDate() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate ?? DateTime(2000, 1, 1),
+      initialDate: _selectedDate ?? DateTime(2000),
       firstDate: DateTime(1920),
       lastDate: DateTime.now(),
       locale: const Locale('vi', 'VN'),
@@ -150,7 +150,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 prefixIcon: const Icon(Icons.email_outlined),
                 validator: (value) {
                   if (value != null && value.isNotEmpty) {
-                    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                    final emailRegex =
+                        RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
                     if (!emailRegex.hasMatch(value)) {
                       return 'Email không hợp lệ';
                     }
@@ -163,7 +164,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
               // Date of birth
               _DatePickerField(
                 label: 'Ngày sinh',
-                value: _selectedDate != null ? _formatDate(_selectedDate!) : null,
+                value:
+                    _selectedDate != null ? _formatDate(_selectedDate!) : null,
                 hint: 'Chọn ngày sinh',
                 onTap: _pickDate,
               ),
@@ -214,7 +216,7 @@ class _AvatarSection extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 50,
-              backgroundColor: AppColors.primary.withOpacity(0.1),
+              backgroundColor: AppColors.primary.withValues(alpha: 0.1),
               child: const Icon(
                 Icons.person,
                 size: 54,
@@ -321,7 +323,7 @@ class _GenderDropdown extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         DropdownButtonFormField<String>(
-          value: value,
+          initialValue: value,
           decoration: const InputDecoration(
             prefixIcon: Icon(Icons.wc_outlined),
           ),

@@ -1,65 +1,21 @@
-class UserProfile {
-  final String id;
-  final String phone;
-  final String fullName;
-  final String role;
-  final String? avatarUrl;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  const UserProfile({
-    required this.id,
-    required this.phone,
-    required this.fullName,
-    required this.role,
-    this.avatarUrl,
-  });
+part 'user_profile.freezed.dart';
+part 'user_profile.g.dart';
 
-  factory UserProfile.fromJson(Map<String, dynamic> json) {
-    return UserProfile(
-      id: json['id'] as String,
-      phone: json['phone'] as String,
-      fullName: json['full_name'] as String,
-      role: json['role'] as String,
-      avatarUrl: json['avatar_url'] as String?,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'phone': phone,
-      'full_name': fullName,
-      'role': role,
-      'avatar_url': avatarUrl,
-    };
-  }
-
-  UserProfile copyWith({
-    String? id,
-    String? phone,
-    String? fullName,
-    String? role,
+@freezed
+class UserProfile with _$UserProfile {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory UserProfile({
+    required String id,
+    required String phone,
+    required String fullName,
+    required String role,
     String? avatarUrl,
-  }) {
-    return UserProfile(
-      id: id ?? this.id,
-      phone: phone ?? this.phone,
-      fullName: fullName ?? this.fullName,
-      role: role ?? this.role,
-      avatarUrl: avatarUrl ?? this.avatarUrl,
-    );
-  }
+  }) = _UserProfile;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is UserProfile &&
-          runtimeType == other.runtimeType &&
-          id == other.id;
+  const UserProfile._();
 
-  @override
-  int get hashCode => id.hashCode;
-
-  @override
-  String toString() =>
-      'UserProfile(id: $id, fullName: $fullName, role: $role)';
+  factory UserProfile.fromJson(Map<String, dynamic> json) =>
+      _$UserProfileFromJson(json);
 }

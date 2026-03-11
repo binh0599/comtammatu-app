@@ -108,8 +108,8 @@ class CacheService {
 
   /// Clears all cached data.
   Future<void> clearCache() async {
-    if (_isDriftBacked) {
-      await _db!.delete(_db!.cachedMenuItems).go();
+    if (_db case final db?) {
+      await db.delete(db.cachedMenuItems).go();
       return;
     }
     final prefs = _prefs!;
@@ -212,9 +212,7 @@ class CacheService {
     if (jsonString == null) return [];
     try {
       final decoded = jsonDecode(jsonString) as List<dynamic>;
-      return decoded
-          .map((e) => Map<String, dynamic>.from(e as Map))
-          .toList();
+      return decoded.map((e) => Map<String, dynamic>.from(e as Map)).toList();
     } catch (_) {
       return [];
     }

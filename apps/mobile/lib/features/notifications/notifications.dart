@@ -1,4 +1,4 @@
-/// Notifications feature barrel file.
+// Notifications feature barrel file.
 // export 'data/...';
 // export 'domain/...';
 // export 'presentation/...';

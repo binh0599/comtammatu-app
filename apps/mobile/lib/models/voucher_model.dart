@@ -1,118 +1,47 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'voucher_model.freezed.dart';
+part 'voucher_model.g.dart';
+
 /// Voucher / Coupon model for the loyalty redemption feature.
-class Voucher {
-  final int id;
-  final String code;
-  final String title;
-  final String description;
+@freezed
+class Voucher with _$Voucher {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory Voucher({
+    required int id,
+    required String code,
+    required String title,
+    required String description,
 
-  /// Either `'percentage'` or `'fixed'`.
-  final String discountType;
+    /// Either `'percentage'` or `'fixed'`.
+    required String discountType,
 
-  /// Percentage value (e.g. 20 for 20%) or fixed amount in VND.
-  final int discountValue;
+    /// Percentage value (e.g. 20 for 20%) or fixed amount in VND.
+    required int discountValue,
 
-  /// Minimum order amount (VND) required to apply the voucher.
-  final int minOrderAmount;
+    /// Minimum order amount (VND) required to apply the voucher.
+    required int minOrderAmount,
 
-  /// Maximum discount cap in VND (only relevant for percentage type).
-  final int? maxDiscount;
+    /// Voucher expiration date.
+    required DateTime expiresAt,
 
-  /// Voucher expiration date.
-  final DateTime expiresAt;
+    /// Loyalty points required to redeem this voucher.
+    required int pointsCost,
 
-  /// Whether the user has already used this voucher.
-  final bool isUsed;
-
-  /// Loyalty points required to redeem this voucher.
-  final int pointsCost;
-
-  const Voucher({
-    required this.id,
-    required this.code,
-    required this.title,
-    required this.description,
-    required this.discountType,
-    required this.discountValue,
-    required this.minOrderAmount,
-    this.maxDiscount,
-    required this.expiresAt,
-    required this.isUsed,
-    required this.pointsCost,
-  });
-
-  factory Voucher.fromJson(Map<String, dynamic> json) {
-    return Voucher(
-      id: json['id'] as int,
-      code: json['code'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      discountType: json['discount_type'] as String,
-      discountValue: json['discount_value'] as int,
-      minOrderAmount: json['min_order_amount'] as int,
-      maxDiscount: json['max_discount'] as int?,
-      expiresAt: DateTime.parse(json['expires_at'] as String),
-      isUsed: json['is_used'] as bool? ?? false,
-      pointsCost: json['points_cost'] as int,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'code': code,
-      'title': title,
-      'description': description,
-      'discount_type': discountType,
-      'discount_value': discountValue,
-      'min_order_amount': minOrderAmount,
-      'max_discount': maxDiscount,
-      'expires_at': expiresAt.toIso8601String(),
-      'is_used': isUsed,
-      'points_cost': pointsCost,
-    };
-  }
-
-  Voucher copyWith({
-    int? id,
-    String? code,
-    String? title,
-    String? description,
-    String? discountType,
-    int? discountValue,
-    int? minOrderAmount,
+    /// Maximum discount cap in VND (only relevant for percentage type).
     int? maxDiscount,
-    DateTime? expiresAt,
-    bool? isUsed,
-    int? pointsCost,
-  }) {
-    return Voucher(
-      id: id ?? this.id,
-      code: code ?? this.code,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      discountType: discountType ?? this.discountType,
-      discountValue: discountValue ?? this.discountValue,
-      minOrderAmount: minOrderAmount ?? this.minOrderAmount,
-      maxDiscount: maxDiscount ?? this.maxDiscount,
-      expiresAt: expiresAt ?? this.expiresAt,
-      isUsed: isUsed ?? this.isUsed,
-      pointsCost: pointsCost ?? this.pointsCost,
-    );
-  }
+
+    /// Whether the user has already used this voucher.
+    @Default(false) bool isUsed,
+  }) = _Voucher;
+
+  const Voucher._();
+
+  factory Voucher.fromJson(Map<String, dynamic> json) =>
+      _$VoucherFromJson(json);
 
   /// Whether this voucher has expired.
   bool get isExpired => DateTime.now().isAfter(expiresAt);
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Voucher && runtimeType == other.runtimeType && id == other.id;
-
-  @override
-  int get hashCode => id.hashCode;
-
-  @override
-  String toString() => 'Voucher(id: $id, code: $code, isUsed: $isUsed)';
 }
 
 /// Sample vouchers for development / preview.
@@ -127,7 +56,6 @@ final sampleAvailableVouchers = <Voucher>[
     minOrderAmount: 50000,
     maxDiscount: 40000,
     expiresAt: DateTime(2026, 3, 31),
-    isUsed: false,
     pointsCost: 200,
   ),
   Voucher(
@@ -138,9 +66,7 @@ final sampleAvailableVouchers = <Voucher>[
     discountType: 'fixed',
     discountValue: 30000,
     minOrderAmount: 80000,
-    maxDiscount: null,
     expiresAt: DateTime(2026, 4, 15),
-    isUsed: false,
     pointsCost: 300,
   ),
   Voucher(
@@ -151,9 +77,7 @@ final sampleAvailableVouchers = <Voucher>[
     discountType: 'fixed',
     discountValue: 25000,
     minOrderAmount: 60000,
-    maxDiscount: null,
     expiresAt: DateTime(2026, 4, 30),
-    isUsed: false,
     pointsCost: 150,
   ),
   Voucher(
@@ -165,8 +89,7 @@ final sampleAvailableVouchers = <Voucher>[
     discountValue: 15,
     minOrderAmount: 40000,
     maxDiscount: 30000,
-    expiresAt: DateTime(2026, 5, 1),
-    isUsed: false,
+    expiresAt: DateTime(2026, 5),
     pointsCost: 120,
   ),
   Voucher(
@@ -177,9 +100,7 @@ final sampleAvailableVouchers = <Voucher>[
     discountType: 'fixed',
     discountValue: 50000,
     minOrderAmount: 150000,
-    maxDiscount: null,
     expiresAt: DateTime(2026, 3, 20),
-    isUsed: false,
     pointsCost: 500,
   ),
   Voucher(
@@ -192,7 +113,6 @@ final sampleAvailableVouchers = <Voucher>[
     minOrderAmount: 30000,
     maxDiscount: 20000,
     expiresAt: DateTime(2026, 6, 30),
-    isUsed: false,
     pointsCost: 80,
   ),
 ];
@@ -208,7 +128,6 @@ final sampleMyVouchers = <Voucher>[
     minOrderAmount: 60000,
     maxDiscount: 50000,
     expiresAt: DateTime(2026, 3, 25),
-    isUsed: false,
     pointsCost: 250,
   ),
   Voucher(
@@ -219,9 +138,7 @@ final sampleMyVouchers = <Voucher>[
     discountType: 'fixed',
     discountValue: 20000,
     minOrderAmount: 50000,
-    maxDiscount: null,
     expiresAt: DateTime(2026, 4, 10),
-    isUsed: false,
     pointsCost: 200,
   ),
   Voucher(
@@ -232,9 +149,7 @@ final sampleMyVouchers = <Voucher>[
     discountType: 'fixed',
     discountValue: 25000,
     minOrderAmount: 40000,
-    maxDiscount: null,
     expiresAt: DateTime(2026, 3, 15),
-    isUsed: false,
     pointsCost: 100,
   ),
 ];

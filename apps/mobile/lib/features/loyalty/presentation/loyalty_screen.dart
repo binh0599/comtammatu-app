@@ -88,7 +88,7 @@ class _ErrorBody extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline, size: 48, color: AppColors.error),
+            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
             const SizedBox(height: 16),
             Text(
               'Không thể tải dữ liệu tích điểm',
@@ -148,18 +148,14 @@ class _LoadedBody extends StatelessWidget {
                 children: [
                   Text(
                     'Điểm tích lũy',
-                    style:
-                        Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.white70,
-                            ),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.white70,
+                        ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     '$points',
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayLarge
-                        ?.copyWith(
+                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
                         ),
@@ -167,10 +163,9 @@ class _LoadedBody extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     'điểm',
-                    style:
-                        Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Colors.white70,
-                            ),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Colors.white70,
+                        ),
                   ),
                   const SizedBox(height: 20),
 
@@ -213,7 +208,7 @@ class _LoadedBody extends StatelessWidget {
           Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: BorderSide(color: AppColors.border),
+              side: const BorderSide(color: AppColors.border),
             ),
             elevation: 0,
             child: Padding(
@@ -243,10 +238,9 @@ class _LoadedBody extends StatelessWidget {
                     const SizedBox(height: 10),
                     Text(
                       'Cần thêm ${tier.nextTier!.pointsNeeded.toInt()} điểm để lên hạng ${tier.nextTier!.name}',
-                      style:
-                          Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
                     ),
                   ],
 
@@ -267,7 +261,7 @@ class _LoadedBody extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 6),
                       child: Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.check_circle,
                             size: 18,
                             color: AppColors.success,
@@ -276,8 +270,7 @@ class _LoadedBody extends StatelessWidget {
                           Expanded(
                             child: Text(
                               b,
-                              style:
-                                  Theme.of(context).textTheme.bodyMedium,
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                           ),
                         ],
@@ -329,7 +322,8 @@ class _TierProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double progress = (nextTier.progressPercent / 100).clamp(0.0, 1.0).toDouble();
+    final progress =
+        (nextTier.progressPercent / 100).clamp(0.0, 1.0).toDouble();
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(6),
@@ -341,7 +335,7 @@ class _TierProgressBar extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: progress,
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
                       AppColors.tierBronze,
@@ -376,20 +370,17 @@ class _TransactionTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
-        side: BorderSide(color: AppColors.border),
+        side: const BorderSide(color: AppColors.border),
       ),
       child: ListTile(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
         leading: CircleAvatar(
           radius: 20,
           backgroundColor: isCredit
-              ? AppColors.success.withOpacity(0.1)
-              : AppColors.error.withOpacity(0.1),
+              ? AppColors.success.withValues(alpha: 0.1)
+              : AppColors.error.withValues(alpha: 0.1),
           child: Icon(
-            isCredit
-                ? Icons.add_circle_outline
-                : Icons.remove_circle_outline,
+            isCredit ? Icons.add_circle_outline : Icons.remove_circle_outline,
             color: isCredit ? AppColors.success : AppColors.error,
           ),
         ),

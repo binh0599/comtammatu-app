@@ -1,3 +1,8 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'staff_member.freezed.dart';
+part 'staff_member.g.dart';
+
 /// Vai trò nhân viên trong hệ thống.
 enum StaffRole {
   cashier,
@@ -35,92 +40,21 @@ enum StaffRole {
 }
 
 /// Nhân viên trong hệ thống quản lý.
-class StaffMember {
-  final int id;
-  final String name;
-  final String phone;
-  final StaffRole role;
-  final String? avatarUrl;
-  final bool isActive;
-  final DateTime hireDate;
-  final int branchId;
-  final String branchName;
-
-  const StaffMember({
-    required this.id,
-    required this.name,
-    required this.phone,
-    required this.role,
-    this.avatarUrl,
-    required this.isActive,
-    required this.hireDate,
-    required this.branchId,
-    required this.branchName,
-  });
-
-  factory StaffMember.fromJson(Map<String, dynamic> json) {
-    return StaffMember(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      phone: json['phone'] as String,
-      role: StaffRole.fromString(json['role'] as String),
-      avatarUrl: json['avatar_url'] as String?,
-      isActive: json['is_active'] as bool? ?? true,
-      hireDate: DateTime.parse(json['hire_date'] as String),
-      branchId: json['branch_id'] as int,
-      branchName: json['branch_name'] as String,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'phone': phone,
-      'role': role.name,
-      'avatar_url': avatarUrl,
-      'is_active': isActive,
-      'hire_date': hireDate.toIso8601String(),
-      'branch_id': branchId,
-      'branch_name': branchName,
-    };
-  }
-
-  StaffMember copyWith({
-    int? id,
-    String? name,
-    String? phone,
-    StaffRole? role,
+@freezed
+class StaffMember with _$StaffMember {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory StaffMember({
+    required int id,
+    required String name,
+    required String phone,
+    required StaffRole role,
+    required DateTime hireDate,
+    required int branchId,
+    required String branchName,
+    @Default(true) bool isActive,
     String? avatarUrl,
-    bool? isActive,
-    DateTime? hireDate,
-    int? branchId,
-    String? branchName,
-  }) {
-    return StaffMember(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      phone: phone ?? this.phone,
-      role: role ?? this.role,
-      avatarUrl: avatarUrl ?? this.avatarUrl,
-      isActive: isActive ?? this.isActive,
-      hireDate: hireDate ?? this.hireDate,
-      branchId: branchId ?? this.branchId,
-      branchName: branchName ?? this.branchName,
-    );
-  }
+  }) = _StaffMember;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is StaffMember &&
-          runtimeType == other.runtimeType &&
-          id == other.id;
-
-  @override
-  int get hashCode => id.hashCode;
-
-  @override
-  String toString() =>
-      'StaffMember(id: $id, name: $name, role: ${role.displayName})';
+  factory StaffMember.fromJson(Map<String, dynamic> json) =>
+      _$StaffMemberFromJson(json);
 }

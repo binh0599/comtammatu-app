@@ -45,7 +45,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
     try {
       // TODO: Call auth repository register
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
       // Navigation handled by auth state listener
     } catch (e) {
       setState(() {
@@ -77,7 +77,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 const SizedBox(height: 16),
 
                 // Header
-                Icon(
+                const Icon(
                   Icons.restaurant,
                   size: 64,
                   color: AppColors.primary,
@@ -86,10 +86,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 Text(
                   'Tạo tài khoản mới',
                   textAlign: TextAlign.center,
-                  style:
-                      Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 const SizedBox(height: 6),
                 Text(
@@ -220,7 +219,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     padding: const EdgeInsets.only(bottom: 16),
                     child: Text(
                       _errorMessage!,
-                      style: TextStyle(color: AppColors.error),
+                      style: const TextStyle(color: AppColors.error),
                       textAlign: TextAlign.center,
                     ),
                   ),

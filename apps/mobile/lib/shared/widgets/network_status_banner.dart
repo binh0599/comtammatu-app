@@ -6,9 +6,9 @@ import '../../core/theme/app_colors.dart';
 /// Wrap your Scaffold body with this widget.
 class NetworkStatusBanner extends StatelessWidget {
   const NetworkStatusBanner({
-    super.key,
     required this.isOffline,
     required this.child,
+    super.key,
   });
 
   final bool isOffline;

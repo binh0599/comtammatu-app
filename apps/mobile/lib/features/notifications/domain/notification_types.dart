@@ -97,8 +97,7 @@ class PushNotificationPayload {
   factory PushNotificationPayload.fromRemoteMessage(
     Map<String, dynamic> message,
   ) {
-    final notification =
-        message['notification'] as Map<String, dynamic>? ?? {};
+    final notification = message['notification'] as Map<String, dynamic>? ?? {};
     final data = message['data'] as Map<String, dynamic>? ?? {};
 
     return PushNotificationPayload(
@@ -106,9 +105,8 @@ class PushNotificationPayload {
       title: (notification['title'] as String?) ??
           (data['title'] as String?) ??
           'Cơm Tấm Má Tư',
-      body: (notification['body'] as String?) ??
-          (data['body'] as String?) ??
-          '',
+      body:
+          (notification['body'] as String?) ?? (data['body'] as String?) ?? '',
       data: data,
     );
   }
@@ -128,7 +126,8 @@ class PushNotificationPayload {
   /// Phân tích lại payload string thành [PushNotificationPayload].
   factory PushNotificationPayload.fromPayloadString(String payload) {
     final parts = payload.split('|');
-    final type = NotificationType.fromString(parts.isNotEmpty ? parts[0] : null);
+    final type =
+        NotificationType.fromString(parts.isNotEmpty ? parts[0] : null);
 
     final data = <String, dynamic>{};
     if (parts.length > 1 && parts[1].isNotEmpty) {

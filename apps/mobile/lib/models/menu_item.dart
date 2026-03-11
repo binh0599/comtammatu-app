@@ -1,148 +1,67 @@
-class MenuItem {
-  final int id;
-  final String name;
-  final String? description;
-  final double price;
-  final String? imageUrl;
-  final String category;
-  final bool available;
-  final List<String>? tags;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  const MenuItem({
-    required this.id,
-    required this.name,
-    this.description,
-    required this.price,
-    this.imageUrl,
-    this.category = '',
-    required this.available,
-    this.tags,
-  });
+part 'menu_item.freezed.dart';
+part 'menu_item.g.dart';
 
-  factory MenuItem.fromJson(Map<String, dynamic> json, {String? categoryName}) {
-    return MenuItem(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      description: json['description'] as String?,
-      price: (json['base_price'] as num?)?.toDouble() ??
-          (json['price'] as num?)?.toDouble() ??
-          0,
-      imageUrl: json['image_url'] as String?,
-      category: categoryName ?? json['category'] as String? ?? '',
-      available: json['is_available'] as bool? ??
-          json['available'] as bool? ??
-          true,
-      tags: (json['tags'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'description': description,
-      'base_price': price,
-      'image_url': imageUrl,
-      'category': category,
-      'is_available': available,
-      'tags': tags,
-    };
-  }
-
-  MenuItem copyWith({
-    int? id,
-    String? name,
+@freezed
+class MenuItem with _$MenuItem {
+  @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
+  const factory MenuItem({
+    required int id,
+    required String name,
+    @JsonKey(name: 'base_price') required double price,
     String? description,
-    double? price,
     String? imageUrl,
-    String? category,
-    bool? available,
+    @Default('') String category,
+    @JsonKey(name: 'is_available') @Default(true) bool available,
     List<String>? tags,
+  }) = _MenuItem;
+
+  const MenuItem._();
+
+  /// Standard generated deserialization.
+  factory MenuItem.fromJson(Map<String, dynamic> json) =>
+      _$MenuItemFromJson(json);
+
+  /// Parse with optional category name override and price fallback.
+  factory MenuItem.fromApiJson(
+    Map<String, dynamic> json, {
+    String? categoryName,
   }) {
-    return MenuItem(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      price: price ?? this.price,
-      imageUrl: imageUrl ?? this.imageUrl,
-      category: category ?? this.category,
-      available: available ?? this.available,
-      tags: tags ?? this.tags,
-    );
+    final merged = Map<String, dynamic>.from(json);
+    if (merged['base_price'] == null && merged['price'] != null) {
+      merged['base_price'] = merged['price'];
+    }
+    if (categoryName != null) {
+      merged['category'] = categoryName;
+    }
+    return _$MenuItemFromJson(merged);
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is MenuItem &&
-          runtimeType == other.runtimeType &&
-          id == other.id;
-
-  @override
-  int get hashCode => id.hashCode;
-
-  @override
-  String toString() => 'MenuItem(id: $id, name: $name, price: $price)';
 }
 
-class MenuCategory {
-  final int? id;
-  final String name;
-  final List<MenuItem> items;
+@freezed
+class MenuCategory with _$MenuCategory {
+  @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
+  const factory MenuCategory({
+    required String name,
+    required List<MenuItem> items,
+    int? id,
+  }) = _MenuCategory;
 
-  const MenuCategory({
-    this.id,
-    required this.name,
-    required this.items,
-  });
+  const MenuCategory._();
 
   factory MenuCategory.fromJson(Map<String, dynamic> json) {
     final categoryName = json['name'] as String;
+    final rawItems = json['items'] as List<dynamic>;
     return MenuCategory(
       id: json['id'] as int?,
       name: categoryName,
-      items: (json['items'] as List<dynamic>)
-          .map((e) => MenuItem.fromJson(
+      items: rawItems
+          .map((e) => MenuItem.fromApiJson(
                 e as Map<String, dynamic>,
                 categoryName: categoryName,
               ))
           .toList(),
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'items': items.map((e) => e.toJson()).toList(),
-    };
-  }
-
-  MenuCategory copyWith({
-    int? id,
-    String? name,
-    List<MenuItem>? items,
-  }) {
-    return MenuCategory(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      items: items ?? this.items,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is MenuCategory &&
-          runtimeType == other.runtimeType &&
-          name == other.name;
-
-  @override
-  int get hashCode => name.hashCode;
-
-  @override
-  String toString() =>
-      'MenuCategory(name: $name, itemCount: ${items.length})';
 }

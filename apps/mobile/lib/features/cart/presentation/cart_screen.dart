@@ -112,7 +112,7 @@ class CartScreen extends ConsumerWidget {
               onPressed: () {
                 ref.read(cartItemsProvider.notifier).state = [];
               },
-              child: Text(
+              child: const Text(
                 'Xóa tất cả',
                 style: TextStyle(color: AppColors.error),
               ),
@@ -137,7 +137,7 @@ class _EmptyCart extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            const Icon(
               Icons.shopping_cart_outlined,
               size: 80,
               color: AppColors.textHint,
@@ -216,10 +216,9 @@ class _CartContent extends ConsumerWidget {
                               List.of(updated);
                         },
                         onRemove: () {
-                          final updated = List<CartItem>.from(items);
-                          updated.removeAt(entry.key);
-                          ref.read(cartItemsProvider.notifier).state =
-                              updated;
+                          final updated = List<CartItem>.from(items)
+                            ..removeAt(entry.key);
+                          ref.read(cartItemsProvider.notifier).state = updated;
                         },
                       ),
                     ),
@@ -231,10 +230,10 @@ class _CartContent extends ConsumerWidget {
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: AppColors.border),
+                    side: const BorderSide(color: AppColors.border),
                   ),
                   child: ListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.location_on_outlined,
                       color: AppColors.primary,
                     ),
@@ -244,10 +243,9 @@ class _CartContent extends ConsumerWidget {
                     ),
                     subtitle: Text(
                       'Chưa chọn địa chỉ',
-                      style:
-                          Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.textHint,
-                              ),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textHint,
+                          ),
                     ),
                     trailing: TextButton(
                       onPressed: () {
@@ -268,41 +266,46 @@ class _CartContent extends ConsumerWidget {
                       ),
                 ),
                 const SizedBox(height: 8),
-                ...PaymentMethod.values.map(
-                  (method) => Card(
-                    elevation: 0,
-                    margin: const EdgeInsets.only(bottom: 8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: BorderSide(
-                        color: selectedPayment == method
-                            ? AppColors.primary
-                            : AppColors.border,
-                        width: selectedPayment == method ? 1.5 : 1,
-                      ),
-                    ),
-                    child: RadioListTile<PaymentMethod>(
-                      value: method,
-                      groupValue: selectedPayment,
-                      onChanged: (v) {
-                        if (v != null) {
-                          ref.read(selectedPaymentProvider.notifier).state =
-                              v;
-                        }
-                      },
-                      title: Text(
-                        _paymentLabel(method),
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      secondary: Icon(
-                        _paymentIcon(method),
-                        color: AppColors.textSecondary,
-                      ),
-                      controlAffinity: ListTileControlAffinity.trailing,
-                      activeColor: AppColors.primary,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 12),
-                    ),
+                RadioGroup<PaymentMethod>(
+                  groupValue: selectedPayment,
+                  onChanged: (v) {
+                    if (v != null) {
+                      ref.read(selectedPaymentProvider.notifier).state = v;
+                    }
+                  },
+                  child: Column(
+                    children: PaymentMethod.values
+                        .map(
+                          (method) => Card(
+                            elevation: 0,
+                            margin: const EdgeInsets.only(bottom: 8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(
+                                color: selectedPayment == method
+                                    ? AppColors.primary
+                                    : AppColors.border,
+                                width: selectedPayment == method ? 1.5 : 1,
+                              ),
+                            ),
+                            child: RadioListTile<PaymentMethod>(
+                              value: method,
+                              title: Text(
+                                _paymentLabel(method),
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              secondary: Icon(
+                                _paymentIcon(method),
+                                color: AppColors.textSecondary,
+                              ),
+                              controlAffinity: ListTileControlAffinity.trailing,
+                              activeColor: AppColors.primary,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ),
 
@@ -313,7 +316,7 @@ class _CartContent extends ConsumerWidget {
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: AppColors.border),
+                    side: const BorderSide(color: AppColors.border),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -371,7 +374,7 @@ class _CartContent extends ConsumerWidget {
             color: AppColors.surface,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: Colors.black.withValues(alpha: 0.06),
                 blurRadius: 8,
                 offset: const Offset(0, -2),
               ),
@@ -395,10 +398,7 @@ class _CartContent extends ConsumerWidget {
                       ),
                       Text(
                         _formatPrice(total),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               color: AppColors.primary,
                               fontWeight: FontWeight.w700,
                             ),
@@ -451,7 +451,7 @@ class _CartItemTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.border),
+        side: const BorderSide(color: AppColors.border),
       ),
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -469,7 +469,8 @@ class _CartItemTile extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: onRemove,
-                  icon: Icon(Icons.close, size: 20, color: AppColors.textHint),
+                  icon: const Icon(Icons.close,
+                      size: 20, color: AppColors.textHint),
                   constraints: const BoxConstraints(),
                   padding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
@@ -499,12 +500,10 @@ class _CartItemTile extends StatelessWidget {
                     children: [
                       _QtyButton(
                         icon: Icons.remove,
-                        onTap: () =>
-                            onQuantityChanged(item.quantity - 1),
+                        onTap: () => onQuantityChanged(item.quantity - 1),
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 14),
+                        padding: const EdgeInsets.symmetric(horizontal: 14),
                         child: Text(
                           '${item.quantity}',
                           style: Theme.of(context)
@@ -515,8 +514,7 @@ class _CartItemTile extends StatelessWidget {
                       ),
                       _QtyButton(
                         icon: Icons.add,
-                        onTap: () =>
-                            onQuantityChanged(item.quantity + 1),
+                        onTap: () => onQuantityChanged(item.quantity + 1),
                       ),
                     ],
                   ),
@@ -524,11 +522,10 @@ class _CartItemTile extends StatelessWidget {
                 const Spacer(),
                 Text(
                   _formatPrice(item.subtotal),
-                  style:
-                      Theme.of(context).textTheme.titleSmall?.copyWith(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w700,
-                          ),
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w700,
+                      ),
                 ),
               ],
             ),
@@ -548,11 +545,11 @@ class _CartItemTile extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: AppColors.border),
+                  borderSide: const BorderSide(color: AppColors.border),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: AppColors.border),
+                  borderSide: const BorderSide(color: AppColors.border),
                 ),
               ),
               style: Theme.of(context).textTheme.bodySmall,

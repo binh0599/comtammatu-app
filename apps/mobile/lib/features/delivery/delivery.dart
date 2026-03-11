@@ -1,4 +1,4 @@
-/// Delivery feature barrel file.
+// Delivery feature barrel file.
 // export 'data/...';
 // export 'domain/...';
 // export 'presentation/...';

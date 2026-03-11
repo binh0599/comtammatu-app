@@ -25,17 +25,17 @@ class EnvConfig {
 
   static String get supabaseAnonKey {
     // In production, load from dart-define or secure storage
-    return const String.fromEnvironment('SUPABASE_ANON_KEY', defaultValue: '');
+    return const String.fromEnvironment('SUPABASE_ANON_KEY');
   }
 
   static String get apiBaseUrl => '$supabaseUrl/functions/v1';
 
   static String get sentryDsn {
-    return const String.fromEnvironment('SENTRY_DSN', defaultValue: '');
+    return const String.fromEnvironment('SENTRY_DSN');
   }
 
   static String get posthogApiKey {
-    return const String.fromEnvironment('POSTHOG_API_KEY', defaultValue: '');
+    return const String.fromEnvironment('POSTHOG_API_KEY');
   }
 
   static bool get enableAnalytics => isProduction || isStaging;

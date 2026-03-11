@@ -1,22 +1,21 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-
-import 'firebase_options.dart';
 
 import 'core/cache/cache_service.dart';
 import 'core/config/env_config.dart';
 import 'core/router/app_router.dart';
-import 'core/theme/app_theme.dart';
 import 'core/theme/app_colors.dart';
+import 'core/theme/app_theme.dart';
+import 'firebase_options.dart';
+import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -94,11 +93,12 @@ Future<void> main() async {
   if (EnvConfig.enableCrashReporting && EnvConfig.sentryDsn.isNotEmpty) {
     await SentryFlutter.init(
       (options) {
-        options.dsn = EnvConfig.sentryDsn;
-        options.environment = EnvConfig.environment.name;
-        options.tracesSampleRate = EnvConfig.isProduction ? 0.2 : 1.0;
-        options.attachScreenshot = true;
-        options.sendDefaultPii = false;
+        options
+          ..dsn = EnvConfig.sentryDsn
+          ..environment = EnvConfig.environment.name
+          ..tracesSampleRate = EnvConfig.isProduction ? 0.2 : 1.0
+          ..attachScreenshot = true
+          ..sendDefaultPii = false;
       },
       appRunner: () => _runApp(prefs),
     );
@@ -111,8 +111,7 @@ void _runApp(SharedPreferences prefs) {
   runApp(
     ProviderScope(
       overrides: [
-        cacheServiceProvider
-            .overrideWithValue(CacheService(prefs: prefs)),
+        cacheServiceProvider.overrideWithValue(CacheService(prefs: prefs)),
       ],
       child: const ComTamMaTuApp(),
     ),
@@ -131,7 +130,6 @@ class ComTamMaTuApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.system,
       routerConfig: router,
       localizationsDelegates: const [
         AppLocalizations.delegate,

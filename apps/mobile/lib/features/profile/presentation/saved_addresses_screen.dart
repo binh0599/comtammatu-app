@@ -36,7 +36,6 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
       ward: 'Phường Tăng Nhơn Phú A',
       district: 'Quận 9',
       city: 'TP. Hồ Chí Minh',
-      isDefault: false,
       lat: 10.8483,
       lng: 106.7830,
     ),
@@ -51,7 +50,7 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
   }
 
   void _deleteAddress(int index) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Xóa địa chỉ'),
@@ -68,7 +67,7 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
                 _addresses.removeAt(index);
               });
             },
-            child: Text(
+            child: const Text(
               'Xóa',
               style: TextStyle(color: AppColors.error),
             ),
@@ -79,7 +78,7 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
   }
 
   void _showAddEditDialog({Address? address, int? index}) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => _AddEditAddressDialog(
         address: address,
@@ -92,7 +91,7 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
               );
             } else {
               _addresses.add(newAddress.copyWith(
-                id: (_addresses.length + 1),
+                id: _addresses.length + 1,
                 isDefault: _addresses.isEmpty,
               ));
             }
@@ -109,7 +108,7 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
         title: const Text('Địa chỉ đã lưu'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddEditDialog(),
+        onPressed: _showAddEditDialog,
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.add, color: Colors.white),
       ),
@@ -162,7 +161,7 @@ class _AddressCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
           color: address.isDefault
-              ? AppColors.primary.withOpacity(0.5)
+              ? AppColors.primary.withValues(alpha: 0.5)
               : AppColors.border,
         ),
       ),
@@ -183,7 +182,7 @@ class _AddressCard extends StatelessWidget {
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.success.withOpacity(0.1),
+                      color: AppColors.success.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
@@ -198,7 +197,7 @@ class _AddressCard extends StatelessWidget {
                 const Spacer(),
                 // Edit button
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.edit_outlined,
                     size: 20,
                     color: AppColors.textSecondary,
@@ -210,7 +209,7 @@ class _AddressCard extends StatelessWidget {
                 ),
                 // Delete button
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.delete_outline,
                     size: 20,
                     color: AppColors.error,
@@ -266,7 +265,7 @@ class _LabelChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.1),
+        color: AppColors.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
@@ -284,8 +283,8 @@ class _LabelChip extends StatelessWidget {
 
 class _AddEditAddressDialog extends StatefulWidget {
   const _AddEditAddressDialog({
-    this.address,
     required this.onSave,
+    this.address,
   });
 
   final Address? address;
@@ -312,8 +311,7 @@ class _AddEditAddressDialogState extends State<_AddEditAddressDialog> {
     _selectedLabel = widget.address?.label ?? 'home';
     _addressLineController =
         TextEditingController(text: widget.address?.addressLine ?? '');
-    _wardController =
-        TextEditingController(text: widget.address?.ward ?? '');
+    _wardController = TextEditingController(text: widget.address?.ward ?? '');
     _districtController =
         TextEditingController(text: widget.address?.district ?? '');
     _cityController =
@@ -356,7 +354,7 @@ class _AddEditAddressDialogState extends State<_AddEditAddressDialog> {
             children: [
               // Label selector
               DropdownButtonFormField<String>(
-                value: _selectedLabel,
+                initialValue: _selectedLabel,
                 decoration: const InputDecoration(
                   labelText: 'Loại địa chỉ',
                   prefixIcon: Icon(Icons.label_outline),

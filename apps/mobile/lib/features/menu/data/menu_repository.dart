@@ -5,8 +5,7 @@ import '../../../models/menu_item.dart';
 
 /// Repository for menu-related API calls.
 class MenuRepository {
-  const MenuRepository({required ApiClient apiClient})
-      : _apiClient = apiClient;
+  const MenuRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
   final ApiClient _apiClient;
 

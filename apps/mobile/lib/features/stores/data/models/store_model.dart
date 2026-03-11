@@ -14,14 +14,14 @@ class StoreInfo {
   const StoreInfo({
     required this.id,
     required this.name,
-    this.code,
     required this.address,
     required this.phone,
-    this.latitude,
-    this.longitude,
     required this.openingTime,
     required this.closingTime,
     required this.isActive,
+    this.code,
+    this.latitude,
+    this.longitude,
   });
 
   factory StoreInfo.fromJson(Map<String, dynamic> json) {
@@ -87,9 +87,7 @@ class StoreInfo {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is StoreInfo &&
-          runtimeType == other.runtimeType &&
-          id == other.id;
+      other is StoreInfo && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;

@@ -2,8 +2,7 @@ class AppConstants {
   AppConstants._();
 
   // Supabase
-  static const String supabaseUrl =
-      'https://zrlriuednoaqrsvnjjyo.supabase.co';
+  static const String supabaseUrl = 'https://zrlriuednoaqrsvnjjyo.supabase.co';
   static const String supabaseAnonKey = ''; // Set via env or config
 
   // API

@@ -35,7 +35,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   void _showDeleteAccountDialog() {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Xóa tài khoản'),
@@ -62,7 +62,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
               );
             },
-            child: Text(
+            child: const Text(
               'Xóa tài khoản',
               style: TextStyle(color: AppColors.error),
             ),
@@ -84,7 +84,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Notifications section
-            _SectionHeader(title: 'Thông báo'),
+            const _SectionHeader(title: 'Thông báo'),
             const SizedBox(height: 8),
             _SettingsCard(
               children: [
@@ -92,7 +92,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: const Text('Thông báo đẩy'),
                   subtitle: const Text('Nhận thông báo từ ứng dụng'),
                   value: _pushNotifications,
-                  activeColor: AppColors.primary,
+                  activeThumbColor: AppColors.primary,
                   onChanged: (value) {
                     setState(() => _pushNotifications = value);
                   },
@@ -102,7 +102,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: const Text('Thông báo khuyến mãi'),
                   subtitle: const Text('Ưu đãi và chương trình đặc biệt'),
                   value: _promoNotifications,
-                  activeColor: AppColors.primary,
+                  activeThumbColor: AppColors.primary,
                   onChanged: (value) {
                     setState(() => _promoNotifications = value);
                   },
@@ -112,7 +112,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: const Text('Thông báo đơn hàng'),
                   subtitle: const Text('Cập nhật trạng thái đơn hàng'),
                   value: _orderNotifications,
-                  activeColor: AppColors.primary,
+                  activeThumbColor: AppColors.primary,
                   onChanged: (value) {
                     setState(() => _orderNotifications = value);
                   },
@@ -123,7 +123,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             const SizedBox(height: 24),
 
             // Display section
-            _SectionHeader(title: 'Hiển thị'),
+            const _SectionHeader(title: 'Hiển thị'),
             const SizedBox(height: 8),
             _SettingsCard(
               children: [
@@ -131,7 +131,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: const Text('Chế độ tối'),
                   subtitle: const Text('Chuyển sang giao diện tối'),
                   value: _darkMode,
-                  activeColor: AppColors.primary,
+                  activeThumbColor: AppColors.primary,
                   onChanged: (value) {
                     setState(() => _darkMode = value);
                   },
@@ -142,14 +142,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             const SizedBox(height: 24),
 
             // Language section
-            _SectionHeader(title: 'Ngôn ngữ'),
+            const _SectionHeader(title: 'Ngôn ngữ'),
             const SizedBox(height: 8),
             _SettingsCard(
               children: [
                 ListTile(
                   title: const Text('Ngôn ngữ'),
                   subtitle: const Text('Tiếng Việt'),
-                  trailing: Icon(
+                  trailing: const Icon(
                     Icons.chevron_right,
                     color: AppColors.textHint,
                   ),
@@ -161,14 +161,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             const SizedBox(height: 24),
 
             // About section
-            _SectionHeader(title: 'Về ứng dụng'),
+            const _SectionHeader(title: 'Về ứng dụng'),
             const SizedBox(height: 8),
             _SettingsCard(
               children: [
                 ListTile(
                   leading: const Icon(Icons.description_outlined),
                   title: const Text('Điều khoản sử dụng'),
-                  trailing: Icon(
+                  trailing: const Icon(
                     Icons.chevron_right,
                     color: AppColors.textHint,
                   ),
@@ -178,7 +178,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ListTile(
                   leading: const Icon(Icons.privacy_tip_outlined),
                   title: const Text('Chính sách bảo mật'),
-                  trailing: Icon(
+                  trailing: const Icon(
                     Icons.chevron_right,
                     color: AppColors.textHint,
                   ),
@@ -188,7 +188,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ListTile(
                   leading: const Icon(Icons.star_outline),
                   title: const Text('Đánh giá ứng dụng'),
-                  trailing: Icon(
+                  trailing: const Icon(
                     Icons.chevron_right,
                     color: AppColors.textHint,
                   ),
@@ -211,16 +211,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             const SizedBox(height: 24),
 
             // Account section
-            _SectionHeader(title: 'Tài khoản'),
+            const _SectionHeader(title: 'Tài khoản'),
             const SizedBox(height: 8),
             _SettingsCard(
               children: [
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.delete_forever_outlined,
                     color: AppColors.error,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Xóa tài khoản',
                     style: TextStyle(color: AppColors.error),
                   ),
@@ -269,7 +269,7 @@ class _SettingsCard extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.border),
+        side: const BorderSide(color: AppColors.border),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(children: children),

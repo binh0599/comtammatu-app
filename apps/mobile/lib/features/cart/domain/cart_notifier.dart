@@ -15,8 +15,8 @@ class CartNotifier extends StateNotifier<CartState> {
 
   /// Add a menu item to cart.
   void addItem(MenuItem menuItem, {String? note}) {
-    final existingIndex = state.items
-        .indexWhere((item) => item.menuItem.id == menuItem.id);
+    final existingIndex =
+        state.items.indexWhere((item) => item.menuItem.id == menuItem.id);
 
     if (existingIndex >= 0) {
       final updatedItems = [...state.items];
@@ -29,7 +29,10 @@ class CartNotifier extends StateNotifier<CartState> {
       state = state.copyWith(items: updatedItems);
     } else {
       state = state.copyWith(
-        items: [...state.items, CartItem(menuItem: menuItem, quantity: 1, note: note)],
+        items: [
+          ...state.items,
+          CartItem(menuItem: menuItem, quantity: 1, note: note)
+        ],
       );
     }
   }
@@ -37,7 +40,8 @@ class CartNotifier extends StateNotifier<CartState> {
   /// Remove a menu item from cart entirely.
   void removeItem(int menuItemId) {
     state = state.copyWith(
-      items: state.items.where((item) => item.menuItem.id != menuItemId).toList(),
+      items:
+          state.items.where((item) => item.menuItem.id != menuItemId).toList(),
     );
   }
 

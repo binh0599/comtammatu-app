@@ -52,9 +52,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       body: Center(
         child: FadeTransition(
           opacity: _fadeAnimation,
-          child: Column(
+          child: const Column(
             mainAxisSize: MainAxisSize.min,
-            children: const [
+            children: [
               Icon(
                 Icons.restaurant,
                 size: 80,

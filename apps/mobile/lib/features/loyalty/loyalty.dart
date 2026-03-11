@@ -1,4 +1,6 @@
 /// Loyalty feature barrel file.
+library;
+
 export 'data/loyalty_repository.dart';
 export 'domain/loyalty_notifier.dart';
 export 'domain/loyalty_state.dart';

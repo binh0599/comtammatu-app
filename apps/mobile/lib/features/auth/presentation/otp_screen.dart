@@ -10,8 +10,8 @@ import '../../../shared/widgets/app_button.dart';
 /// OTP verification screen with 6 digit input and countdown timer.
 class OtpScreen extends ConsumerStatefulWidget {
   const OtpScreen({
-    super.key,
     required this.phoneNumber,
+    super.key,
   });
 
   final String phoneNumber;
@@ -66,8 +66,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     });
   }
 
-  String get _otpCode =>
-      _controllers.map((c) => c.text).join();
+  String get _otpCode => _controllers.map((c) => c.text).join();
 
   bool get _isOtpComplete => _otpCode.length == _otpLength;
 
@@ -80,8 +79,8 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     });
   }
 
-  void _onKeyPressed(int index, RawKeyEvent event) {
-    if (event is RawKeyDownEvent &&
+  void _onKeyPressed(int index, KeyEvent event) {
+    if (event is KeyDownEvent &&
         event.logicalKey == LogicalKeyboardKey.backspace &&
         _controllers[index].text.isEmpty &&
         index > 0) {
@@ -105,7 +104,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
     try {
       // TODO: Call auth verify OTP
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
       // Navigation handled by auth state listener
     } catch (e) {
       setState(() {
@@ -148,7 +147,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
               const SizedBox(height: 24),
 
               // Icon
-              Icon(
+              const Icon(
                 Icons.sms_outlined,
                 size: 64,
                 color: AppColors.primary,
@@ -159,10 +158,9 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
               Text(
                 'Nhập mã xác thực',
                 textAlign: TextAlign.center,
-                style:
-                    Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               const SizedBox(height: 8),
 
@@ -194,9 +192,9 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                     margin: EdgeInsets.only(
                       right: index < _otpLength - 1 ? 10 : 0,
                     ),
-                    child: RawKeyboardListener(
+                    child: KeyboardListener(
                       focusNode: FocusNode(),
-                      onKey: (event) => _onKeyPressed(index, event),
+                      onKeyEvent: (event) => _onKeyPressed(index, event),
                       child: TextField(
                         controller: _controllers[index],
                         focusNode: _focusNodes[index],
@@ -215,29 +213,28 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                           contentPadding: EdgeInsets.zero,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide:
-                                BorderSide(color: AppColors.border, width: 1.5),
+                            borderSide: const BorderSide(
+                                color: AppColors.border, width: 1.5),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide:
-                                BorderSide(color: AppColors.border, width: 1.5),
+                            borderSide: const BorderSide(
+                                color: AppColors.border, width: 1.5),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: AppColors.primary, width: 2),
                           ),
                           errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: AppColors.error, width: 1.5),
                           ),
                           filled: true,
                           fillColor: AppColors.surface,
                         ),
-                        onChanged: (value) =>
-                            _onDigitChanged(index, value),
+                        onChanged: (value) => _onDigitChanged(index, value),
                       ),
                     ),
                   );
@@ -252,7 +249,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
                     _errorMessage!,
-                    style: TextStyle(color: AppColors.error),
+                    style: const TextStyle(color: AppColors.error),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -279,8 +276,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
               // Verify button
               AppButton(
-                onPressed:
-                    _isLoading || !_isOtpComplete ? null : _handleVerify,
+                onPressed: _isLoading || !_isOtpComplete ? null : _handleVerify,
                 isLoading: _isLoading,
                 label: 'Xác nhận',
               ),

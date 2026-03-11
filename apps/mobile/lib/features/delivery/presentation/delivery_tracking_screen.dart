@@ -40,7 +40,7 @@ const _kStatusIcons = {
 
 /// Delivery tracking screen with realtime updates, driver info and ETA.
 class DeliveryTrackingScreen extends ConsumerStatefulWidget {
-  const DeliveryTrackingScreen({super.key, required this.orderId});
+  const DeliveryTrackingScreen({required this.orderId, super.key});
 
   final String orderId;
 
@@ -55,9 +55,9 @@ class _DeliveryTrackingScreenState
   void initState() {
     super.initState();
     Future.microtask(() {
-      final notifier = ref.read(deliveryNotifierProvider.notifier);
-      notifier.loadTracking(widget.orderId);
-      notifier.subscribeToUpdates(widget.orderId);
+      ref.read(deliveryNotifierProvider.notifier)
+        ..loadTracking(widget.orderId)
+        ..subscribeToUpdates(widget.orderId);
     });
   }
 
@@ -90,7 +90,7 @@ class _DeliveryTrackingScreenState
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.error_outline, size: 64, color: AppColors.error),
+              const Icon(Icons.error_outline, size: 64, color: AppColors.error),
               const SizedBox(height: 16),
               Text(
                 'Không thể tải thông tin giao hàng',
@@ -185,7 +185,7 @@ class _TrackingContent extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.border),
+        side: const BorderSide(color: AppColors.border),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -225,9 +225,8 @@ class _TrackingContent extends StatelessWidget {
                         child: Icon(
                           icon,
                           size: 18,
-                          color: isCompleted
-                              ? Colors.white
-                              : AppColors.textHint,
+                          color:
+                              isCompleted ? Colors.white : AppColors.textHint,
                         ),
                       ),
                       if (!isLast)
@@ -247,17 +246,15 @@ class _TrackingContent extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 6),
                       child: Text(
                         label,
-                        style:
-                            Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: isCurrent
-                                      ? AppColors.primary
-                                      : isCompleted
-                                          ? AppColors.textPrimary
-                                          : AppColors.textHint,
-                                  fontWeight: isCurrent
-                                      ? FontWeight.w700
-                                      : FontWeight.w400,
-                                ),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: isCurrent
+                                  ? AppColors.primary
+                                  : isCompleted
+                                      ? AppColors.textPrimary
+                                      : AppColors.textHint,
+                              fontWeight:
+                                  isCurrent ? FontWeight.w700 : FontWeight.w400,
+                            ),
                       ),
                     ),
                   ),
@@ -275,7 +272,7 @@ class _TrackingContent extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.border),
+        side: const BorderSide(color: AppColors.border),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -289,7 +286,7 @@ class _TrackingContent extends StatelessWidget {
                   ? NetworkImage(tracking.driverAvatarUrl!)
                   : null,
               child: tracking.driverAvatarUrl == null
-                  ? Icon(
+                  ? const Icon(
                       Icons.person,
                       size: 28,
                       color: AppColors.primary,
@@ -333,7 +330,7 @@ class _TrackingContent extends StatelessWidget {
                 onPressed: () {
                   launchUrl(Uri.parse('tel:${tracking.driverPhone}'));
                 },
-                icon: Icon(Icons.phone, color: AppColors.primary),
+                icon: const Icon(Icons.phone, color: AppColors.primary),
                 style: IconButton.styleFrom(
                   backgroundColor: AppColors.primary.withValues(alpha: 0.1),
                 ),
@@ -356,7 +353,7 @@ class _TrackingContent extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.map_outlined,
             size: 48,
             color: AppColors.textHint,
@@ -400,7 +397,7 @@ class _TrackingContent extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            Icon(Icons.schedule, color: AppColors.primary, size: 28),
+            const Icon(Icons.schedule, color: AppColors.primary, size: 28),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -443,7 +440,7 @@ class _TrackingContent extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.border),
+        side: const BorderSide(color: AppColors.border),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),

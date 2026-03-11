@@ -2,7 +2,8 @@
 class DeliveryTracking {
   final String id;
   final String orderId;
-  final String status; // waiting_driver, driver_assigned, picked_up, on_the_way, arrived, delivered
+  final String
+      status; // waiting_driver, driver_assigned, picked_up, on_the_way, arrived, delivered
   final String? driverName;
   final String? driverPhone;
   final String? driverAvatarUrl;
@@ -16,14 +17,14 @@ class DeliveryTracking {
     required this.id,
     required this.orderId,
     required this.status,
+    required this.createdAt,
+    required this.updatedAt,
     this.driverName,
     this.driverPhone,
     this.driverAvatarUrl,
     this.currentLatitude,
     this.currentLongitude,
     this.estimatedArrivalAt,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory DeliveryTracking.fromJson(Map<String, dynamic> json) {

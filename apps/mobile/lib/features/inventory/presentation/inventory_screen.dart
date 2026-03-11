@@ -7,187 +7,6 @@ import '../../../shared/utils/formatters.dart';
 import '../domain/inventory_notifier.dart';
 
 // ---------------------------------------------------------------------------
-// Dữ liệu mẫu — 13 mặt hàng bao phủ tất cả danh mục
-// ---------------------------------------------------------------------------
-
-final _sampleInventoryItems = <InventoryItem>[
-  // Nguyên liệu chính
-  InventoryItem(
-    id: 1,
-    name: 'Thịt sườn heo',
-    category: 'Nguyên liệu chính',
-    unit: 'kg',
-    currentStock: 15.0,
-    minStock: 20.0,
-    maxStock: 50.0,
-    lastRestocked: DateTime(2026, 3, 5),
-    pricePerUnit: 120000,
-    supplierId: 1,
-    supplierName: 'Công ty Thực phẩm Vissan',
-  ),
-  InventoryItem(
-    id: 2,
-    name: 'Trứng gà',
-    category: 'Nguyên liệu chính',
-    unit: 'hộp',
-    currentStock: 8.0,
-    minStock: 5.0,
-    maxStock: 20.0,
-    lastRestocked: DateTime(2026, 3, 6),
-    pricePerUnit: 45000,
-    supplierId: 2,
-    supplierName: 'Trại gà Ba Huân',
-  ),
-  InventoryItem(
-    id: 3,
-    name: 'Bì heo',
-    category: 'Nguyên liệu chính',
-    unit: 'kg',
-    currentStock: 5.0,
-    minStock: 8.0,
-    maxStock: 15.0,
-    lastRestocked: DateTime(2026, 3, 4),
-    pricePerUnit: 80000,
-    supplierId: 1,
-    supplierName: 'Công ty Thực phẩm Vissan',
-  ),
-  InventoryItem(
-    id: 4,
-    name: 'Gạo tấm',
-    category: 'Nguyên liệu chính',
-    unit: 'kg',
-    currentStock: 45.0,
-    minStock: 30.0,
-    maxStock: 100.0,
-    lastRestocked: DateTime(2026, 3, 7),
-    pricePerUnit: 18000,
-    supplierId: 3,
-    supplierName: 'Đại lý gạo Phước Thành',
-  ),
-
-  // Gia vị
-  InventoryItem(
-    id: 5,
-    name: 'Nước mắm',
-    category: 'Gia vị',
-    unit: 'lít',
-    currentStock: 10.0,
-    minStock: 5.0,
-    maxStock: 20.0,
-    lastRestocked: DateTime(2026, 3, 3),
-    pricePerUnit: 35000,
-    supplierId: 4,
-    supplierName: 'Nước mắm Phú Quốc',
-  ),
-  InventoryItem(
-    id: 6,
-    name: 'Đường',
-    category: 'Gia vị',
-    unit: 'kg',
-    currentStock: 8.0,
-    minStock: 5.0,
-    maxStock: 15.0,
-    lastRestocked: DateTime(2026, 3, 5),
-    pricePerUnit: 22000,
-    supplierId: 5,
-    supplierName: 'Đường Biên Hòa',
-  ),
-  InventoryItem(
-    id: 7,
-    name: 'Tiêu',
-    category: 'Gia vị',
-    unit: 'kg',
-    currentStock: 2.0,
-    minStock: 3.0,
-    maxStock: 5.0,
-    lastRestocked: DateTime(2026, 3, 1),
-    pricePerUnit: 250000,
-    supplierId: 6,
-    supplierName: 'Tiêu Phú Quốc Hưng Lợi',
-  ),
-  InventoryItem(
-    id: 8,
-    name: 'Tỏi',
-    category: 'Gia vị',
-    unit: 'kg',
-    currentStock: 3.0,
-    minStock: 4.0,
-    maxStock: 8.0,
-    lastRestocked: DateTime(2026, 3, 2),
-    pricePerUnit: 60000,
-    supplierId: 7,
-    supplierName: 'Tỏi Lý Sơn',
-  ),
-
-  // Đồ uống
-  InventoryItem(
-    id: 9,
-    name: 'Coca Cola',
-    category: 'Đồ uống',
-    unit: 'chai',
-    currentStock: 48.0,
-    minStock: 20.0,
-    maxStock: 100.0,
-    lastRestocked: DateTime(2026, 3, 6),
-    pricePerUnit: 10000,
-    supplierId: 8,
-    supplierName: 'Đại lý nước giải khát Tân Hiệp Phát',
-  ),
-  InventoryItem(
-    id: 10,
-    name: 'Nước suối',
-    category: 'Đồ uống',
-    unit: 'chai',
-    currentStock: 60.0,
-    minStock: 30.0,
-    maxStock: 100.0,
-    lastRestocked: DateTime(2026, 3, 7),
-    pricePerUnit: 5000,
-    supplierId: 8,
-    supplierName: 'Đại lý nước giải khát Tân Hiệp Phát',
-  ),
-  InventoryItem(
-    id: 11,
-    name: 'Trà đá',
-    category: 'Đồ uống',
-    unit: 'lít',
-    currentStock: 5.0,
-    minStock: 3.0,
-    maxStock: 10.0,
-    lastRestocked: DateTime(2026, 3, 7),
-    pricePerUnit: 15000,
-  ),
-
-  // Đóng gói
-  InventoryItem(
-    id: 12,
-    name: 'Hộp xốp',
-    category: 'Đóng gói',
-    unit: 'hộp',
-    currentStock: 200.0,
-    minStock: 100.0,
-    maxStock: 500.0,
-    lastRestocked: DateTime(2026, 3, 5),
-    pricePerUnit: 1500,
-    supplierId: 9,
-    supplierName: 'Bao bì Thành Đạt',
-  ),
-  InventoryItem(
-    id: 13,
-    name: 'Túi nilon',
-    category: 'Đóng gói',
-    unit: 'gói',
-    currentStock: 50.0,
-    minStock: 30.0,
-    maxStock: 100.0,
-    lastRestocked: DateTime(2026, 3, 4),
-    pricePerUnit: 25000,
-    supplierId: 9,
-    supplierName: 'Bao bì Thành Đạt',
-  ),
-];
-
-// ---------------------------------------------------------------------------
 // Danh mục lọc
 // ---------------------------------------------------------------------------
 
@@ -299,7 +118,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
     final quantityController = TextEditingController();
     final noteController = TextEditingController();
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
@@ -329,7 +148,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
                 ),
                 const SizedBox(height: 6),
                 DropdownButtonFormField<InventoryItem>(
-                  value: selectedItem,
+                  initialValue: selectedItem,
                   isExpanded: true,
                   decoration: InputDecoration(
                     hintText: 'Chọn mặt hàng',
@@ -497,7 +316,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
   }
 
   void _showItemDetailSheet(InventoryItem item) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -521,7 +340,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
     final quantityController = TextEditingController();
     final noteController = TextEditingController();
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(
@@ -614,8 +433,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              final quantity =
-                  double.tryParse(quantityController.text.trim());
+              final quantity = double.tryParse(quantityController.text.trim());
               if (quantity == null || quantity <= 0) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -653,7 +471,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
       text: _formatStock(item.currentStock),
     );
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(
@@ -711,8 +529,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              final newStock =
-                  double.tryParse(stockController.text.trim());
+              final newStock = double.tryParse(stockController.text.trim());
               if (newStock == null || newStock < 0) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -759,9 +576,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
                   border: InputBorder.none,
                 ),
                 onChanged: (value) {
-                  ref
-                      .read(inventoryNotifierProvider.notifier)
-                      .search(value);
+                  ref.read(inventoryNotifierProvider.notifier).search(value);
                 },
               )
             : const Text('Quản lý kho hàng'),
@@ -1350,8 +1165,7 @@ class _ItemDetailSheet extends StatelessWidget {
                         value: item.stockPercentage,
                         minHeight: 8,
                         backgroundColor: _stockColor.withValues(alpha: 0.15),
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(_stockColor),
+                        valueColor: AlwaysStoppedAnimation<Color>(_stockColor),
                       ),
                     ),
                     const SizedBox(height: 10),

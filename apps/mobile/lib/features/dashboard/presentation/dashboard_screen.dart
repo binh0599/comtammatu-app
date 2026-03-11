@@ -162,7 +162,7 @@ class _SummaryCardsGrid extends StatelessWidget {
               child: _SummaryCard(
                 title: 'Giá trị trung bình',
                 value: Formatters.currency(stats.avgOrderValue),
-                icon: Icons.avg_pace,
+                icon: Icons.speed,
                 iconColor: AppColors.secondary,
                 subtitle: 'Trên mỗi đơn hàng',
               ),
@@ -329,13 +329,13 @@ class _RevenueBarChartPainter extends CustomPainter {
     // Vẽ từng cột
     final barPaint = Paint()..color = const Color(0xFFD4442A);
     final highlightPaint = Paint()..color = const Color(0xFFF5A623);
-    final labelStyle = TextStyle(
-      color: const Color(0xFF78716C),
+    const labelStyle = TextStyle(
+      color: Color(0xFF78716C),
       fontSize: 10,
       fontWeight: FontWeight.w500,
     );
-    final valueStyle = TextStyle(
-      color: const Color(0xFF1C1917),
+    const valueStyle = TextStyle(
+      color: Color(0xFF1C1917),
       fontSize: 9,
       fontWeight: FontWeight.w600,
     );

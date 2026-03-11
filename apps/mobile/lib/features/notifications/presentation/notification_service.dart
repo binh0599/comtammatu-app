@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_router.dart';
@@ -90,8 +90,6 @@ class NotificationService {
         NotificationChannelConfig.channelName,
         description: NotificationChannelConfig.channelDescription,
         importance: Importance.high,
-        enableVibration: true,
-        showBadge: true,
       );
 
       // Tạo kênh thông báo đơn hàng riêng (ưu tiên cao nhất)
@@ -100,8 +98,6 @@ class NotificationService {
         NotificationChannelConfig.orderChannelName,
         description: NotificationChannelConfig.orderChannelDescription,
         importance: Importance.max,
-        enableVibration: true,
-        showBadge: true,
       );
 
       // Đăng ký kênh thông báo với hệ thống Android
@@ -178,15 +174,7 @@ class NotificationService {
   /// Trả về `true` nếu người dùng cho phép, `false` nếu từ chối.
   Future<bool> requestPermission() async {
     try {
-      final settings = await _fcm.requestPermission(
-        alert: true,
-        badge: true,
-        sound: true,
-        announcement: false,
-        carPlay: false,
-        criticalAlert: false,
-        provisional: false,
-      );
+      final settings = await _fcm.requestPermission();
 
       final isGranted =
           settings.authorizationStatus == AuthorizationStatus.authorized ||
@@ -302,8 +290,7 @@ class NotificationService {
     if (payloadString == null || payloadString.isEmpty) return;
 
     try {
-      final payload =
-          PushNotificationPayload.fromPayloadString(payloadString);
+      final payload = PushNotificationPayload.fromPayloadString(payloadString);
       final route = payload.route;
 
       debugPrint(
@@ -361,9 +348,6 @@ class NotificationService {
       importance: _importanceForType(type),
       priority: _priorityForType(type),
       icon: NotificationIconConfig.defaultIcon,
-      showWhen: true,
-      autoCancel: true,
-      enableVibration: true,
     );
 
     const iosDetails = DarwinNotificationDetails(

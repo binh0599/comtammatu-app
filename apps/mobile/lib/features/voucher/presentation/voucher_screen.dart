@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -40,7 +42,7 @@ class _VoucherScreenState extends ConsumerState<VoucherScreen>
   }
 
   void _onRedeemVoucher(Voucher voucher) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(
@@ -76,7 +78,7 @@ class _VoucherScreenState extends ConsumerState<VoucherScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(
+            child: const Text(
               'Huỷ',
               style: TextStyle(color: AppColors.textSecondary),
             ),
@@ -107,7 +109,7 @@ class _VoucherScreenState extends ConsumerState<VoucherScreen>
           .redeemVoucher(voucher.id);
 
       // Refresh owned vouchers after redemption.
-      ref.read(myVouchersProvider.notifier).loadVouchers();
+      unawaited(ref.read(myVouchersProvider.notifier).loadVouchers());
 
       if (!mounted) return;
 
@@ -209,9 +211,7 @@ class _AvailableVouchersTab extends ConsumerWidget {
     final state = ref.watch(availableVouchersProvider);
 
     return switch (state) {
-      VoucherListInitial() ||
-      VoucherListLoading() =>
-        const LoadingIndicator(
+      VoucherListInitial() || VoucherListLoading() => const LoadingIndicator(
           type: LoadingType.shimmer,
         ),
       VoucherListError(message: final msg) => ErrorView(
@@ -257,15 +257,12 @@ class _MyVouchersTab extends ConsumerWidget {
     final state = ref.watch(myVouchersProvider);
 
     return switch (state) {
-      VoucherListInitial() ||
-      VoucherListLoading() =>
-        const LoadingIndicator(
+      VoucherListInitial() || VoucherListLoading() => const LoadingIndicator(
           type: LoadingType.shimmer,
         ),
       VoucherListError(message: final msg) => ErrorView(
           message: msg,
-          onRetry: () =>
-              ref.read(myVouchersProvider.notifier).loadVouchers(),
+          onRetry: () => ref.read(myVouchersProvider.notifier).loadVouchers(),
         ),
       VoucherListLoaded(vouchers: final vouchers) => vouchers.isEmpty
           ? const EmptyView(
@@ -474,7 +471,7 @@ class _LeftStrip extends StatelessWidget {
         children: [
           Icon(
             Icons.local_offer_rounded,
-            color: Colors.white.withOpacity(0.9),
+            color: Colors.white.withValues(alpha: 0.9),
             size: 24,
           ),
           const SizedBox(height: 6),
@@ -508,16 +505,16 @@ class _PointsBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.secondary.withOpacity(0.15),
+        color: AppColors.secondary.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppColors.secondary.withOpacity(0.4),
+          color: AppColors.secondary.withValues(alpha: 0.4),
         ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
+          const Icon(
             Icons.stars_rounded,
             size: 14,
             color: AppColors.secondaryDark,
@@ -525,7 +522,7 @@ class _PointsBadge extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             '${Formatters.number(points)} điểm',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
               color: AppColors.secondaryDark,
@@ -602,10 +599,9 @@ class _ActionButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor:
-              isAvailable ? AppColors.primary : AppColors.success,
+          backgroundColor: isAvailable ? AppColors.primary : AppColors.success,
           foregroundColor: AppColors.textOnPrimary,
-          disabledBackgroundColor: AppColors.textHint.withOpacity(0.3),
+          disabledBackgroundColor: AppColors.textHint.withValues(alpha: 0.3),
           disabledForegroundColor: AppColors.textHint,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 16),

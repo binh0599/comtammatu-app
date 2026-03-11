@@ -14,8 +14,7 @@ class DashboardRepository {
   Future<DashboardStats> getStats() async {
     return _apiClient.get<DashboardStats>(
       '/dashboard-stats',
-      fromJson: (json) =>
-          DashboardStats.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => DashboardStats.fromJson(json as Map<String, dynamic>),
     );
   }
 }

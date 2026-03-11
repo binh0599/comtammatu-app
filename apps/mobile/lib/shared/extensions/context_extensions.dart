@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Convenient extensions on BuildContext for common lookups.
 extension ContextExtensions on BuildContext {
@@ -48,7 +48,6 @@ extension ContextExtensions on BuildContext {
       SnackBar(
         content: Text(message),
         backgroundColor: colorScheme.error,
-        duration: const Duration(seconds: 4),
       ),
     );
   }
