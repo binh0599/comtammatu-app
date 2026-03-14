@@ -1,0 +1,26 @@
+Cơm Tấm Má Tư — Ứng dụng khách hàng thân thiết chính thức của chuỗi cơm tấm Má Tư.
+
+Tính năng nổi bật:
+
+🎯 Chương trình khách hàng thân thiết
+Tích điểm mỗi lần dùng bữa hoặc đặt hàng. Đổi điểm lấy ưu đãi hấp dẫn. Theo dõi chuỗi check-in liên tiếp để nhận thưởng đặc biệt.
+
+📱 Quét mã QR check-in
+Check-in nhanh chóng tại cửa hàng bằng mã QR. Tích điểm tự động, không cần thẻ giấy.
+
+🛵 Đặt món giao hàng
+Xem thực đơn đầy đủ với hình ảnh. Thêm món vào giỏ hàng và đặt giao tận nơi. Theo dõi đơn hàng theo thời gian thực.
+
+📍 Tìm cửa hàng gần nhất
+Bản đồ hiển thị tất cả cửa hàng Cơm Tấm Má Tư. Xem giờ mở cửa, địa chỉ và chỉ đường.
+
+🎟️ Voucher và ưu đãi
+Nhận và sử dụng voucher giảm giá. Chương trình khuyến mãi đặc biệt cho thành viên.
+
+📋 Lịch sử đơn hàng
+Xem lại tất cả đơn hàng đã đặt. Đặt lại món yêu thích chỉ với một chạm.
+
+👤 Quản lý tài khoản
+Cập nhật thông tin cá nhân. Lưu địa chỉ giao hàng thường dùng. Quản lý thông báo theo ý thích.
+
+Tải ngay để thưởng thức cơm tấm ngon và nhận nhiều ưu đãi!

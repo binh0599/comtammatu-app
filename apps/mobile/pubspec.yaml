@@ -78,7 +78,11 @@ dev_dependencies:
   drift_dev: ^2.22.1
   mocktail: ^1.0.4
   patrol: ^3.13.0
+  flutter_launcher_icons: ^0.14.2
 
 flutter:
   uses-material-design: true
   generate: true  # Enable l10n
+
+  assets:
+    - assets/icon/

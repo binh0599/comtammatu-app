@@ -1,0 +1,26 @@
+Cơm Tấm Má Tư — The official loyalty app for the Má Tư broken rice restaurant chain.
+
+Key Features:
+
+🎯 Loyalty Program
+Earn points with every dine-in or delivery order. Redeem points for exciting rewards. Track your check-in streak for bonus rewards.
+
+📱 QR Check-in
+Quick check-in at any store using QR codes. Automatic point accumulation, no paper cards needed.
+
+🛵 Food Delivery
+Browse the full menu with photos. Add items to cart and order delivery to your door. Track your order in real-time.
+
+📍 Store Locator
+Map showing all Cơm Tấm Má Tư locations. View opening hours, addresses, and get directions.
+
+🎟️ Vouchers & Deals
+Receive and use discount vouchers. Special promotions for loyalty members.
+
+📋 Order History
+Review all past orders. Reorder your favorites with a single tap.
+
+👤 Account Management
+Update your personal information. Save frequently used delivery addresses. Customize your notification preferences.
+
+Download now to enjoy delicious broken rice and earn rewards!

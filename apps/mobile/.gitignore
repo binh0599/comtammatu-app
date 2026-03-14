@@ -100,3 +100,8 @@ coverage/
 *.keystore
 key.properties
 play-store-service-account.json
+
+# Fastlane env (secrets)
+**/fastlane/.env
+**/fastlane/.env.*
+!**/fastlane/.env.example

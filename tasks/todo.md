@@ -115,14 +115,23 @@
 - [x] iOS: `Info.plist` URL types + `Runner.entitlements` Associated Domains
 - [x] `FlutterDeepLinkingEnabled` set on both platforms
 
-### P4.4 — Pre-launch Checklist (Remaining)
-- [ ] App icon generation (all sizes for Android/iOS)
-- [ ] Splash screen image asset
-- [ ] App Store / Play Store metadata
-- [ ] Privacy policy and terms of service
-- [ ] Code signing for release builds
-- [ ] Fastlane secrets configuration
-- [ ] Host `assetlinks.json` and `apple-app-site-association` on `comtammatu.vn`
+### P4.4 — Pre-launch Checklist
+- [x] Fix package name mismatch (`vn.comtammatu.app` → `com.comtammatu.app`)
+- [x] App icon config (`flutter_launcher_icons.yaml` ready — chờ copy logo vào `assets/icon/app_icon.png` rồi chạy `dart run flutter_launcher_icons`)
+- [x] Splash screen config (`flutter_native_splash.yaml` updated — chờ logo rồi chạy `dart run flutter_native_splash:create`)
+- [x] App Store / Play Store metadata (12 files: vi-VN + en-US cho cả Android & iOS)
+- [x] Privacy policy (`docs/privacy_policy.md`) — ⚠️ cần luật sư review
+- [x] Terms of service (`docs/terms_of_service.md`) — ⚠️ cần luật sư review
+- [x] Code signing guide (`docs/CODE_SIGNING.md`) + templates (`key.properties.example`, `Matchfile`, `.env.example`)
+- [x] Deep link verification files (`web/.well-known/assetlinks.json` + `apple-app-site-association`) — chờ deploy lên domain
+
+#### Chờ User Action:
+- [ ] Copy logo PNG 1024x1024 vào `apps/mobile/assets/icon/app_icon.png`
+- [ ] Chạy `dart run flutter_launcher_icons` và `dart run flutter_native_splash:create`
+- [ ] Đăng ký Apple Developer Account + Google Play Console
+- [ ] Cấu hình code signing theo `docs/CODE_SIGNING.md`
+- [ ] Mua domain `comtammatu.vn` và host `assetlinks.json` + `apple-app-site-association`
+- [ ] Luật sư review privacy policy + terms of service
 
 ---
 

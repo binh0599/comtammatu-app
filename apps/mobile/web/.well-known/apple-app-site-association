@@ -1,0 +1,21 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "TEAM_ID.com.comtammatu.app",
+        "paths": [
+          "/menu/*",
+          "/orders/*",
+          "/delivery/*",
+          "/vouchers/*",
+          "/loyalty/*",
+          "/checkin/*",
+          "/profile/*",
+          "/store-locator/*",
+          "/*"
+        ]
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="vn.comtammatu.app">
+    package="com.comtammatu.app">
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
