@@ -1,6 +1,10 @@
 ---
 title: "Luồng Tích Điểm Khi Mua Hàng (Point Accumulation Flow)"
 ---
+%% TRẠNG THÁI IMPLEMENT (2026-03-15):
+%% ✅ Implemented: Supabase Realtime WebSocket, loyalty_member model, point_transaction model
+%% ⚠️ Model chưa đầy đủ: PointTransaction thiếu idempotency_key field, LoyaltyMember thiếu version column
+%% 🔹 Backend-only (chưa verify): process-payment Edge Function, sync_outbox, crm-sync-worker, tier upgrade logic
 sequenceDiagram
     actor KH as 👤 Khách hàng
     participant POS as 🖥️ Cashier App / POS

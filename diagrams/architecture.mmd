@@ -14,8 +14,10 @@ graph TB
         subgraph OFFLINE_LAYER["Offline Layer"]
             DRIFT["Drift — SQLite wrapper<br/>(offline-first data)"]
         end
+        subgraph ANALYTICS_LAYER["Analytics"]
+            POSTHOG["PostHog<br/>(product analytics)"]
+        end
         subgraph NATIVE_LAYER["Platform Features"]
-            RIVE["Rive + Impeller<br/>(60fps animations)"]
             CAMERA["mobile_scanner<br/>(ML Kit / Vision)"]
             MAPS["google_maps_flutter"]
             GEO["geolocator<br/>(geofencing)"]
@@ -24,7 +26,7 @@ graph TB
         WIDGETS --> RIVERPOD
         RIVERPOD --> DIO
         RIVERPOD --> DRIFT
-        WIDGETS --> RIVE
+        WIDGETS --> POSTHOG
         WIDGETS --> CAMERA
         WIDGETS --> MAPS
     end
@@ -85,13 +87,15 @@ graph TB
         FASTLANE["Fastlane<br/>(build & deploy)"]
         SENTRY["Sentry<br/>(crash reporting)"]
         SHOREBIRD["Shorebird.dev<br/>(OTA code push)"]
-        FIREBASE_DIST["Firebase App Dist.<br/>(beta testing)"]
+        PLAY_STORE["Google Play Store<br/>(internal track)"]
+        TESTFLIGHT["Apple TestFlight<br/>(beta testing)"]
     end
 
     SENTRY -.->|"crash reports"| MOBILE
     SHOREBIRD -.->|"OTA updates"| MOBILE
     GHA --> FASTLANE
-    FASTLANE --> FIREBASE_DIST
+    FASTLANE --> PLAY_STORE
+    FASTLANE --> TESTFLIGHT
 
     classDef mobile fill:#E3F2FD,stroke:#1565C0,stroke-width:2px,color:#0D47A1
     classDef backend fill:#FFF3E0,stroke:#E65100,stroke-width:2px,color:#BF360C
@@ -99,8 +103,8 @@ graph TB
     classDef db fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20
     classDef devops fill:#ECEFF1,stroke:#546E7A,stroke-width:1px,color:#37474F
 
-    class WIDGETS,RIVERPOD,DIO,DRIFT,RIVE,CAMERA,MAPS,GEO,FCM mobile
+    class WIDGETS,RIVERPOD,DIO,DRIFT,POSTHOG,CAMERA,MAPS,GEO,FCM mobile
     class AUTH,EDGE,REALTIME,SUPABASE_GW,PGCRON,PGNOTIFY,STORAGE backend
     class CRM_SYNC,CRM crm
     class PG,SYNC_OUTBOX db
-    class GHA,FASTLANE,SENTRY,SHOREBIRD,FIREBASE_DIST devops
+    class GHA,FASTLANE,SENTRY,SHOREBIRD,PLAY_STORE,TESTFLIGHT devops
