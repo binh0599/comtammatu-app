@@ -26,8 +26,7 @@ class MenuNotifier extends StateNotifier<MenuState> {
   Future<void> refreshMenu({required int branchId}) async {
     final previous = state;
     try {
-      final categories =
-          await _menuRepository.refreshMenu(branchId: branchId);
+      final categories = await _menuRepository.refreshMenu(branchId: branchId);
       state = MenuLoaded(categories: categories);
     } catch (e) {
       // Keep previous loaded state if refresh fails

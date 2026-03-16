@@ -94,8 +94,7 @@ void main() {
       });
 
       test('sets error on failure', () async {
-        when(() => mockRepo.getOrders())
-            .thenThrow(Exception('Network error'));
+        when(() => mockRepo.getOrders()).thenThrow(Exception('Network error'));
 
         await notifier.loadOrders();
 
@@ -132,8 +131,7 @@ void main() {
         await notifier.loadOrders();
 
         // Load more
-        when(() => mockRepo.getOrders(cursor: 'cursor_1'))
-            .thenAnswer(
+        when(() => mockRepo.getOrders(cursor: 'cursor_1')).thenAnswer(
           (_) async => _paginatedResponse(
             orders: [_sampleOrder(orderId: 2)],
           ),

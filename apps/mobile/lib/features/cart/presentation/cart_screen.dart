@@ -164,8 +164,7 @@ class _CartContent extends ConsumerWidget {
     final deliveryFee = cartState.deliveryFee;
     final discount = cartState.discount;
     final total = cartState.total;
-    final selectedPayment =
-        _paymentMethodFromString(cartState.paymentMethod);
+    final selectedPayment = _paymentMethodFromString(cartState.paymentMethod);
     final isSubmitting = cartState.isSubmitting;
 
     // Listen for orderError changes to show snackbar
@@ -233,7 +232,8 @@ class _CartContent extends ConsumerWidget {
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     subtitle: Text(
-                      cartState.deliveryAddress ?? 'Ch\u01b0a ch\u1ecdn \u0111\u1ecba ch\u1ec9',
+                      cartState.deliveryAddress ??
+                          'Ch\u01b0a ch\u1ecdn \u0111\u1ecba ch\u1ec9',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppColors.textHint,
                           ),
@@ -285,18 +285,16 @@ class _CartContent extends ConsumerWidget {
                             },
                             title: Text(
                               _paymentLabel(method),
-                              style:
-                                  Theme.of(context).textTheme.bodyMedium,
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             secondary: Icon(
                               _paymentIcon(method),
                               color: AppColors.textSecondary,
                             ),
-                            controlAffinity:
-                                ListTileControlAffinity.trailing,
+                            controlAffinity: ListTileControlAffinity.trailing,
                             activeColor: AppColors.primary,
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12),
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 12),
                           ),
                         ),
                       )
@@ -392,11 +390,10 @@ class _CartContent extends ConsumerWidget {
                       ),
                       Text(
                         _formatPrice(total),
-                        style:
-                            Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w700,
+                            ),
                       ),
                     ],
                   ),
@@ -514,8 +511,7 @@ class _CartItemTile extends StatelessWidget {
                         onTap: () => onQuantityChanged(item.quantity - 1),
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 14),
+                        padding: const EdgeInsets.symmetric(horizontal: 14),
                         child: Text(
                           '${item.quantity}',
                           style: Theme.of(context)
@@ -551,13 +547,12 @@ class _CartItemTile extends StatelessWidget {
               decoration: InputDecoration(
                 hintText:
                     'Ghi ch\u00fa (vd: \u00edt h\u00e0nh, th\u00eam n\u01b0\u1edbc m\u1eafm...)',
-                hintStyle:
-                    Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.textHint,
-                        ),
+                hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.textHint,
+                    ),
                 isDense: true,
-                contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 10),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(color: AppColors.border),

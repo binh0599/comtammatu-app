@@ -135,8 +135,7 @@ void main() {
             .thenAnswer((_) async {});
 
         final apiStores = _sampleStores();
-        _stubGetStores(mockApiClient)
-            .thenAnswer((_) async => apiStores);
+        _stubGetStores(mockApiClient).thenAnswer((_) async => apiStores);
 
         // Act
         final result = await repository.getStores();
@@ -153,8 +152,7 @@ void main() {
         // Arrange: cache expired, API fails, stale cache available
         when(() => mockCacheService.isCacheValid(any(), any()))
             .thenReturn(false);
-        _stubGetStores(mockApiClient)
-            .thenThrow(Exception('Network error'));
+        _stubGetStores(mockApiClient).thenThrow(Exception('Network error'));
         when(() => mockCacheService.getCachedStores())
             .thenReturn(_sampleCachedStoreJson());
 
@@ -175,8 +173,7 @@ void main() {
             .thenAnswer((_) async {});
 
         final apiStores = _sampleStores();
-        _stubGetStores(mockApiClient)
-            .thenAnswer((_) async => apiStores);
+        _stubGetStores(mockApiClient).thenAnswer((_) async => apiStores);
 
         // Act
         final result = await repository.getStores();
@@ -189,8 +186,7 @@ void main() {
         // Arrange
         when(() => mockCacheService.isCacheValid(any(), any()))
             .thenReturn(false);
-        _stubGetStores(mockApiClient)
-            .thenThrow(Exception('Network error'));
+        _stubGetStores(mockApiClient).thenThrow(Exception('Network error'));
         when(() => mockCacheService.getCachedStores()).thenReturn([]);
 
         // Act & Assert
@@ -204,8 +200,7 @@ void main() {
     group('getNearbyStores', () {
       test('returns stores from API sorted by distance', () async {
         final apiStores = _sampleStores();
-        _stubGetNearbyStores(mockApiClient)
-            .thenAnswer((_) async => apiStores);
+        _stubGetNearbyStores(mockApiClient).thenAnswer((_) async => apiStores);
 
         // Act
         final result = await repository.getNearbyStores(10.83, 106.66);

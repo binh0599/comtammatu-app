@@ -146,12 +146,10 @@ void main() {
         // Arrange: cache is not valid
         when(() => mockCacheService.isCacheValid(any(), any()))
             .thenReturn(false);
-        when(() => mockCacheService.cacheMenu(any()))
-            .thenAnswer((_) async {});
+        when(() => mockCacheService.cacheMenu(any())).thenAnswer((_) async {});
 
         final apiCategories = _sampleCategories();
-        _stubGetMenu(mockApiClient)
-            .thenAnswer((_) async => apiCategories);
+        _stubGetMenu(mockApiClient).thenAnswer((_) async => apiCategories);
 
         // Act
         final result = await repository.getMenu(branchId: 1);
@@ -167,8 +165,7 @@ void main() {
         // Arrange: cache is not valid, API fails, stale cache exists
         when(() => mockCacheService.isCacheValid(any(), any()))
             .thenReturn(false);
-        _stubGetMenu(mockApiClient)
-            .thenThrow(Exception('Network error'));
+        _stubGetMenu(mockApiClient).thenThrow(Exception('Network error'));
         when(() => mockCacheService.getCachedMenuAsync())
             .thenAnswer((_) async => _sampleCachedItems());
 
@@ -186,12 +183,10 @@ void main() {
         when(() => mockCacheService.isCacheValid(any(), any()))
             .thenReturn(true);
         when(() => mockCacheService.getCachedMenu()).thenReturn([]);
-        when(() => mockCacheService.cacheMenu(any()))
-            .thenAnswer((_) async {});
+        when(() => mockCacheService.cacheMenu(any())).thenAnswer((_) async {});
 
         final apiCategories = _sampleCategories();
-        _stubGetMenu(mockApiClient)
-            .thenAnswer((_) async => apiCategories);
+        _stubGetMenu(mockApiClient).thenAnswer((_) async => apiCategories);
 
         // Act
         final result = await repository.getMenu(branchId: 1);
@@ -204,8 +199,7 @@ void main() {
         // Arrange: no valid cache, API fails, stale cache is empty
         when(() => mockCacheService.isCacheValid(any(), any()))
             .thenReturn(false);
-        _stubGetMenu(mockApiClient)
-            .thenThrow(Exception('Network error'));
+        _stubGetMenu(mockApiClient).thenThrow(Exception('Network error'));
         when(() => mockCacheService.getCachedMenuAsync())
             .thenAnswer((_) async => []);
 
@@ -221,10 +215,8 @@ void main() {
       test('bypasses cache and fetches directly from API', () async {
         // Arrange
         final apiCategories = _sampleCategories();
-        _stubGetMenu(mockApiClient)
-            .thenAnswer((_) async => apiCategories);
-        when(() => mockCacheService.cacheMenu(any()))
-            .thenAnswer((_) async {});
+        _stubGetMenu(mockApiClient).thenAnswer((_) async => apiCategories);
+        when(() => mockCacheService.cacheMenu(any())).thenAnswer((_) async {});
 
         // Act
         final result = await repository.refreshMenu(branchId: 1);
@@ -241,8 +233,7 @@ void main() {
 
       test('throws on API error without cache fallback', () async {
         // Arrange: refreshMenu does not fall back to cache
-        _stubGetMenu(mockApiClient)
-            .thenThrow(Exception('Server error'));
+        _stubGetMenu(mockApiClient).thenThrow(Exception('Server error'));
 
         // Act & Assert
         expect(

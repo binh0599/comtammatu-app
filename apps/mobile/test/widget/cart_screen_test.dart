@@ -38,8 +38,7 @@ void main() {
               for (final item in initialState.items) {
                 notifier.addItem(item.menuItem);
                 if (item.quantity > 1) {
-                  notifier.updateQuantity(
-                      item.menuItem.id, item.quantity);
+                  notifier.updateQuantity(item.menuItem.id, item.quantity);
                 }
                 if (item.note != null) {
                   notifier.updateNote(item.menuItem.id, item.note!);

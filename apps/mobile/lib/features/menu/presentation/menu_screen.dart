@@ -526,11 +526,9 @@ class _MenuItemCard extends StatelessWidget {
                           child: CachedNetworkImage(
                             imageUrl: item.imageUrl!,
                             placeholder: (context, url) => const Center(
-                              child:
-                                  CircularProgressIndicator(strokeWidth: 2),
+                              child: CircularProgressIndicator(strokeWidth: 2),
                             ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(
+                            errorWidget: (context, url, error) => const Icon(
                               Icons.broken_image_outlined,
                               size: 36,
                               color: Colors.grey,
