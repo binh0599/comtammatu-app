@@ -842,7 +842,7 @@ void _showAddStaffDialog(BuildContext context, WidgetRef ref) {
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<StaffRole>(
-                      initialValue: selectedRole,
+                      value: selectedRole,
                       decoration: const InputDecoration(
                         labelText: 'Vai trò',
                         prefixIcon: Icon(Icons.badge_outlined),
@@ -864,7 +864,7 @@ void _showAddStaffDialog(BuildContext context, WidgetRef ref) {
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<int>(
-                      initialValue: selectedBranchId,
+                      value: selectedBranchId,
                       decoration: const InputDecoration(
                         labelText: 'Chi nhánh',
                         prefixIcon: Icon(Icons.store_outlined),
@@ -1012,7 +1012,7 @@ void _showEditStaffDialog(
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<StaffRole>(
-                      initialValue: selectedRole,
+                      value: selectedRole,
                       decoration: const InputDecoration(
                         labelText: 'Vai trò',
                         prefixIcon: Icon(Icons.badge_outlined),
@@ -1034,7 +1034,7 @@ void _showEditStaffDialog(
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<int>(
-                      initialValue: selectedBranchId,
+                      value: selectedBranchId,
                       decoration: const InputDecoration(
                         labelText: 'Chi nhánh',
                         prefixIcon: Icon(Icons.store_outlined),

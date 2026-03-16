@@ -92,7 +92,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: const Text('Thông báo đẩy'),
                   subtitle: const Text('Nhận thông báo từ ứng dụng'),
                   value: _pushNotifications,
-                  activeThumbColor: AppColors.primary,
+                  activeColor: AppColors.primary,
                   onChanged: (value) {
                     setState(() => _pushNotifications = value);
                   },
@@ -102,7 +102,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: const Text('Thông báo khuyến mãi'),
                   subtitle: const Text('Ưu đãi và chương trình đặc biệt'),
                   value: _promoNotifications,
-                  activeThumbColor: AppColors.primary,
+                  activeColor: AppColors.primary,
                   onChanged: (value) {
                     setState(() => _promoNotifications = value);
                   },
@@ -112,7 +112,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: const Text('Thông báo đơn hàng'),
                   subtitle: const Text('Cập nhật trạng thái đơn hàng'),
                   value: _orderNotifications,
-                  activeThumbColor: AppColors.primary,
+                  activeColor: AppColors.primary,
                   onChanged: (value) {
                     setState(() => _orderNotifications = value);
                   },
@@ -131,7 +131,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: const Text('Chế độ tối'),
                   subtitle: const Text('Chuyển sang giao diện tối'),
                   value: _darkMode,
-                  activeThumbColor: AppColors.primary,
+                  activeColor: AppColors.primary,
                   onChanged: (value) {
                     setState(() => _darkMode = value);
                   },

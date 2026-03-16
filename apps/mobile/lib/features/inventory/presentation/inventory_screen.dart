@@ -148,7 +148,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
                 ),
                 const SizedBox(height: 6),
                 DropdownButtonFormField<InventoryItem>(
-                  initialValue: selectedItem,
+                  value: selectedItem,
                   isExpanded: true,
                   decoration: InputDecoration(
                     hintText: 'Chọn mặt hàng',

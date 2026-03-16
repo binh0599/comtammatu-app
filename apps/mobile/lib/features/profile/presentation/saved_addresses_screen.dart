@@ -367,7 +367,7 @@ class _AddEditAddressDialogState extends State<_AddEditAddressDialog> {
             children: [
               // Label selector
               DropdownButtonFormField<String>(
-                initialValue: _selectedLabel,
+                value: _selectedLabel,
                 decoration: const InputDecoration(
                   labelText: 'Loại địa chỉ',
                   prefixIcon: Icon(Icons.label_outline),

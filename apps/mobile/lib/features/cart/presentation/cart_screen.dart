@@ -257,51 +257,50 @@ class _CartContent extends ConsumerWidget {
                       ),
                 ),
                 const SizedBox(height: 8),
-                RadioGroup<PaymentMethod>(
-                  groupValue: selectedPayment,
-                  onChanged: (v) {
-                    if (v != null) {
-                      ref
-                          .read(cartNotifierProvider.notifier)
-                          .setPaymentMethod(_paymentMethodToString(v));
-                    }
-                  },
-                  child: Column(
-                    children: PaymentMethod.values
-                        .map(
-                          (method) => Card(
-                            elevation: 0,
-                            margin: const EdgeInsets.only(bottom: 8),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(
-                                color: selectedPayment == method
-                                    ? AppColors.primary
-                                    : AppColors.border,
-                                width: selectedPayment == method ? 1.5 : 1,
-                              ),
+                Column(
+                  children: PaymentMethod.values
+                      .map(
+                        (method) => Card(
+                          elevation: 0,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(
+                              color: selectedPayment == method
+                                  ? AppColors.primary
+                                  : AppColors.border,
+                              width: selectedPayment == method ? 1.5 : 1,
                             ),
-                            child: RadioListTile<PaymentMethod>(
-                              value: method,
-                              title: Text(
-                                _paymentLabel(method),
-                                style:
-                                    Theme.of(context).textTheme.bodyMedium,
-                              ),
-                              secondary: Icon(
-                                _paymentIcon(method),
-                                color: AppColors.textSecondary,
-                              ),
-                              controlAffinity:
-                                  ListTileControlAffinity.trailing,
-                              activeColor: AppColors.primary,
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 12),
+                          ),
+                          child: RadioListTile<PaymentMethod>(
+                            value: method,
+                            groupValue: selectedPayment,
+                            onChanged: (v) {
+                              if (v != null) {
+                                ref
+                                    .read(cartNotifierProvider.notifier)
+                                    .setPaymentMethod(
+                                        _paymentMethodToString(v));
+                              }
+                            },
+                            title: Text(
+                              _paymentLabel(method),
+                              style:
+                                  Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            secondary: Icon(
+                              _paymentIcon(method),
+                              color: AppColors.textSecondary,
+                            ),
+                            controlAffinity:
+                                ListTileControlAffinity.trailing,
+                            activeColor: AppColors.primary,
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12),
                           ),
                         ),
                       )
-                        .toList(),
-                  ),
+                      .toList(),
                 ),
 
                 const SizedBox(height: 16),
