@@ -36,7 +36,7 @@
 
 ## Cấu Trúc Dự Án
 
-```
+```text
 comtammatu-app/
 ├── apps/mobile/          ← Mã nguồn Flutter
 │   ├── lib/              ← Code Dart chính
@@ -66,7 +66,7 @@ comtammatu-app/
 
 ```bash
 # Clone repo
-git clone https://github.com/user/comtammatu-app.git
+git clone https://github.com/binh0599/comtammatu-app.git
 cd comtammatu-app/apps/mobile
 
 # Cài đặt dependencies
@@ -102,9 +102,9 @@ flutter build ios --release
 
 | Tài liệu | Mô tả |
 |-----------|--------|
-| [Design & Tech Workflow](Design_Tech_Workflow.md) | Kiến trúc, luồng dữ liệu, tech stack |
-| [API Contract](API_Contract.md) | 20+ endpoints, request/response schemas |
-| [Team Hiring Proposal](Team_Hiring_Proposal.md) | Cơ cấu đội ngũ, RACI matrix |
+| [Design & Tech Workflow](docs/Design_Tech_Workflow.md) | Kiến trúc, luồng dữ liệu, tech stack |
+| [API Contract](docs/API_Contract.md) | 20+ endpoints, request/response schemas |
+| [Team Hiring Proposal](docs/Team_Hiring_Proposal.md) | Cơ cấu đội ngũ, RACI matrix |
 | [Tiến độ dự án](tasks/todo.md) | Roadmap Phase 5–7 |
 
 ## Trạng Thái Dự Án

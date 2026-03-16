@@ -6,7 +6,7 @@
 **/.packages
 **/.pub-cache/
 **/.pub/
-**/pubspec.lock
+
 
 # Generated files
 **/*.g.dart
