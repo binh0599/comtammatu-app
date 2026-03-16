@@ -4,25 +4,42 @@
 
 ---
 
+## 0. TRẠNG THÁI HIỆN TẠI (Updated: 2026-03-16)
+
+**Phase 0–4 HOÀN THÀNH.** App đã có 113 Dart files, 14 test files (167+ tests), CI PASSING.
+
+| Đã xong | Chưa xong |
+|---------|-----------|
+| 17 Freezed models | Push notifications (P5.1) |
+| 90% screens wired to API | Earn/Redeem points screens (P5.2) |
+| Offline cache (menu + store) | Localization completion (P5.3) |
+| PostHog + Sentry | Offline cache expansion (P5.4) |
+| Deep linking (Android + iOS) | E2E tests (P6.2) |
+| Fastlane + CI/CD | Monetary `double` → `int` audit (P6.1) |
+
+**Next:** Phase 5 — Push Notifications, Points screens, Localization, Offline expansion.
+**Blockers:** Logo, Apple/Google dev accounts, domain setup. Xem `tasks/todo.md` → "Chờ User Action".
+
+---
+
 ## I. STACK
 
 | Layer | Choice |
 | ----- | ------ |
-| Framework | Flutter 3.x + Dart 3.x strict mode + Impeller rendering |
+| Framework | Flutter 3.27+ / Dart 3.6+ strict mode + Impeller |
 | State | Riverpod 2 (providers, notifiers, async) |
-| Navigation | GoRouter (tab nav, deep linking, redirect guards) |
-| Network | Dio + Supabase Flutter SDK (`supabase_flutter` v2+) |
-| Offline | Drift (SQLite wrapper for Dart) |
-| Animation | Rive + Flutter implicit animations (Impeller 60fps) |
+| Navigation | GoRouter (2 ShellRoutes: customer 5 tabs + admin 4 tabs) |
+| Network | Dio (interceptors: Auth → Idempotency → Error) + Supabase Flutter SDK v2 |
+| Offline | Drift (menu, store) + SharedPreferences (cart, orders, settings) |
+| Models | Freezed + json_serializable (17 models, all with fromJson/toJson) |
 | QR Scanner | mobile_scanner (ML Kit / Vision) |
-| Maps | google_maps_flutter |
-| Push | firebase_messaging (FCM/APNs) |
-| Testing | flutter_test + integration_test + Patrol (E2E) |
-| CI/CD | Fastlane + GitHub Actions + Firebase App Distribution |
-| OTA | Shorebird.dev (Dart code push) |
-| Monitoring | Sentry (Flutter SDK) |
-| Analytics | PostHog |
-| Component Docs | Widgetbook |
+| Maps | google_maps_flutter + geolocator |
+| Push | firebase_messaging + flutter_local_notifications |
+| Testing | flutter_test (167+ tests) + Patrol (E2E — not yet configured) |
+| CI/CD | GitHub Actions (analyze → test → build) + Fastlane |
+| Monitoring | Sentry (crash reports, screenshots) |
+| Analytics | PostHog (lifecycle events, env-aware) |
+| i18n | flutter_localizations + ARB (vi + en, partially wired) |
 
 **Backend:** Supabase (project: `zrlriuednoaqrsvnjjyo`) — shared với web CRM.
 
@@ -33,18 +50,18 @@
 > Violation = stop immediately and diagnose.
 
 1. **RLS_EVERYWHERE** — Mọi table phải có RLS policies.
-2. **MONEY_TYPE** — `NUMERIC(14,2)` totals, `NUMERIC(12,2)` prices. NEVER FLOAT.
+2. **MONEY_TYPE** — `NUMERIC(14,2)` totals, `NUMERIC(12,2)` prices. NEVER FLOAT. ⚠️ FE hiện dùng `double` — cần audit P6.1
 3. **TIME_TYPE** — `TIMESTAMPTZ` always.
 4. **PK_TYPE** — `BIGINT GENERATED ALWAYS AS IDENTITY`.
 5. **TEXT_TYPE** — `TEXT` always. Never VARCHAR.
 6. **ZOD_BACKEND** — Edge Function validate input bằng Zod schema.
-7. **FREEZED_FRONTEND** — Dart models dùng `@freezed` + `fromJson`.
+7. **FREEZED_FRONTEND** — Dart models dùng `@freezed` + `fromJson`. ✅ All 17 models migrated.
 8. **RIVERPOD_STATE** — Dùng Riverpod providers cho state. KHÔNG `setState` ngoài local UI.
 9. **CONST_WIDGETS** — Mọi Widget phải có `const` constructor nếu possible.
-10. **IDEMPOTENCY** — Mọi POST request gửi `X-Idempotency-Key` (UUID v7).
-11. **VIETNAMESE_DIACRITICS** — Toàn bộ text tiếng Việt phải có dấu đầy đủ.
+10. **IDEMPOTENCY** — Mọi POST request gửi `X-Idempotency-Key` (UUID v7). ✅ Wired in Dio interceptor.
+11. **VIETNAMESE_DIACRITICS** — Toàn bộ text tiếng Việt phải có dấu đầy đủ. ⚠️ Chưa audit — P5.3
 12. **API_CONTRACT** — FE và BE phải follow `API_Contract.md`. Thay đổi phải cả 2 bên review.
-13. **OFFLINE_FIRST** — Mọi data hiển thị phải có local cache (Drift). Network fail ≠ app fail.
+13. **OFFLINE_FIRST** — Mọi data hiển thị phải có local cache (Drift). ⚠️ Chỉ menu + store — cần expand P5.4
 
 ---
 
@@ -54,79 +71,54 @@
 
 | Agent | Vai trò | Chuyên môn chính |
 |-------|---------|-----------------|
-| `sr-ux-designer` | Senior UI/UX Designer | Design System, Figma, v0.app, Widgetbook review, micro-interactions |
-| `sr-flutter-dev` | Senior FE (Mobile) + Tech Lead | Flutter architecture, Component Library, Core screens, Offline mode, Performance |
-| `mid-flutter-dev` | Mid FE (Mobile) | Delivery screens, Đặt Bàn screens, Maps, Push notification UI |
-| `backend-dev` | Back-End Developer | Supabase Edge Functions, PostgreSQL, CRM sync, Security |
-| `qa-engineer` | QA Engineer | Test strategy, E2E automation (Patrol), Load testing (k6), Bug tracking |
-| `devops-engineer` | DevOps Engineer | CI/CD, Fastlane, Sentry, Shorebird, Monitoring, Production readiness |
-
-### Khi Nào Gọi Agent Nào?
-
-| Tình huống | Gọi agent |
-|-----------|-----------|
-| Thiết kế UI/UX, review component, design tokens | `sr-ux-designer` |
-| Architecture decisions, Flutter patterns, Riverpod, performance | `sr-flutter-dev` |
-| Build Delivery/Đặt Bàn screens, Maps integration | `mid-flutter-dev` |
-| Database schema, Edge Functions, API, CRM sync, security | `backend-dev` |
-| Viết test cases, review edge cases, bug report, load test | `qa-engineer` |
-| CI/CD pipeline, Fastlane, monitoring, deployment, infra | `devops-engineer` |
-| Cross-cutting decisions | Gọi nhiều agents cùng lúc |
+| `sr-ux-designer` | Senior UI/UX Designer | Design System, Figma, Widgetbook, micro-interactions |
+| `sr-flutter-dev` | Senior FE + Tech Lead | Architecture, Riverpod, Offline, Performance |
+| `mid-flutter-dev` | Mid FE (Mobile) | Delivery/Đặt Bàn screens, Maps, Push notification UI |
+| `backend-dev` | Back-End Developer | Supabase Edge Functions, PostgreSQL, Security |
+| `qa-engineer` | QA Engineer | Test strategy, E2E (Patrol), Load testing |
+| `devops-engineer` | DevOps Engineer | CI/CD, Fastlane, Sentry, Monitoring |
 
 ---
 
 ## IV. BOOT SEQUENCE
 
 ```
-1. Check tasks/regressions.md — rule nào áp dụng?
-2. Check tasks/lessons.md — pattern nào relevant?
-3. Identify agent(s) phù hợp → invoke skill
-4. Fill Task Contract → confirm scope trước khi code
-5. Checkpoint commit: git commit -m "checkpoint: before [task]"
-6. After task: flutter analyze + flutter test → commit → kill session
+1. Check tasks/regressions.md — 7 rules from past failures
+2. Check tasks/lessons.md — 7 patterns discovered
+3. Check tasks/predictions.md — 6 predicted risks
+4. Identify agent(s) phù hợp → invoke skill
+5. Fill Task Contract → confirm scope trước khi code
+6. Checkpoint commit: git commit -m "checkpoint: before [task]"
+7. After task: flutter analyze + flutter test → commit → kill session
 ```
 
 ---
 
-## V. SKILL INVOCATION MAP
-
-| Task involves | Invoke skill first |
-|---|---|
-| UI/UX design, component review | `sr-ux-designer` + `web-design-guidelines` |
-| Flutter architecture, Riverpod | `sr-flutter-dev` + `vercel-react-native-skills` |
-| Delivery/Reservation screens | `mid-flutter-dev` |
-| Edge Functions, DB schema, RLS | `backend-dev` + `postgres` |
-| Test strategy, E2E, load test | `qa-engineer` + `tdd-test-driven-development` |
-| CI/CD, Fastlane, monitoring | `devops-engineer` |
-| Architecture decisions | `ddd-software-architecture` + `brainstorming` |
-| Bug investigation | `systematic-debugging` + `kaizen-root-cause-tracing` |
-| Implementation planning | `writing-plans` + `executing-plans` |
-| Code review before merge | `code-review-review-local-changes` |
-| Before claiming "done" | `verification-before-completion` |
-
----
-
-## VI. KEY FILES
+## V. KEY FILES
 
 ```
 docs/
-  Design_Tech_Workflow.md       ← Architecture, data flow, tech stack, task delegation
-  API_Contract.md               ← 20 endpoints, request/response schemas, Dart models
+  Design_Tech_Workflow.md       ← Architecture, data flow, tech stack (123KB)
+  API_Contract.md               ← 20+ endpoints, request/response schemas (30KB)
   Team_Hiring_Proposal.md       ← Team structure, RACI matrix, hiring JDs
-  SESSION_PROTOCOL.md           ← Session lifecycle, error recovery, parallel sessions
-  PROJECT_OPERATING_SYSTEM.md   ← Workflow, meta-learning, quality gates, anti-patterns
+  SESSION_PROTOCOL.md           ← Session lifecycle, error recovery
+  PROJECT_OPERATING_SYSTEM.md   ← Workflow, meta-learning, quality gates
 
 tasks/
-  regressions.md  ← Rules from past failures — CHECK EVERY SESSION
-  lessons.md      ← Patterns + prevention — CHECK EVERY SESSION
-  friction.md     ← What slows down development
-  predictions.md  ← "This will probably break when..."
-  todo.md         ← Current progress
+  todo.md         ← Progress tracker + Phase 5–7 roadmap
+  regressions.md  ← 7 rules from past failures — CHECK EVERY SESSION
+  lessons.md      ← 7 patterns + prevention — CHECK EVERY SESSION
+  friction.md     ← 6 friction points slowing development
+  predictions.md  ← 6 predicted risks + mitigation
+
+diagrams/
+  architecture.mmd              ← System architecture (Mermaid)
+  point-accumulation-flow.mmd   ← Points flow (Mermaid)
 ```
 
 ---
 
-## VII. API BASE
+## VI. API BASE
 
 ```
 Base URL: https://zrlriuednoaqrsvnjjyo.supabase.co/functions/v1
@@ -137,4 +129,4 @@ Response: { success, data, meta? } | { success: false, error: { code, message, d
 
 ---
 
-*Team 6 người · 16 tuần · Flutter 3.x + Supabase · Loyalty App*
+*Team 6 agents · Flutter 3.27 + Supabase · Loyalty App · Phase 5 next*
