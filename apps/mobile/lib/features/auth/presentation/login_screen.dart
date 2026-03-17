@@ -41,9 +41,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     try {
       await ref.read(authNotifierProvider.notifier).signIn(
-        phone: _phoneController.text.trim(),
-        password: _passwordController.text,
-      );
+            phone: _phoneController.text.trim(),
+            password: _passwordController.text,
+          );
       // Navigation handled by auth state listener in router
     } catch (e) {
       setState(() {

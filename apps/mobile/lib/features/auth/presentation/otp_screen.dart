@@ -125,9 +125,12 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   void _handleResend() {
     if (_remainingSeconds > 0) return;
 
-    ref.read(authRepositoryProvider).resendOtp(
-      phone: widget.phoneNumber,
-    ).ignore();
+    ref
+        .read(authRepositoryProvider)
+        .resendOtp(
+          phone: widget.phoneNumber,
+        )
+        .ignore();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Đã gửi lại mã OTP'),
