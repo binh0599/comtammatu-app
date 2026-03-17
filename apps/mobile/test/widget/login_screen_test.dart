@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' show AuthResponse;
+import 'package:supabase_flutter/supabase_flutter.dart'
+    show AuthResponse, AuthState;
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 
@@ -15,6 +16,10 @@ void main() {
 
   setUp(() {
     mockAuthRepo = MockAuthRepository();
+    // Stub methods that AuthNotifier._init() calls
+    when(() => mockAuthRepo.getCurrentUser()).thenReturn(null);
+    when(() => mockAuthRepo.onAuthStateChange())
+        .thenAnswer((_) => const Stream<AuthState>.empty());
   });
 
   Widget buildSubject() {
