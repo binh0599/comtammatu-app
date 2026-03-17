@@ -82,6 +82,14 @@ jobs:
       - name: Run code generation
         working-directory: apps/mobile
         run: dart run build_runner build --delete-conflicting-outputs
+      - name: Decode google-services.json
+        working-directory: apps/mobile
+        run: |
+          if [ -n "${{ secrets.GOOGLE_SERVICES_JSON }}" ]; then
+            echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > android/app/google-services.json
+          else
+            echo '{"project_info":{"project_number":"000","project_id":"placeholder","storage_bucket":"placeholder.appspot.com"},"client":[{"client_info":{"mobilesdk_app_id":"1:000:android:placeholder","android_client_info":{"package_name":"com.comtammatu.app"}},"api_key":[{"current_key":"placeholder"}]}],"configuration_version":"1"}' > android/app/google-services.json
+          fi
       - name: Build APK
         working-directory: apps/mobile
         run: |
