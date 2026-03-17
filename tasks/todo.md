@@ -180,7 +180,7 @@
 | 2 | Chạy `dart run flutter_launcher_icons` + `flutter_native_splash:create` | Build final |
 | 3 | Đăng ký Apple Developer Account + Google Play Console | Store submission |
 | 4 | Cấu hình code signing theo `docs/CODE_SIGNING.md` | Release builds |
-| 5 | Mua domain `comtammatu.vn` + host deep link verification files | Deep links |
+| 5 | Mua domain `comtammatu.com` + host deep link verification files | Deep links |
 | 6 | Luật sư review privacy policy + terms of service | Store submission |
 | 7 | Firebase project setup (FCM server key) | Push notifications |
 | 8 | Supabase secrets cho `earn-points` + `redeem-points` | Points feature |

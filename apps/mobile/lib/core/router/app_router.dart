@@ -225,6 +225,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       if (!isLoggedIn && !isAuthRoute) return AppRoutes.login;
       if (isLoggedIn && isAuthRoute) return AppRoutes.home;
+
+      // Block customers from admin routes (dashboard, staff, inventory)
+      if (authState is Authenticated) {
+        final path = state.uri.path;
+        final isAdminRoute = path.startsWith(AppRoutes.dashboard) ||
+            path.startsWith(AppRoutes.staffManagement) ||
+            path.startsWith(AppRoutes.inventory);
+        if (isAdminRoute) {
+          final role = authState.user.userMetadata?['role'] as String? ??
+              authState.user.appMetadata['user_role'] as String? ??
+              'customer';
+          if (role == 'customer') return AppRoutes.home;
+        }
+      }
       return null;
     },
     routes: [

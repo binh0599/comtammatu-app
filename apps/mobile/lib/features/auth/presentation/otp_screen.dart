@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/app_button.dart';
+import '../data/auth_repository.dart';
 
 /// OTP verification screen with 6 digit input and countdown timer.
 class OtpScreen extends ConsumerStatefulWidget {
@@ -103,9 +104,11 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     });
 
     try {
-      // TODO: Call auth verify OTP
-      await Future<void>.delayed(const Duration(seconds: 1));
-      // Navigation handled by auth state listener
+      await ref.read(authRepositoryProvider).verifyOtp(
+            phone: widget.phoneNumber,
+            token: _otpCode,
+          );
+      // Navigation handled by auth state listener in GoRouter
     } catch (e) {
       setState(() {
         _errorMessage = 'Mã OTP không hợp lệ. Vui lòng thử lại.';
@@ -122,7 +125,9 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   void _handleResend() {
     if (_remainingSeconds > 0) return;
 
-    // TODO: Call resend OTP API
+    ref.read(authRepositoryProvider).resendOtp(
+      phone: widget.phoneNumber,
+    ).ignore();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Đã gửi lại mã OTP'),

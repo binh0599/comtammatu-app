@@ -37,6 +37,14 @@ class AuthRepository {
     );
   }
 
+  /// Resend OTP to phone number.
+  Future<ResendResponse> resendOtp({
+    required String phone,
+    OtpType type = OtpType.sms,
+  }) async {
+    return _auth.resend(phone: phone, type: type);
+  }
+
   /// Sign in with phone and password.
   Future<AuthResponse> signIn({
     required String phone,

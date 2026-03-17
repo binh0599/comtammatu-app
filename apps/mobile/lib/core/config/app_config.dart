@@ -30,5 +30,5 @@ class AppConfig {
 
   // Deep link
   static const String deepLinkScheme = 'comtammatu';
-  static const String universalLinkDomain = 'app.comtammatu.vn';
+  static const String universalLinkDomain = 'app.comtammatu.com';
 }

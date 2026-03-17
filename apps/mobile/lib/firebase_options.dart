@@ -7,18 +7,10 @@ import 'package:flutter/foundation.dart'
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// To regenerate this file, run `flutterfire configure` from the project root.
-///
-/// TODO: Replace placeholder values below with your actual Firebase project
-/// configuration from the Firebase Console or by running:
-///   dart pub global activate flutterfire_cli
-///   flutterfire configure --project=<your-firebase-project-id>
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -47,22 +39,28 @@ class DefaultFirebaseOptions {
     }
   }
 
-  // TODO: Replace with actual values from Firebase Console
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'YOUR-ANDROID-API-KEY',
-    appId: 'YOUR-ANDROID-APP-ID',
-    messagingSenderId: 'YOUR-MESSAGING-SENDER-ID',
-    projectId: 'YOUR-PROJECT-ID',
-    storageBucket: 'YOUR-STORAGE-BUCKET',
+    apiKey: 'AIzaSyBB-kTKZbEbLtBJnelsKYc8soYoKhs7Av4',
+    appId: '1:654625579884:android:a5218eb5bebfa517230949',
+    messagingSenderId: '654625579884',
+    projectId: 'comtammatu-d9adb',
+    storageBucket: 'comtammatu-d9adb.firebasestorage.app',
   );
 
-  // TODO: Replace with actual values from Firebase Console
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'YOUR-IOS-API-KEY',
-    appId: 'YOUR-IOS-APP-ID',
-    messagingSenderId: 'YOUR-MESSAGING-SENDER-ID',
-    projectId: 'YOUR-PROJECT-ID',
-    storageBucket: 'YOUR-STORAGE-BUCKET',
+    apiKey: 'AIzaSyCqaluVntIMsI2QDWt2oK4B57Sm06eLyHc',
+    appId: '1:654625579884:ios:132b83cccdd40746230949',
+    messagingSenderId: '654625579884',
+    projectId: 'comtammatu-d9adb',
+    storageBucket: 'comtammatu-d9adb.firebasestorage.app',
     iosBundleId: 'com.comtammatu.app',
+  );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBB-kTKZbEbLtBJnelsKYc8soYoKhs7Av4',
+    appId: '1:654625579884:web:5f1d9da74d275679230949',
+    messagingSenderId: '654625579884',
+    projectId: 'comtammatu-d9adb',
+    storageBucket: 'comtammatu-d9adb.firebasestorage.app',
   );
 }

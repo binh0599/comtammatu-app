@@ -67,7 +67,7 @@ Bạn có quyền:
 - **Từ chối:** Tắt thông báo đẩy hoặc thu thập vị trí
 - **Xuất dữ liệu:** Yêu cầu bản sao dữ liệu cá nhân của bạn
 
-Để thực hiện các quyền trên, vui lòng liên hệ qua email: **privacy@comtammatu.vn**
+Để thực hiện các quyền trên, vui lòng liên hệ qua email: **privacy@comtammatu.com**
 
 ## 7. Bảo mật dữ liệu
 
@@ -94,5 +94,5 @@ Chúng tôi có thể cập nhật chính sách này theo thời gian. Mọi tha
 ## 11. Liên hệ
 
 Nếu có câu hỏi về chính sách bảo mật, vui lòng liên hệ:
-- Email: **privacy@comtammatu.vn**
+- Email: **privacy@comtammatu.com**
 - Địa chỉ: [Địa chỉ công ty]

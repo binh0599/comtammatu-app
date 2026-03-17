@@ -97,5 +97,5 @@ Chúng tôi có quyền sửa đổi điều khoản này bất kỳ lúc nào. 
 ## 12. Liên hệ
 
 Nếu có câu hỏi về điều khoản sử dụng, vui lòng liên hệ:
-- Email: **support@comtammatu.vn**
+- Email: **support@comtammatu.com**
 - Địa chỉ: [Địa chỉ công ty]

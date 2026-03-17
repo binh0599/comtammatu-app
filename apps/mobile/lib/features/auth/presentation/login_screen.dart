@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:go_router/go_router.dart';
+
+import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_text_field.dart';
-import '../data/auth_repository.dart';
+import '../domain/auth_notifier.dart';
 
 /// Login screen with phone + password authentication.
 class LoginScreen extends ConsumerStatefulWidget {
@@ -37,8 +40,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
 
     try {
-      final authRepo = ref.read(authRepositoryProvider);
-      await authRepo.signIn(
+      await ref.read(authNotifierProvider.notifier).signIn(
         phone: _phoneController.text.trim(),
         password: _passwordController.text,
       );
@@ -136,7 +138,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      // TODO: Navigate to forgot password
+                      // TODO: Forgot password flow (Phase 2)
                     },
                     child: const Text('Quên mật khẩu?'),
                   ),
@@ -171,9 +173,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     TextButton(
-                      onPressed: () {
-                        // TODO: Navigate to register
-                      },
+                      onPressed: () => context.push(AppRoutes.register),
                       child: const Text('Đăng ký ngay'),
                     ),
                   ],

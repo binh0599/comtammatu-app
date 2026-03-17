@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_text_field.dart';
+import '../domain/auth_notifier.dart';
 
 /// Registration screen with form validation.
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -43,10 +46,18 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       _errorMessage = null;
     });
 
+    final phone = _phoneController.text.trim();
+
     try {
-      // TODO: Call auth repository register
-      await Future<void>.delayed(const Duration(seconds: 1));
-      // Navigation handled by auth state listener
+      await ref.read(authNotifierProvider.notifier).signUp(
+            phone: phone,
+            password: _passwordController.text,
+            fullName: _nameController.text.trim(),
+          );
+      // Navigate to OTP verification screen
+      if (mounted) {
+        context.push(AppRoutes.otp, extra: phone);
+      }
     } catch (e) {
       setState(() {
         _errorMessage = 'Đăng ký thất bại. Vui lòng thử lại.';

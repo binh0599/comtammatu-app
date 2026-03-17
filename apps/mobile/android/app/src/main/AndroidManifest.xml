@@ -39,14 +39,14 @@
                 <data android:scheme="comtammatu" />
             </intent-filter>
 
-            <!-- Deep link: App Links https://comtammatu.vn/* -->
+            <!-- Deep link: App Links https://comtammatu.com/* -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="https"
-                    android:host="comtammatu.vn" />
+                    android:host="comtammatu.com" />
             </intent-filter>
 
             <!-- Theme transition metadata -->
