@@ -124,6 +124,7 @@ class ApiClient {
 }
 
 /// Adds Bearer token from Supabase auth session + standard headers.
+/// On 401, refreshes the session and retries once.
 class _AuthInterceptor extends Interceptor {
   _AuthInterceptor({
     required SupabaseClient supabase,
@@ -149,6 +150,29 @@ class _AuthInterceptor extends Interceptor {
     }
 
     handler.next(options);
+  }
+
+  @override
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
+    if (err.response?.statusCode == 401) {
+      try {
+        final result = await _supabase.auth.refreshSession();
+        if (result.session != null) {
+          // Retry with new token
+          final opts = err.requestOptions;
+          opts.headers['Authorization'] =
+              'Bearer ${result.session!.accessToken}';
+          final response = await Dio().fetch<dynamic>(opts);
+          return handler.resolve(response);
+        }
+      } catch (_) {
+        // Refresh failed — let original 401 propagate
+      }
+    }
+    handler.next(err);
   }
 }
 

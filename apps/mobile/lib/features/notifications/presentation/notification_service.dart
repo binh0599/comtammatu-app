@@ -11,15 +11,17 @@ import '../data/notification_repository.dart';
 import '../domain/notification_config.dart';
 import '../domain/notification_types.dart';
 
+void _log(String message) {
+  if (kDebugMode) debugPrint(message);
+}
+
 /// Hàm xử lý thông báo nền cấp cao nhất (top-level function).
 ///
 /// Firebase yêu cầu hàm này phải là top-level hoặc static,
 /// không được là closure hay method của instance.
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  debugPrint(
-    '[NotificationService] Xử lý thông báo nền: ${message.messageId}',
-  );
+  _log('[NotificationService] Xử lý thông báo nền: ${message.messageId}');
   // Không cần hiển thị local notification ở đây vì hệ thống
   // sẽ tự hiển thị thông báo khi app ở background.
 }
@@ -154,9 +156,9 @@ class NotificationService {
       _fcm.onTokenRefresh.listen(_onTokenRefresh);
 
       _isInitialized = true;
-      debugPrint('[NotificationService] Khởi tạo thành công');
+      _log('[NotificationService] Khởi tạo thành công');
     } catch (e, stackTrace) {
-      debugPrint(
+      _log(
         '[NotificationService] Lỗi khởi tạo: $e\n$stackTrace',
       );
     }
@@ -180,7 +182,7 @@ class NotificationService {
           settings.authorizationStatus == AuthorizationStatus.authorized ||
               settings.authorizationStatus == AuthorizationStatus.provisional;
 
-      debugPrint(
+      _log(
         '[NotificationService] Quyền thông báo: '
         '${settings.authorizationStatus.name} '
         '(${isGranted ? "được cấp" : "bị từ chối"})',
@@ -188,7 +190,7 @@ class NotificationService {
 
       return isGranted;
     } catch (e) {
-      debugPrint('[NotificationService] Lỗi yêu cầu quyền: $e');
+      _log('[NotificationService] Lỗi yêu cầu quyền: $e');
       return false;
     }
   }
@@ -204,12 +206,12 @@ class NotificationService {
   Future<String> getToken() async {
     try {
       final token = await _fcm.getToken();
-      debugPrint(
+      _log(
         '[NotificationService] FCM Token: ${token?.substring(0, 20)}...',
       );
       return token ?? '';
     } catch (e) {
-      debugPrint('[NotificationService] Lỗi lấy token: $e');
+      _log('[NotificationService] Lỗi lấy token: $e');
       return '';
     }
   }
@@ -220,22 +222,22 @@ class NotificationService {
   /// Server lưu token vào bảng device_tokens và liên kết với user.
   Future<void> registerToken(String token) async {
     if (token.isEmpty) {
-      debugPrint('[NotificationService] Token rỗng, bỏ qua đăng ký');
+      _log('[NotificationService] Token rỗng, bỏ qua đăng ký');
       return;
     }
 
     try {
       final platform = Platform.isIOS ? 'ios' : 'android';
       await _repository?.registerToken(token, platform);
-      debugPrint('[NotificationService] Đăng ký token thành công');
+      _log('[NotificationService] Đăng ký token thành công');
     } catch (e) {
-      debugPrint('[NotificationService] Lỗi đăng ký token: $e');
+      _log('[NotificationService] Lỗi đăng ký token: $e');
     }
   }
 
   /// Callback khi FCM tự động làm mới token.
   void _onTokenRefresh(String token) {
-    debugPrint('[NotificationService] Token được làm mới');
+    _log('[NotificationService] Token được làm mới');
     registerToken(token);
   }
 
@@ -248,7 +250,7 @@ class NotificationService {
   /// Khi app đang mở, hệ thống không tự hiển thị thông báo,
   /// nên cần hiển thị qua local notification plugin.
   Future<void> handleForegroundMessage(RemoteMessage message) async {
-    debugPrint(
+    _log(
       '[NotificationService] Thông báo foreground: ${message.messageId}',
     );
 
@@ -272,7 +274,7 @@ class NotificationService {
   static Future<void> handleBackgroundMessage(
     Map<String, dynamic> message,
   ) async {
-    debugPrint(
+    _log(
       '[NotificationService] Xử lý thông báo nền: ${message['messageId']}',
     );
   }
@@ -282,7 +284,7 @@ class NotificationService {
   /// Phân tích payload để xác định loại thông báo,
   /// sau đó điều hướng đến màn hình tương ứng.
   void handleNotificationTap(NotificationResponse response) {
-    debugPrint(
+    _log(
       '[NotificationService] Nhấn thông báo, payload: ${response.payload}',
     );
 
@@ -293,13 +295,13 @@ class NotificationService {
       final payload = PushNotificationPayload.fromPayloadString(payloadString);
       final route = payload.route;
 
-      debugPrint(
+      _log(
         '[NotificationService] Điều hướng đến: $route',
       );
 
       _router?.go(route);
     } catch (e) {
-      debugPrint('[NotificationService] Lỗi xử lý payload: $e');
+      _log('[NotificationService] Lỗi xử lý payload: $e');
       // Mặc định điều hướng về danh sách thông báo
       _router?.go(AppRoutes.notifications);
     }
@@ -307,7 +309,7 @@ class NotificationService {
 
   /// Xử lý khi app được mở từ thông báo (background → foreground).
   void _handleMessageOpenedApp(RemoteMessage message) {
-    debugPrint(
+    _log(
       '[NotificationService] App mở từ thông báo: ${message.messageId}',
     );
 
@@ -316,7 +318,7 @@ class NotificationService {
     );
     final route = payload.route;
 
-    debugPrint('[NotificationService] Điều hướng đến: $route');
+    _log('[NotificationService] Điều hướng đến: $route');
     _router?.go(route);
   }
 
@@ -383,9 +385,9 @@ class NotificationService {
     for (final topic in NotificationTopicConfig.defaultSubscriptions) {
       try {
         await _fcm.subscribeToTopic(topic);
-        debugPrint('[NotificationService] Đăng ký topic: $topic');
+        _log('[NotificationService] Đăng ký topic: $topic');
       } catch (e) {
-        debugPrint('[NotificationService] Lỗi đăng ký topic $topic: $e');
+        _log('[NotificationService] Lỗi đăng ký topic $topic: $e');
       }
     }
   }
@@ -395,9 +397,9 @@ class NotificationService {
     try {
       final topic = '${NotificationTopicConfig.regionPrefix}$regionCode';
       await _fcm.subscribeToTopic(topic);
-      debugPrint('[NotificationService] Đăng ký khu vực: $topic');
+      _log('[NotificationService] Đăng ký khu vực: $topic');
     } catch (e) {
-      debugPrint('[NotificationService] Lỗi đăng ký khu vực: $e');
+      _log('[NotificationService] Lỗi đăng ký khu vực: $e');
     }
   }
 
@@ -406,9 +408,9 @@ class NotificationService {
     try {
       final topic = '${NotificationTopicConfig.regionPrefix}$regionCode';
       await _fcm.unsubscribeFromTopic(topic);
-      debugPrint('[NotificationService] Hủy đăng ký khu vực: $topic');
+      _log('[NotificationService] Hủy đăng ký khu vực: $topic');
     } catch (e) {
-      debugPrint('[NotificationService] Lỗi hủy khu vực: $e');
+      _log('[NotificationService] Lỗi hủy khu vực: $e');
     }
   }
 
@@ -418,7 +420,7 @@ class NotificationService {
       try {
         await _fcm.unsubscribeFromTopic(topic);
       } catch (e) {
-        debugPrint('[NotificationService] Lỗi hủy topic $topic: $e');
+        _log('[NotificationService] Lỗi hủy topic $topic: $e');
       }
     }
   }
@@ -547,7 +549,7 @@ final initializeNotificationsProvider = FutureProvider<void>((ref) async {
   // Yêu cầu quyền
   final granted = await service.requestPermission();
   if (!granted) {
-    debugPrint(
+    _log(
       '[NotificationService] Người dùng từ chối quyền thông báo',
     );
     return;

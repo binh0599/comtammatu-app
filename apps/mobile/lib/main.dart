@@ -109,7 +109,7 @@ Future<void> main() async {
           ..dsn = EnvConfig.sentryDsn
           ..environment = EnvConfig.environment.name
           ..tracesSampleRate = EnvConfig.isProduction ? 0.2 : 1.0
-          ..attachScreenshot = true
+          ..attachScreenshot = !EnvConfig.isProduction
           ..sendDefaultPii = false;
       },
       appRunner: () => _runApp(prefs),
