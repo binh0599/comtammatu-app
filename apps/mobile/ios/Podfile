@@ -1,4 +1,4 @@
-# mobile_scanner + google_maps_flutter_ios require iOS 15.0+
+# mobile_scanner 6.x requires iOS 15.5+, using 16.0 for headroom
 platform :ios, '16.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
