@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../domain/loyalty_notifier.dart';
 import '../domain/loyalty_state.dart';
 
@@ -31,10 +33,11 @@ class _EarnPointsScreenState extends ConsumerState<EarnPointsScreen> {
   @override
   Widget build(BuildContext context) {
     final loyaltyState = ref.watch(loyaltyNotifierProvider);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Cách tích điểm')),
+      appBar: AppBar(title: Text(l10n.earnPointsTitle)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -48,46 +51,49 @@ class _EarnPointsScreenState extends ConsumerState<EarnPointsScreen> {
                 tierName: loyaltyState.dashboard.tier.name,
                 multiplier: loyaltyState.dashboard.tier.pointMultiplier,
               ),
+              const SizedBox(height: 20),
+
+              // Member QR code
+              _MemberQRCard(
+                memberId: loyaltyState.dashboard.member.id,
+                phone: loyaltyState.dashboard.member.phone,
+              ),
               const SizedBox(height: 24),
             ],
 
             Text(
-              'Các cách tích điểm',
+              l10n.earnPointsMethods,
               style: theme.textTheme.titleLarge
                   ?.copyWith(fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 16),
 
             // Earning methods
-            const _EarnMethodCard(
+            _EarnMethodCard(
               icon: Icons.qr_code_scanner,
-              title: 'Điểm danh tại quán',
-              description:
-                  'Quét mã QR tại quầy mỗi lần đến ăn. Nhận 10 điểm/lần điểm danh.',
+              title: l10n.earnPointsCheckin,
+              description: l10n.earnPointsCheckinDesc,
               color: AppColors.primary,
             ),
             const SizedBox(height: 12),
-            const _EarnMethodCard(
+            _EarnMethodCard(
               icon: Icons.shopping_bag_outlined,
-              title: 'Đặt hàng',
-              description:
-                  'Mỗi đơn hàng được tích 1 điểm cho mỗi 10.000đ. Hạng cao hơn có nhân điểm.',
+              title: l10n.earnPointsOrder,
+              description: l10n.earnPointsOrderDesc,
               color: AppColors.success,
             ),
             const SizedBox(height: 12),
-            const _EarnMethodCard(
+            _EarnMethodCard(
               icon: Icons.local_fire_department_outlined,
-              title: 'Chuỗi điểm danh',
-              description:
-                  'Điểm danh liên tiếp 7 ngày nhận bonus 50 điểm. 30 ngày nhận 200 điểm.',
+              title: l10n.earnPointsStreak,
+              description: l10n.earnPointsStreakDesc,
               color: AppColors.warning,
             ),
             const SizedBox(height: 12),
-            const _EarnMethodCard(
+            _EarnMethodCard(
               icon: Icons.card_giftcard_outlined,
-              title: 'Khuyến mãi đặc biệt',
-              description:
-                  'Theo dõi mục Voucher để nhận điểm thưởng từ các chương trình khuyến mãi.',
+              title: l10n.earnPointsPromo,
+              description: l10n.earnPointsPromoDesc,
               color: AppColors.info,
             ),
 
@@ -99,7 +105,7 @@ class _EarnPointsScreenState extends ConsumerState<EarnPointsScreen> {
               child: ElevatedButton.icon(
                 onPressed: () => context.push(AppRoutes.checkin),
                 icon: const Icon(Icons.qr_code_scanner),
-                label: const Text('Điểm danh ngay'),
+                label: Text(l10n.earnPointsCheckinNow),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
@@ -115,7 +121,72 @@ class _EarnPointsScreenState extends ConsumerState<EarnPointsScreen> {
   }
 }
 
-// -- Points summary card ---------------------------------------------------
+// -- Member QR code card ------------------------------------------------------
+
+class _MemberQRCard extends StatelessWidget {
+  const _MemberQRCard({required this.memberId, required this.phone});
+
+  final int memberId;
+  final String phone;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    // QR data: member_id for cashier to scan and earn points
+    final qrData = 'comtammatu://member/$memberId';
+
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: const BorderSide(color: AppColors.border),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Text(
+              l10n.earnPointsMyQR,
+              style: theme.textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: QrImageView(
+                data: qrData,
+                version: QrVersions.auto,
+                size: 180,
+                eyeStyle: const QrEyeStyle(
+                  eyeShape: QrEyeShape.square,
+                  color: AppColors.primary,
+                ),
+                dataModuleStyle: const QrDataModuleStyle(
+                  dataModuleShape: QrDataModuleShape.square,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              l10n.earnPointsShowQR,
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: AppColors.textSecondary),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// -- Points summary card ------------------------------------------------------
 
 class _PointsSummaryCard extends StatelessWidget {
   const _PointsSummaryCard({
@@ -130,6 +201,7 @@ class _PointsSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return Card(
@@ -144,7 +216,7 @@ class _PointsSummaryCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Điểm hiện có',
+                    l10n.earnPointsCurrentPoints,
                     style: theme.textTheme.bodyMedium
                         ?.copyWith(color: Colors.white70),
                   ),
@@ -166,7 +238,8 @@ class _PointsSummaryCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                'Hạng $tierName · x${multiplier.toStringAsFixed(1)}',
+                l10n.earnPointsTierMultiplier(
+                    tierName, multiplier.toStringAsFixed(1)),
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -180,7 +253,7 @@ class _PointsSummaryCard extends StatelessWidget {
   }
 }
 
-// -- Earning method card ---------------------------------------------------
+// -- Earning method card ------------------------------------------------------
 
 class _EarnMethodCard extends StatelessWidget {
   const _EarnMethodCard({

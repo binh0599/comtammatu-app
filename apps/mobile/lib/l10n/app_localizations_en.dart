@@ -785,6 +785,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voucherUse => 'Use';
 
   @override
+  String get notifPermissionTitle => 'Enable Notifications';
+
+  @override
+  String get notifPermissionDescription =>
+      'Get notified about offers and order updates';
+
+  @override
+  String get notifPermissionBenefitOrders => 'Real-time order status updates';
+
+  @override
+  String get notifPermissionBenefitPromotions =>
+      'New offers and promotions alerts';
+
+  @override
+  String get notifPermissionBenefitPoints => 'Points and rewards reminders';
+
+  @override
+  String get notifPermissionEnable => 'Enable Notifications';
+
+  @override
+  String get notifPermissionSkip => 'Later';
+
+  @override
   String get notifReadAll => 'Read all';
 
   @override
@@ -819,6 +842,96 @@ class AppLocalizationsEn extends AppLocalizations {
   String notifDaysAgo(int days) {
     return '$days days ago';
   }
+
+  @override
+  String get earnPointsTitle => 'How to Earn Points';
+
+  @override
+  String get earnPointsCurrentPoints => 'Current Points';
+
+  @override
+  String earnPointsTierMultiplier(String tierName, String multiplier) {
+    return '$tierName tier · x$multiplier';
+  }
+
+  @override
+  String get earnPointsMethods => 'Ways to Earn Points';
+
+  @override
+  String get earnPointsCheckin => 'Check in at store';
+
+  @override
+  String get earnPointsCheckinDesc =>
+      'Scan the QR code at the counter each visit. Earn 10 points per check-in.';
+
+  @override
+  String get earnPointsOrder => 'Place orders';
+
+  @override
+  String get earnPointsOrderDesc =>
+      'Earn 1 point per 10,000đ spent. Higher tiers get point multipliers.';
+
+  @override
+  String get earnPointsStreak => 'Check-in streak';
+
+  @override
+  String get earnPointsStreakDesc =>
+      '7-day streak earns 50 bonus points. 30-day streak earns 200 points.';
+
+  @override
+  String get earnPointsPromo => 'Special promotions';
+
+  @override
+  String get earnPointsPromoDesc =>
+      'Check the Vouchers section for bonus points from promotion campaigns.';
+
+  @override
+  String get earnPointsCheckinNow => 'Check in now';
+
+  @override
+  String get earnPointsMyQR => 'My QR Code';
+
+  @override
+  String get earnPointsShowQR => 'Show this code to staff to earn points';
+
+  @override
+  String get redeemPointsTitle => 'Redeem Points';
+
+  @override
+  String get redeemPointsAvailable => 'Available Points';
+
+  @override
+  String get redeemPointsSuffix => 'points';
+
+  @override
+  String get redeemPointsRewards => 'Rewards';
+
+  @override
+  String get redeemPointsRedeem => 'Redeem';
+
+  @override
+  String get redeemPointsConfirmTitle => 'Confirm Redemption';
+
+  @override
+  String redeemPointsConfirmMessage(int points, String name) {
+    return 'Use $points points to redeem \"$name\"?';
+  }
+
+  @override
+  String redeemPointsSuccess(String name) {
+    return 'Successfully redeemed: $name';
+  }
+
+  @override
+  String redeemPointsFailed(String error) {
+    return 'Redemption failed: $error';
+  }
+
+  @override
+  String get redeemPointsInsufficient => 'Not enough points for this reward';
+
+  @override
+  String get redeemPointsNoRewards => 'No rewards available';
 
   @override
   String get feedbackTitle => 'Rate your order';

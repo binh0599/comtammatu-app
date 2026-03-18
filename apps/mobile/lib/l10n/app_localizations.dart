@@ -1556,6 +1556,48 @@ abstract class AppLocalizations {
   /// **'Sử dụng'**
   String get voucherUse;
 
+  /// No description provided for @notifPermissionTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bật thông báo'**
+  String get notifPermissionTitle;
+
+  /// No description provided for @notifPermissionDescription.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhận thông báo để không bỏ lỡ ưu đãi và cập nhật đơn hàng'**
+  String get notifPermissionDescription;
+
+  /// No description provided for @notifPermissionBenefitOrders.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cập nhật trạng thái đơn hàng theo thời gian thực'**
+  String get notifPermissionBenefitOrders;
+
+  /// No description provided for @notifPermissionBenefitPromotions.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thông báo ưu đãi và khuyến mãi mới'**
+  String get notifPermissionBenefitPromotions;
+
+  /// No description provided for @notifPermissionBenefitPoints.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhắc nhở tích điểm và phần thưởng'**
+  String get notifPermissionBenefitPoints;
+
+  /// No description provided for @notifPermissionEnable.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bật thông báo'**
+  String get notifPermissionEnable;
+
+  /// No description provided for @notifPermissionSkip.
+  ///
+  /// In vi, this message translates to:
+  /// **'Để sau'**
+  String get notifPermissionSkip;
+
   /// No description provided for @notifReadAll.
   ///
   /// In vi, this message translates to:
@@ -1615,6 +1657,162 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'{days} ngày trước'**
   String notifDaysAgo(int days);
+
+  /// No description provided for @earnPointsTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cách tích điểm'**
+  String get earnPointsTitle;
+
+  /// No description provided for @earnPointsCurrentPoints.
+  ///
+  /// In vi, this message translates to:
+  /// **'Điểm hiện có'**
+  String get earnPointsCurrentPoints;
+
+  /// No description provided for @earnPointsTierMultiplier.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hạng {tierName} · x{multiplier}'**
+  String earnPointsTierMultiplier(String tierName, String multiplier);
+
+  /// No description provided for @earnPointsMethods.
+  ///
+  /// In vi, this message translates to:
+  /// **'Các cách tích điểm'**
+  String get earnPointsMethods;
+
+  /// No description provided for @earnPointsCheckin.
+  ///
+  /// In vi, this message translates to:
+  /// **'Điểm danh tại quán'**
+  String get earnPointsCheckin;
+
+  /// No description provided for @earnPointsCheckinDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quét mã QR tại quầy mỗi lần đến ăn. Nhận 10 điểm/lần điểm danh.'**
+  String get earnPointsCheckinDesc;
+
+  /// No description provided for @earnPointsOrder.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đặt hàng'**
+  String get earnPointsOrder;
+
+  /// No description provided for @earnPointsOrderDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mỗi đơn hàng được tích 1 điểm cho mỗi 10.000đ. Hạng cao hơn có nhân điểm.'**
+  String get earnPointsOrderDesc;
+
+  /// No description provided for @earnPointsStreak.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chuỗi điểm danh'**
+  String get earnPointsStreak;
+
+  /// No description provided for @earnPointsStreakDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Điểm danh liên tiếp 7 ngày nhận bonus 50 điểm. 30 ngày nhận 200 điểm.'**
+  String get earnPointsStreakDesc;
+
+  /// No description provided for @earnPointsPromo.
+  ///
+  /// In vi, this message translates to:
+  /// **'Khuyến mãi đặc biệt'**
+  String get earnPointsPromo;
+
+  /// No description provided for @earnPointsPromoDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Theo dõi mục Voucher để nhận điểm thưởng từ các chương trình khuyến mãi.'**
+  String get earnPointsPromoDesc;
+
+  /// No description provided for @earnPointsCheckinNow.
+  ///
+  /// In vi, this message translates to:
+  /// **'Điểm danh ngay'**
+  String get earnPointsCheckinNow;
+
+  /// No description provided for @earnPointsMyQR.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mã QR của tôi'**
+  String get earnPointsMyQR;
+
+  /// No description provided for @earnPointsShowQR.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đưa mã này cho nhân viên để tích điểm'**
+  String get earnPointsShowQR;
+
+  /// No description provided for @redeemPointsTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đổi điểm'**
+  String get redeemPointsTitle;
+
+  /// No description provided for @redeemPointsAvailable.
+  ///
+  /// In vi, this message translates to:
+  /// **'Điểm có thể đổi'**
+  String get redeemPointsAvailable;
+
+  /// No description provided for @redeemPointsSuffix.
+  ///
+  /// In vi, this message translates to:
+  /// **'điểm'**
+  String get redeemPointsSuffix;
+
+  /// No description provided for @redeemPointsRewards.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phần thưởng'**
+  String get redeemPointsRewards;
+
+  /// No description provided for @redeemPointsRedeem.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đổi'**
+  String get redeemPointsRedeem;
+
+  /// No description provided for @redeemPointsConfirmTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xác nhận đổi điểm'**
+  String get redeemPointsConfirmTitle;
+
+  /// No description provided for @redeemPointsConfirmMessage.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn muốn dùng {points} điểm để đổi \"{name}\"?'**
+  String redeemPointsConfirmMessage(int points, String name);
+
+  /// No description provided for @redeemPointsSuccess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đổi thành công: {name}'**
+  String redeemPointsSuccess(String name);
+
+  /// No description provided for @redeemPointsFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đổi điểm thất bại: {error}'**
+  String redeemPointsFailed(String error);
+
+  /// No description provided for @redeemPointsInsufficient.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không đủ điểm để đổi phần thưởng này'**
+  String get redeemPointsInsufficient;
+
+  /// No description provided for @redeemPointsNoRewards.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có phần thưởng nào'**
+  String get redeemPointsNoRewards;
 
   /// No description provided for @feedbackTitle.
   ///

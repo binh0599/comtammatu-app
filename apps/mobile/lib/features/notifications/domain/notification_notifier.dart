@@ -78,12 +78,24 @@ class NotificationInboxNotifier extends StateNotifier<NotificationInboxState> {
     }
   }
 
-  /// Delete a notification by id.
-  void deleteNotification(String id) {
+  /// Delete a notification by id (calls API then removes from UI).
+  Future<void> deleteNotification(String id) async {
     final current = state;
     if (current is NotificationInboxLoaded) {
+      // Optimistic UI update
       final updated = current.notifications.where((n) => n.id != id).toList();
       state = NotificationInboxLoaded(notifications: updated);
+
+      // Fire-and-forget API call
+      final intId = int.tryParse(id);
+      if (intId != null) {
+        try {
+          await _repository.deleteNotification(intId);
+        } catch (_) {
+          // Revert on failure
+          state = current;
+        }
+      }
     }
   }
 }

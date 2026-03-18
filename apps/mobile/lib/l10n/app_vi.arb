@@ -370,6 +370,14 @@
   },
   "voucherUse": "Sử dụng",
 
+  "notifPermissionTitle": "Bật thông báo",
+  "notifPermissionDescription": "Nhận thông báo để không bỏ lỡ ưu đãi và cập nhật đơn hàng",
+  "notifPermissionBenefitOrders": "Cập nhật trạng thái đơn hàng theo thời gian thực",
+  "notifPermissionBenefitPromotions": "Thông báo ưu đãi và khuyến mãi mới",
+  "notifPermissionBenefitPoints": "Nhắc nhở tích điểm và phần thưởng",
+  "notifPermissionEnable": "Bật thông báo",
+  "notifPermissionSkip": "Để sau",
+
   "notifReadAll": "Đọc tất cả",
   "notifCannotLoad": "Không thể tải thông báo",
   "notifDeleted": "Đã xóa thông báo",
@@ -395,6 +403,56 @@
       "days": { "type": "int" }
     }
   },
+
+  "earnPointsTitle": "Cách tích điểm",
+  "earnPointsCurrentPoints": "Điểm hiện có",
+  "earnPointsTierMultiplier": "Hạng {tierName} · x{multiplier}",
+  "@earnPointsTierMultiplier": {
+    "placeholders": {
+      "tierName": { "type": "String" },
+      "multiplier": { "type": "String" }
+    }
+  },
+  "earnPointsMethods": "Các cách tích điểm",
+  "earnPointsCheckin": "Điểm danh tại quán",
+  "earnPointsCheckinDesc": "Quét mã QR tại quầy mỗi lần đến ăn. Nhận 10 điểm/lần điểm danh.",
+  "earnPointsOrder": "Đặt hàng",
+  "earnPointsOrderDesc": "Mỗi đơn hàng được tích 1 điểm cho mỗi 10.000đ. Hạng cao hơn có nhân điểm.",
+  "earnPointsStreak": "Chuỗi điểm danh",
+  "earnPointsStreakDesc": "Điểm danh liên tiếp 7 ngày nhận bonus 50 điểm. 30 ngày nhận 200 điểm.",
+  "earnPointsPromo": "Khuyến mãi đặc biệt",
+  "earnPointsPromoDesc": "Theo dõi mục Voucher để nhận điểm thưởng từ các chương trình khuyến mãi.",
+  "earnPointsCheckinNow": "Điểm danh ngay",
+  "earnPointsMyQR": "Mã QR của tôi",
+  "earnPointsShowQR": "Đưa mã này cho nhân viên để tích điểm",
+
+  "redeemPointsTitle": "Đổi điểm",
+  "redeemPointsAvailable": "Điểm có thể đổi",
+  "redeemPointsSuffix": "điểm",
+  "redeemPointsRewards": "Phần thưởng",
+  "redeemPointsRedeem": "Đổi",
+  "redeemPointsConfirmTitle": "Xác nhận đổi điểm",
+  "redeemPointsConfirmMessage": "Bạn muốn dùng {points} điểm để đổi \"{name}\"?",
+  "@redeemPointsConfirmMessage": {
+    "placeholders": {
+      "points": { "type": "int" },
+      "name": { "type": "String" }
+    }
+  },
+  "redeemPointsSuccess": "Đổi thành công: {name}",
+  "@redeemPointsSuccess": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "redeemPointsFailed": "Đổi điểm thất bại: {error}",
+  "@redeemPointsFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "redeemPointsInsufficient": "Không đủ điểm để đổi phần thưởng này",
+  "redeemPointsNoRewards": "Chưa có phần thưởng nào",
 
   "feedbackTitle": "Đánh giá đơn hàng",
   "feedbackOrderId": "Đơn hàng #{orderId}",

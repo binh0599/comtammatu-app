@@ -5,33 +5,66 @@ import '../../../core/network/api_client.dart';
 import '../../../models/checkin_result.dart';
 import '../../../models/loyalty_dashboard.dart';
 import '../../../models/point_transaction.dart';
+import '../../../models/reward_model.dart';
 
-/// Result of a point redemption request.
+/// Result of a point redemption request (API Contract §2.3).
 class RedemptionResult {
-  final int transactionId;
-  final double pointsRedeemed;
+  final int redemptionId;
+  final int pointsDeducted;
   final double newBalance;
+  final RedemptionReward? reward;
+  final int version;
 
   const RedemptionResult({
-    required this.transactionId,
-    required this.pointsRedeemed,
+    required this.redemptionId,
+    required this.pointsDeducted,
     required this.newBalance,
+    this.reward,
+    this.version = 0,
   });
 
   factory RedemptionResult.fromJson(Map<String, dynamic> json) {
     return RedemptionResult(
-      transactionId: json['transaction_id'] as int,
-      pointsRedeemed: (json['points_redeemed'] as num).toDouble(),
-      newBalance: (json['new_balance'] as num).toDouble(),
+      redemptionId: json['redemption_id'] as int? ?? 0,
+      pointsDeducted: (json['points_deducted'] as num?)?.toInt() ?? 0,
+      newBalance: (json['new_balance'] as num?)?.toDouble() ?? 0,
+      reward: json['reward'] != null
+          ? RedemptionReward.fromJson(json['reward'] as Map<String, dynamic>)
+          : null,
+      version: json['version'] as int? ?? 0,
     );
   }
+}
 
-  Map<String, dynamic> toJson() {
-    return {
-      'transaction_id': transactionId,
-      'points_redeemed': pointsRedeemed,
-      'new_balance': newBalance,
-    };
+/// Reward details returned after successful redemption.
+class RedemptionReward {
+  final int id;
+  final String name;
+  final String? description;
+  final int pointsRequired;
+  final String? voucherCode;
+  final DateTime? expiresAt;
+
+  const RedemptionReward({
+    required this.id,
+    required this.name,
+    this.description,
+    required this.pointsRequired,
+    this.voucherCode,
+    this.expiresAt,
+  });
+
+  factory RedemptionReward.fromJson(Map<String, dynamic> json) {
+    return RedemptionReward(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      description: json['description'] as String?,
+      pointsRequired: json['points_required'] as int? ?? 0,
+      voucherCode: json['voucher_code'] as String?,
+      expiresAt: json['expires_at'] != null
+          ? DateTime.tryParse(json['expires_at'] as String)
+          : null,
+    );
   }
 }
 
@@ -129,18 +162,30 @@ class LoyaltyRepository {
     );
   }
 
-  /// Redeems loyalty points for a reward or discount.
+  /// Fetches available rewards for point redemption.
+  Future<List<Reward>> getAvailableRewards() async {
+    return _apiClient.get<List<Reward>>(
+      '/redeem-points/rewards',
+      fromJson: (json) {
+        final map = json as Map<String, dynamic>;
+        final list = map['rewards'] as List<dynamic>? ?? [];
+        return list
+            .map((e) => Reward.fromJson(e as Map<String, dynamic>))
+            .toList();
+      },
+    );
+  }
+
+  /// Redeems loyalty points for a reward (per API Contract §2.3).
   Future<RedemptionResult> redeemPoints({
-    required double points,
-    required String rewardType,
-    int? orderId,
+    required int rewardId,
+    required int points,
   }) async {
     return _apiClient.post<RedemptionResult>(
       '/redeem-points',
       data: {
+        'reward_id': rewardId,
         'points': points,
-        'reward_type': rewardType,
-        if (orderId != null) 'order_id': orderId,
       },
       fromJson: (json) =>
           RedemptionResult.fromJson(json as Map<String, dynamic>),

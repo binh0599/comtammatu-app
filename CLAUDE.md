@@ -6,21 +6,22 @@
 
 ## 0. TRẠNG THÁI HIỆN TẠI (Updated: 2026-03-18)
 
-**Phase 0–4 HOÀN THÀNH. P5.3 + P5.4 HOÀN THÀNH.** App đã có 113+ Dart files, 14 test files (168 tests), CI PASSING.
+**Phase 0–5 HOÀN THÀNH.** App đã có 116+ Dart files, 16 test files (183 tests), CI PASSING.
 
 | Đã xong | Chưa xong |
 |---------|-----------|
-| 17 Freezed models | Push notifications (P5.1) |
-| 90% screens wired to API | Earn/Redeem points screens (P5.2) |
-| Localization (258 strings, 15 screens) | E2E tests (P6.2) |
-| Offline cache (6/6 repos cache-first) | Monetary `double` → `int` audit (P6.1) |
-| PostHog + Sentry | Vietnamese diacritics audit |
+| 18 Freezed models | E2E tests (P6.2) |
+| 95% screens wired to API | Monetary `double` → `int` audit (P6.1) |
+| Localization (285 strings, 17 screens) | Vietnamese diacritics audit |
+| Offline cache (6/6 repos cache-first) | UI polish + dark mode (P6.3) |
+| Push notifications (FCM + permission) | Performance optimization (P6.4) |
+| Earn/Redeem points (API + QR code) | Backend hardening (P7) |
+| PostHog + Sentry | |
 | Deep linking (Android + iOS) | |
 | Fastlane + CI/CD | |
-| Connectivity listener | |
 
-**Next:** P5.1 Push Notifications, P5.2 Points screens.
-**Blockers:** Logo, Apple/Google dev accounts, domain setup, Firebase FCM. Xem `tasks/todo.md` → "Chờ User Action".
+**Next:** Phase 6 — Quality & Polish (Tech Debt, E2E Tests, UI/UX, Performance).
+**Blockers:** Logo, Apple/Google dev accounts, domain setup. Xem `tasks/todo.md` → "Chờ User Action".
 
 ---
 
@@ -33,15 +34,15 @@
 | Navigation | GoRouter (2 ShellRoutes: customer 5 tabs + admin 4 tabs) |
 | Network | Dio (interceptors: Auth → Idempotency → Error) + Supabase Flutter SDK v2 |
 | Offline | Drift (menu, store) + SharedPreferences (cart, orders, settings) |
-| Models | Freezed + json_serializable (17 models, all with fromJson/toJson) |
+| Models | Freezed + json_serializable (18 models, all with fromJson/toJson) |
 | QR Scanner | mobile_scanner (ML Kit / Vision) |
 | Maps | google_maps_flutter + geolocator |
 | Push | firebase_messaging + flutter_local_notifications |
-| Testing | flutter_test (167+ tests) + Patrol (E2E — not yet configured) |
+| Testing | flutter_test (183 tests) + Patrol (E2E — not yet configured) |
 | CI/CD | GitHub Actions (analyze → test → build) + Fastlane |
 | Monitoring | Sentry (crash reports, screenshots) |
 | Analytics | PostHog (lifecycle events, env-aware) |
-| i18n | flutter_localizations + ARB (vi + en, partially wired) |
+| i18n | flutter_localizations + ARB (vi + en, 285 strings, 17 screens) |
 
 **Backend:** Supabase (project: `zrlriuednoaqrsvnjjyo`) — shared với web CRM.
 
@@ -57,7 +58,7 @@
 4. **PK_TYPE** — `BIGINT GENERATED ALWAYS AS IDENTITY`.
 5. **TEXT_TYPE** — `TEXT` always. Never VARCHAR.
 6. **ZOD_BACKEND** — Edge Function validate input bằng Zod schema.
-7. **FREEZED_FRONTEND** — Dart models dùng `@freezed` + `fromJson`. ✅ All 17 models migrated.
+7. **FREEZED_FRONTEND** — Dart models dùng `@freezed` + `fromJson`. ✅ All 18 models migrated.
 8. **RIVERPOD_STATE** — Dùng Riverpod providers cho state. KHÔNG `setState` ngoài local UI.
 9. **CONST_WIDGETS** — Mọi Widget phải có `const` constructor nếu possible.
 10. **IDEMPOTENCY** — Mọi POST request gửi `X-Idempotency-Key` (UUID v7). ✅ Wired in Dio interceptor.

@@ -8,6 +8,8 @@ import '../../../shared/extensions/context_extensions.dart';
 import '../../../shared/utils/formatters.dart';
 import '../../loyalty/domain/loyalty_notifier.dart';
 import '../../loyalty/domain/loyalty_state.dart';
+import '../../notifications/domain/notification_notifier.dart';
+import '../../notifications/presentation/notification_permission_dialog.dart';
 
 /// Home screen — main landing page with loyalty summary and promotions.
 class HomeScreen extends ConsumerStatefulWidget {
@@ -25,6 +27,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     Future.microtask(() {
       ref.read(loyaltyNotifierProvider.notifier).loadDashboard();
     });
+    // Show notification permission dialog after short delay
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) showNotificationPermissionIfNeeded(context);
+    });
   }
 
   @override
@@ -35,9 +41,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: AppBar(
         title: Text(context.l10n.appTitle),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () => context.go(AppRoutes.notifications),
+          _NotificationBell(
+            onTap: () => context.go(AppRoutes.notifications),
           ),
         ],
       ),
@@ -355,6 +360,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             )),
       ],
+    );
+  }
+}
+
+class _NotificationBell extends ConsumerWidget {
+  const _NotificationBell({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final unreadCount = ref.watch(unreadNotificationCountProvider);
+
+    return IconButton(
+      icon: Badge(
+        isLabelVisible: unreadCount > 0,
+        label: Text(
+          unreadCount > 99 ? '99+' : '$unreadCount',
+          style: const TextStyle(fontSize: 10),
+        ),
+        child: const Icon(Icons.notifications_outlined),
+      ),
+      onPressed: onTap,
     );
   }
 }

@@ -786,6 +786,31 @@ class AppLocalizationsVi extends AppLocalizations {
   String get voucherUse => 'Sử dụng';
 
   @override
+  String get notifPermissionTitle => 'Bật thông báo';
+
+  @override
+  String get notifPermissionDescription =>
+      'Nhận thông báo để không bỏ lỡ ưu đãi và cập nhật đơn hàng';
+
+  @override
+  String get notifPermissionBenefitOrders =>
+      'Cập nhật trạng thái đơn hàng theo thời gian thực';
+
+  @override
+  String get notifPermissionBenefitPromotions =>
+      'Thông báo ưu đãi và khuyến mãi mới';
+
+  @override
+  String get notifPermissionBenefitPoints =>
+      'Nhắc nhở tích điểm và phần thưởng';
+
+  @override
+  String get notifPermissionEnable => 'Bật thông báo';
+
+  @override
+  String get notifPermissionSkip => 'Để sau';
+
+  @override
   String get notifReadAll => 'Đọc tất cả';
 
   @override
@@ -820,6 +845,96 @@ class AppLocalizationsVi extends AppLocalizations {
   String notifDaysAgo(int days) {
     return '$days ngày trước';
   }
+
+  @override
+  String get earnPointsTitle => 'Cách tích điểm';
+
+  @override
+  String get earnPointsCurrentPoints => 'Điểm hiện có';
+
+  @override
+  String earnPointsTierMultiplier(String tierName, String multiplier) {
+    return 'Hạng $tierName · x$multiplier';
+  }
+
+  @override
+  String get earnPointsMethods => 'Các cách tích điểm';
+
+  @override
+  String get earnPointsCheckin => 'Điểm danh tại quán';
+
+  @override
+  String get earnPointsCheckinDesc =>
+      'Quét mã QR tại quầy mỗi lần đến ăn. Nhận 10 điểm/lần điểm danh.';
+
+  @override
+  String get earnPointsOrder => 'Đặt hàng';
+
+  @override
+  String get earnPointsOrderDesc =>
+      'Mỗi đơn hàng được tích 1 điểm cho mỗi 10.000đ. Hạng cao hơn có nhân điểm.';
+
+  @override
+  String get earnPointsStreak => 'Chuỗi điểm danh';
+
+  @override
+  String get earnPointsStreakDesc =>
+      'Điểm danh liên tiếp 7 ngày nhận bonus 50 điểm. 30 ngày nhận 200 điểm.';
+
+  @override
+  String get earnPointsPromo => 'Khuyến mãi đặc biệt';
+
+  @override
+  String get earnPointsPromoDesc =>
+      'Theo dõi mục Voucher để nhận điểm thưởng từ các chương trình khuyến mãi.';
+
+  @override
+  String get earnPointsCheckinNow => 'Điểm danh ngay';
+
+  @override
+  String get earnPointsMyQR => 'Mã QR của tôi';
+
+  @override
+  String get earnPointsShowQR => 'Đưa mã này cho nhân viên để tích điểm';
+
+  @override
+  String get redeemPointsTitle => 'Đổi điểm';
+
+  @override
+  String get redeemPointsAvailable => 'Điểm có thể đổi';
+
+  @override
+  String get redeemPointsSuffix => 'điểm';
+
+  @override
+  String get redeemPointsRewards => 'Phần thưởng';
+
+  @override
+  String get redeemPointsRedeem => 'Đổi';
+
+  @override
+  String get redeemPointsConfirmTitle => 'Xác nhận đổi điểm';
+
+  @override
+  String redeemPointsConfirmMessage(int points, String name) {
+    return 'Bạn muốn dùng $points điểm để đổi \"$name\"?';
+  }
+
+  @override
+  String redeemPointsSuccess(String name) {
+    return 'Đổi thành công: $name';
+  }
+
+  @override
+  String redeemPointsFailed(String error) {
+    return 'Đổi điểm thất bại: $error';
+  }
+
+  @override
+  String get redeemPointsInsufficient => 'Không đủ điểm để đổi phần thưởng này';
+
+  @override
+  String get redeemPointsNoRewards => 'Chưa có phần thưởng nào';
 
   @override
   String get feedbackTitle => 'Đánh giá đơn hàng';

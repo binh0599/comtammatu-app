@@ -370,6 +370,14 @@
   },
   "voucherUse": "Use",
 
+  "notifPermissionTitle": "Enable Notifications",
+  "notifPermissionDescription": "Get notified about offers and order updates",
+  "notifPermissionBenefitOrders": "Real-time order status updates",
+  "notifPermissionBenefitPromotions": "New offers and promotions alerts",
+  "notifPermissionBenefitPoints": "Points and rewards reminders",
+  "notifPermissionEnable": "Enable Notifications",
+  "notifPermissionSkip": "Later",
+
   "notifReadAll": "Read all",
   "notifCannotLoad": "Cannot load notifications",
   "notifDeleted": "Notification deleted",
@@ -395,6 +403,56 @@
       "days": { "type": "int" }
     }
   },
+
+  "earnPointsTitle": "How to Earn Points",
+  "earnPointsCurrentPoints": "Current Points",
+  "earnPointsTierMultiplier": "{tierName} tier · x{multiplier}",
+  "@earnPointsTierMultiplier": {
+    "placeholders": {
+      "tierName": { "type": "String" },
+      "multiplier": { "type": "String" }
+    }
+  },
+  "earnPointsMethods": "Ways to Earn Points",
+  "earnPointsCheckin": "Check in at store",
+  "earnPointsCheckinDesc": "Scan the QR code at the counter each visit. Earn 10 points per check-in.",
+  "earnPointsOrder": "Place orders",
+  "earnPointsOrderDesc": "Earn 1 point per 10,000đ spent. Higher tiers get point multipliers.",
+  "earnPointsStreak": "Check-in streak",
+  "earnPointsStreakDesc": "7-day streak earns 50 bonus points. 30-day streak earns 200 points.",
+  "earnPointsPromo": "Special promotions",
+  "earnPointsPromoDesc": "Check the Vouchers section for bonus points from promotion campaigns.",
+  "earnPointsCheckinNow": "Check in now",
+  "earnPointsMyQR": "My QR Code",
+  "earnPointsShowQR": "Show this code to staff to earn points",
+
+  "redeemPointsTitle": "Redeem Points",
+  "redeemPointsAvailable": "Available Points",
+  "redeemPointsSuffix": "points",
+  "redeemPointsRewards": "Rewards",
+  "redeemPointsRedeem": "Redeem",
+  "redeemPointsConfirmTitle": "Confirm Redemption",
+  "redeemPointsConfirmMessage": "Use {points} points to redeem \"{name}\"?",
+  "@redeemPointsConfirmMessage": {
+    "placeholders": {
+      "points": { "type": "int" },
+      "name": { "type": "String" }
+    }
+  },
+  "redeemPointsSuccess": "Successfully redeemed: {name}",
+  "@redeemPointsSuccess": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "redeemPointsFailed": "Redemption failed: {error}",
+  "@redeemPointsFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "redeemPointsInsufficient": "Not enough points for this reward",
+  "redeemPointsNoRewards": "No rewards available",
 
   "feedbackTitle": "Rate your order",
   "feedbackOrderId": "Order #{orderId}",

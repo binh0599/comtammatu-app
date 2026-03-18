@@ -62,6 +62,13 @@ class NotificationRepository {
       '/notifications-inbox/read/$notificationId',
     );
   }
+
+  /// Deletes a notification.
+  Future<void> deleteNotification(int notificationId) async {
+    await _apiClient.delete<dynamic>(
+      '/notifications-inbox/$notificationId',
+    );
+  }
 }
 
 /// Riverpod provider for [NotificationRepository].

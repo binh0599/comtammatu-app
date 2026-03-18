@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../models/reward_model.dart';
 import '../data/loyalty_repository.dart';
 import 'loyalty_state.dart';
 
@@ -44,19 +45,18 @@ class LoyaltyNotifier extends StateNotifier<LoyaltyState> {
     }
   }
 
-  /// Redeem points for a reward.
-  Future<void> redeemPoints({
-    required double points,
-    required String rewardType,
-    int? orderId,
+  /// Redeem points for a reward (per API Contract §2.3).
+  Future<RedemptionResult> redeemPoints({
+    required int rewardId,
+    required int points,
   }) async {
     try {
-      await _loyaltyRepository.redeemPoints(
+      final result = await _loyaltyRepository.redeemPoints(
+        rewardId: rewardId,
         points: points,
-        rewardType: rewardType,
-        orderId: orderId,
       );
       await loadDashboard();
+      return result;
     } catch (e) {
       rethrow;
     }
@@ -67,4 +67,10 @@ final loyaltyNotifierProvider =
     StateNotifierProvider<LoyaltyNotifier, LoyaltyState>((ref) {
   final repo = ref.watch(loyaltyRepositoryProvider);
   return LoyaltyNotifier(loyaltyRepository: repo);
+});
+
+/// Provider that fetches available rewards for redemption.
+final availableRewardsProvider = FutureProvider<List<Reward>>((ref) async {
+  final repo = ref.watch(loyaltyRepositoryProvider);
+  return repo.getAvailableRewards();
 });

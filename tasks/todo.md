@@ -1,25 +1,27 @@
 # Todo — Mobile App
 
-> Tiến độ hiện tại. Updated: 2026-03-16
+> Tiến độ hiện tại. Updated: 2026-03-18
 
 ---
 
 ## REPOSITORY HEALTH SNAPSHOT
 
-| Metric | Trước (Mar 08) | Hiện tại (Mar 16) |
+| Metric | Trước (Mar 08) | Hiện tại (Mar 18) |
 |--------|----------------|-------------------|
-| Dart source files (excl. generated) | 74 | 113 |
-| Generated files (.freezed + .g) | 0 | 34 (17 models × 2) |
-| Test files | 1 (0% coverage) | 14 files, 167+ tests |
+| Dart source files (excl. generated) | 74 | 116 |
+| Generated files (.freezed + .g) | 0 | 36 (18 models × 2) |
+| Test files | 1 (0% coverage) | 16 files, 183 tests |
 | CI/CD | FAILING (281 lint issues) | PASSING (analyze + test + build) |
-| Freezed models | NONE | All 17 migrated |
+| Freezed models | NONE | All 18 migrated |
 | Offline-first (Drift) | Not wired | 6/6 repos cache-first + connectivity |
-| Feature completeness | ~40% screens | ~90% screens wired to API |
+| Feature completeness | ~40% screens | ~95% screens wired to API |
 | Deep linking | Not configured | Android + iOS configured |
 | Analytics/Monitoring | Not wired | PostHog + Sentry integrated |
-| i18n | Hardcoded | 258 ARB strings, 15 screens wired |
+| i18n | Hardcoded | 285 ARB strings, 17 screens wired |
 | Fastlane | Not configured | Android + iOS configured |
 | Store metadata | None | 12 files (vi-VN + en-US) |
+| Push Notifications | Not wired | FCM + permission dialog + badge |
+| Points Earn/Redeem | Hardcoded | API-wired + member QR code |
 
 ---
 
@@ -92,22 +94,29 @@
 
 > Đây là những tính năng còn thiếu cần hoàn thành trước khi có thể beta test.
 
-### P5.1 — Push Notifications (FCM) 🔴
-- [ ] FCM token registration → `push-register` API
-- [ ] Foreground notification handling (flutter_local_notifications)
-- [ ] Background notification handling
-- [ ] Deep linking from notification taps → GoRouter
-- [ ] Notification permission request flow (iOS)
-- **Owner:** `mid-flutter-dev`
-- **Dependencies:** Firebase project configured, FCM server key in Supabase secrets
-
-### P5.2 — Earn/Redeem Points Screens 🔴
-- [ ] `earn_points_screen.dart` — hiển thị cách tích điểm, QR code
-- [ ] `redeem_points_screen.dart` — danh sách rewards, đổi điểm
-- [ ] Wire to `earn-points` + `redeem-points` Edge Functions
-- [ ] Add routes to GoRouter
+### P5.1 — Push Notifications (FCM) ✅ (2026-03-18)
+- [x] FCM token registration → `push-register` API
+- [x] Foreground notification handling (flutter_local_notifications)
+- [x] Background notification handling
+- [x] Deep linking from notification taps → GoRouter
+- [x] Notification permission request flow (bottom sheet dialog, SharedPreferences flag)
+- [x] Unread notification badge on home screen bell icon
+- [x] Notification delete → API call with optimistic UI
+- [x] Localization (7 new ARB strings, vi + en)
+- [x] Unit tests (7 tests: notifier state, markAsRead, deleteNotification)
 - **Owner:** `sr-flutter-dev`
-- **Dependencies:** Backend endpoints `earn-points`, `redeem-points` phải sẵn sàng
+
+### P5.2 — Earn/Redeem Points Screens ✅ (2026-03-18)
+- [x] `earn_points_screen.dart` — hướng dẫn tích điểm + member QR code (qr_flutter)
+- [x] `redeem_points_screen.dart` — fetch rewards từ API, đổi điểm per API Contract §2.3
+- [x] Reward Freezed model (`reward_model.dart`) + build_runner
+- [x] `LoyaltyRepository.getAvailableRewards()` + `redeemPoints()` updated per contract
+- [x] `LoyaltyNotifier.redeemPoints()` returns `RedemptionResult` with voucher details
+- [x] `availableRewardsProvider` (FutureProvider) for rewards list
+- [x] Routes already configured in GoRouter
+- [x] Localization (20+ new ARB strings, vi + en)
+- [x] Unit tests (9 tests: notifier, RedemptionResult.fromJson)
+- **Owner:** `sr-flutter-dev`
 
 ### P5.3 — Localization Completion ✅ (2026-03-18)
 - [x] Audit tất cả hardcoded Vietnamese strings trong `lib/` — 250+ strings identified
@@ -208,10 +217,10 @@
 | `addresses` | `saved_addresses_screen.dart` | ✅ Wired (CRUD) |
 | `feedback` | `feedback_screen.dart` | ✅ Built |
 | `profile-update` | `profile_edit_screen.dart` | ✅ Wired |
-| `push-register` | `notification_service.dart` | ⚠️ Partial (cần P5.1) |
-| `notifications-inbox` | `notification_inbox_screen.dart` | ✅ Built |
-| `earn-points` | — | ❌ Missing (cần P5.2) |
-| `redeem-points` | — | ❌ Missing (cần P5.2) |
+| `push-register` | `notification_service.dart` | ✅ Wired (FCM + permission dialog) |
+| `notifications-inbox` | `notification_inbox_screen.dart` | ✅ Built + delete API |
+| `earn-points` | `earn_points_screen.dart` | ✅ Informational + member QR |
+| `redeem-points` | `redeem_points_screen.dart` | ✅ API-wired (rewards + redeem) |
 | `push-send` | — | Backend only |
 | `dashboard-stats` | `dashboard_screen.dart` | ✅ Admin only |
 | `inventory` | `inventory_screen.dart` | ✅ Admin only |

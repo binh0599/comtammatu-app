@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../models/reward_model.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../domain/loyalty_notifier.dart';
 import '../domain/loyalty_state.dart';
 
@@ -31,10 +33,12 @@ class _RedeemPointsScreenState extends ConsumerState<RedeemPointsScreen> {
   @override
   Widget build(BuildContext context) {
     final loyaltyState = ref.watch(loyaltyNotifierProvider);
+    final rewardsAsync = ref.watch(availableRewardsProvider);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Đổi điểm')),
+      appBar: AppBar(title: Text(l10n.redeemPointsTitle)),
       body: switch (loyaltyState) {
         LoyaltyLoading() ||
         LoyaltyInitial() =>
@@ -53,85 +57,132 @@ class _RedeemPointsScreenState extends ConsumerState<RedeemPointsScreen> {
                       .read(loyaltyNotifierProvider.notifier)
                       .loadDashboard(),
                   icon: const Icon(Icons.refresh),
-                  label: const Text('Thử lại'),
+                  label: Text(l10n.retry),
                 ),
               ],
             ),
           ),
-        LoyaltyLoaded(:final dashboard) => SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Available points
-                Card(
-                  color: AppColors.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.stars, color: Colors.white, size: 32),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Điểm có thể đổi',
-                                style: theme.textTheme.bodyMedium
-                                    ?.copyWith(color: Colors.white70),
-                              ),
-                              Text(
-                                '${dashboard.member.availablePoints.toInt()} điểm',
-                                style: theme.textTheme.headlineSmall?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
+        LoyaltyLoaded(:final dashboard) => RefreshIndicator(
+            onRefresh: () async {
+              ref.invalidate(availableRewardsProvider);
+              await ref.read(loyaltyNotifierProvider.notifier).loadDashboard();
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Available points card
+                  Card(
+                    color: AppColors.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.stars,
+                              color: Colors.white, size: 32),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  l10n.redeemPointsAvailable,
+                                  style: theme.textTheme.bodyMedium
+                                      ?.copyWith(color: Colors.white70),
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  '${dashboard.member.availablePoints.toInt()} ${l10n.redeemPointsSuffix}',
+                                  style:
+                                      theme.textTheme.headlineSmall?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
 
-                const SizedBox(height: 24),
-                Text(
-                  'Phần thưởng',
-                  style: theme.textTheme.titleLarge
-                      ?.copyWith(fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(height: 16),
-
-                // Reward list
-                ..._rewards.map(
-                  (reward) => _RewardCard(
-                    reward: reward,
-                    availablePoints: dashboard.member.availablePoints.toInt(),
-                    isRedeeming: _isRedeeming,
-                    onRedeem: () => _handleRedeem(reward),
+                  const SizedBox(height: 24),
+                  Text(
+                    l10n.redeemPointsRewards,
+                    style: theme.textTheme.titleLarge
+                        ?.copyWith(fontWeight: FontWeight.w700),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16),
+
+                  // Reward list from API
+                  rewardsAsync.when(
+                    loading: () => const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(32),
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    error: (e, _) => Center(
+                      child: Column(
+                        children: [
+                          Text(l10n.redeemPointsNoRewards),
+                          const SizedBox(height: 8),
+                          TextButton.icon(
+                            onPressed: () =>
+                                ref.invalidate(availableRewardsProvider),
+                            icon: const Icon(Icons.refresh, size: 18),
+                            label: Text(l10n.retry),
+                          ),
+                        ],
+                      ),
+                    ),
+                    data: (rewards) => rewards.isEmpty
+                        ? Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(32),
+                              child: Text(
+                                l10n.redeemPointsNoRewards,
+                                style: theme.textTheme.bodyMedium
+                                    ?.copyWith(color: AppColors.textSecondary),
+                              ),
+                            ),
+                          )
+                        : Column(
+                            children: rewards
+                                .map((reward) => _RewardCard(
+                                      reward: reward,
+                                      availablePoints: dashboard
+                                          .member.availablePoints
+                                          .toInt(),
+                                      isRedeeming: _isRedeeming,
+                                      onRedeem: () => _handleRedeem(reward),
+                                    ))
+                                .toList(),
+                          ),
+                  ),
+                ],
+              ),
             ),
           ),
       },
     );
   }
 
-  Future<void> _handleRedeem(_Reward reward) async {
+  Future<void> _handleRedeem(Reward reward) async {
     final loyaltyState = ref.read(loyaltyNotifierProvider);
     if (loyaltyState is! LoyaltyLoaded) return;
+    final l10n = context.l10n;
 
     final available = loyaltyState.dashboard.member.availablePoints.toInt();
-    if (available < reward.pointsCost) {
+    if (available < reward.pointsRequired) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Không đủ điểm để đổi phần thưởng này'),
+        SnackBar(
+          content: Text(l10n.redeemPointsInsufficient),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -142,18 +193,18 @@ class _RedeemPointsScreenState extends ConsumerState<RedeemPointsScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Xác nhận đổi điểm'),
+        title: Text(l10n.redeemPointsConfirmTitle),
         content: Text(
-          'Bạn muốn dùng ${reward.pointsCost} điểm để đổi "${reward.name}"?',
+          l10n.redeemPointsConfirmMessage(reward.pointsRequired, reward.name),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Huỷ'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Đổi điểm'),
+            child: Text(l10n.redeemPointsRedeem),
           ),
         ],
       ),
@@ -164,13 +215,15 @@ class _RedeemPointsScreenState extends ConsumerState<RedeemPointsScreen> {
     setState(() => _isRedeeming = true);
     try {
       await ref.read(loyaltyNotifierProvider.notifier).redeemPoints(
-            points: reward.pointsCost.toDouble(),
-            rewardType: reward.type,
+            rewardId: reward.id,
+            points: reward.pointsRequired,
           );
+      // Refresh rewards list
+      ref.invalidate(availableRewardsProvider);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Đổi thành công: ${reward.name}'),
+            content: Text(l10n.redeemPointsSuccess(reward.name)),
             behavior: SnackBarBehavior.floating,
             backgroundColor: AppColors.success,
           ),
@@ -180,7 +233,7 @@ class _RedeemPointsScreenState extends ConsumerState<RedeemPointsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Đổi điểm thất bại: $e'),
+            content: Text(l10n.redeemPointsFailed(e.toString())),
             behavior: SnackBarBehavior.floating,
             backgroundColor: AppColors.error,
           ),
@@ -192,63 +245,17 @@ class _RedeemPointsScreenState extends ConsumerState<RedeemPointsScreen> {
   }
 }
 
-// -- Reward data -----------------------------------------------------------
+// -- Reward card (uses Reward model from API) ---------------------------------
 
-class _Reward {
-  const _Reward({
-    required this.name,
-    required this.description,
-    required this.pointsCost,
-    required this.type,
-    required this.icon,
-  });
-
-  final String name;
-  final String description;
-  final int pointsCost;
-  final String type;
-  final IconData icon;
+IconData _rewardIcon(String category) {
+  return switch (category) {
+    'discount' => Icons.local_offer_outlined,
+    'free_item' => Icons.restaurant_outlined,
+    'free_delivery' => Icons.delivery_dining_outlined,
+    'free_drink' => Icons.local_drink_outlined,
+    _ => Icons.card_giftcard_outlined,
+  };
 }
-
-const _rewards = [
-  _Reward(
-    name: 'Giảm 10.000đ',
-    description: 'Áp dụng cho đơn từ 50.000đ trở lên',
-    pointsCost: 100,
-    type: 'discount_10k',
-    icon: Icons.local_offer_outlined,
-  ),
-  _Reward(
-    name: 'Giảm 25.000đ',
-    description: 'Áp dụng cho đơn từ 100.000đ trở lên',
-    pointsCost: 200,
-    type: 'discount_25k',
-    icon: Icons.local_offer_outlined,
-  ),
-  _Reward(
-    name: 'Miễn phí nước uống',
-    description: 'Tặng 1 nước uống bất kỳ khi mua cơm tấm',
-    pointsCost: 50,
-    type: 'free_drink',
-    icon: Icons.local_drink_outlined,
-  ),
-  _Reward(
-    name: 'Miễn phí giao hàng',
-    description: 'Áp dụng cho 1 đơn giao hàng tiếp theo',
-    pointsCost: 80,
-    type: 'free_delivery',
-    icon: Icons.delivery_dining_outlined,
-  ),
-  _Reward(
-    name: 'Suất cơm tấm miễn phí',
-    description: 'Tặng 1 suất cơm tấm sườn bì chả trị giá 55.000đ',
-    pointsCost: 500,
-    type: 'free_meal',
-    icon: Icons.restaurant_outlined,
-  ),
-];
-
-// -- Reward card -----------------------------------------------------------
 
 class _RewardCard extends StatelessWidget {
   const _RewardCard({
@@ -258,7 +265,7 @@ class _RewardCard extends StatelessWidget {
     required this.onRedeem,
   });
 
-  final _Reward reward;
+  final Reward reward;
   final int availablePoints;
   final bool isRedeeming;
   final VoidCallback onRedeem;
@@ -266,7 +273,8 @@ class _RewardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final canAfford = availablePoints >= reward.pointsCost;
+    final l10n = context.l10n;
+    final canAfford = availablePoints >= reward.pointsRequired;
 
     return Card(
       elevation: 0,
@@ -285,7 +293,7 @@ class _RewardCard extends StatelessWidget {
                   ? AppColors.primary.withValues(alpha: 0.1)
                   : AppColors.textSecondary.withValues(alpha: 0.1),
               child: Icon(
-                reward.icon,
+                _rewardIcon(reward.category),
                 color: canAfford ? AppColors.primary : AppColors.textSecondary,
                 size: 24,
               ),
@@ -308,7 +316,7 @@ class _RewardCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    '${reward.pointsCost} điểm',
+                    '${reward.pointsRequired} ${l10n.redeemPointsSuffix}',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
@@ -336,7 +344,7 @@ class _RewardCard extends StatelessWidget {
                         color: Colors.white,
                       ),
                     )
-                  : const Text('Đổi'),
+                  : Text(l10n.redeemPointsRedeem),
             ),
           ],
         ),
