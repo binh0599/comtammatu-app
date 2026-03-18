@@ -3,27 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../domain/feedback_notifier.dart';
 import '../domain/feedback_state.dart';
 
-/// Available quick feedback tags.
-const _kFeedbackTags = [
-  'Ngon',
-  'Nhanh',
-  'Sạch sẽ',
-  'Thân thiện',
-  'Giá hợp lý',
-  'Phần lượng nhiều',
+/// Tag keys used for feedback (stable identifiers for storage).
+const _kFeedbackTagKeys = [
+  'delicious',
+  'fast',
+  'clean',
+  'friendly',
+  'fair_price',
+  'large_portions',
 ];
-
-/// Star rating labels mapped by rating value (1-5).
-const _kRatingLabels = {
-  1: 'Rất tệ',
-  2: 'Tệ',
-  3: 'Bình thường',
-  4: 'Tốt',
-  5: 'Tuyệt vời',
-};
 
 /// Feedback screen for rating a completed order.
 class FeedbackScreen extends ConsumerStatefulWidget {
@@ -52,8 +44,8 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
   void _onSubmit() {
     if (_rating == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Vui lòng chọn số sao đánh giá'),
+        SnackBar(
+          content: Text(context.l10n.feedbackSelectRating),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -95,7 +87,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Cảm ơn bạn!',
+              context.l10n.feedbackThankYou,
               style: Theme.of(ctx).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w700,
                     color: AppColors.textPrimary,
@@ -103,8 +95,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Đánh giá của bạn đã được gửi thành công.\n'
-              'Cơm Tấm Má Tư luôn lắng nghe để phục vụ bạn tốt hơn!',
+              context.l10n.feedbackSuccessMessage,
               textAlign: TextAlign.center,
               style: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
                     color: AppColors.textSecondary,
@@ -127,7 +118,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
-                child: const Text('Quay lại'),
+                child: Text(context.l10n.feedbackBack),
               ),
             ),
           ],
@@ -157,7 +148,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Đánh giá đơn hàng'),
+        title: Text(context.l10n.feedbackTitle),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -224,9 +215,9 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
                           color: AppColors.textOnPrimary,
                         ),
                       )
-                    : const Text(
-                        'Gửi đánh giá',
-                        style: TextStyle(
+                    : Text(
+                        context.l10n.feedbackSubmit,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -279,7 +270,7 @@ class _OrderInfoCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Đơn hàng #$orderId',
+                    context.l10n.feedbackOrderId(orderId.toString()),
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
@@ -287,7 +278,7 @@ class _OrderInfoCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Hãy cho chúng tôi biết trải nghiệm của bạn',
+                    context.l10n.feedbackShareExperience,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: AppColors.textSecondary,
                         ),
@@ -313,6 +304,17 @@ class _StarRatingCard extends StatelessWidget {
   final int rating;
   final ValueChanged<int> onRatingChanged;
 
+  String _ratingLabel(BuildContext context, int rating) {
+    return switch (rating) {
+      1 => context.l10n.feedbackRatingTerrible,
+      2 => context.l10n.feedbackRatingBad,
+      3 => context.l10n.feedbackRatingAverage,
+      4 => context.l10n.feedbackRatingGood,
+      5 => context.l10n.feedbackRatingExcellent,
+      _ => '',
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -326,7 +328,7 @@ class _StarRatingCard extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'Bạn đánh giá thế nào?',
+              context.l10n.feedbackHowWouldYouRate,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
@@ -357,7 +359,7 @@ class _StarRatingCard extends StatelessWidget {
             if (rating > 0) ...[
               const SizedBox(height: 8),
               Text(
-                _kRatingLabels[rating] ?? '',
+                _ratingLabel(context, rating),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.secondary,
                       fontWeight: FontWeight.w600,
@@ -382,6 +384,18 @@ class _FeedbackTagsCard extends StatelessWidget {
   final Set<String> selectedTags;
   final ValueChanged<String> onTagToggled;
 
+  String _tagLabel(BuildContext context, String key) {
+    return switch (key) {
+      'delicious' => context.l10n.feedbackTagDelicious,
+      'fast' => context.l10n.feedbackTagFast,
+      'clean' => context.l10n.feedbackTagClean,
+      'friendly' => context.l10n.feedbackTagFriendly,
+      'fair_price' => context.l10n.feedbackTagFairPrice,
+      'large_portions' => context.l10n.feedbackTagLargePortions,
+      _ => key,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -396,7 +410,7 @@ class _FeedbackTagsCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Điều gì bạn thích?',
+              context.l10n.feedbackWhatDidYouLike,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
@@ -406,10 +420,10 @@ class _FeedbackTagsCard extends StatelessWidget {
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: _kFeedbackTags.map((tag) {
+              children: _kFeedbackTagKeys.map((tag) {
                 final isSelected = selectedTags.contains(tag);
                 return FilterChip(
-                  label: Text(tag),
+                  label: Text(_tagLabel(context, tag)),
                   selected: isSelected,
                   onSelected: (_) => onTagToggled(tag),
                   selectedColor: AppColors.primary.withValues(alpha: 0.15),
@@ -458,7 +472,7 @@ class _CommentCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Nhận xét thêm',
+              context.l10n.feedbackAdditionalComments,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
@@ -470,7 +484,7 @@ class _CommentCard extends StatelessWidget {
               maxLines: 4,
               maxLength: 500,
               decoration: InputDecoration(
-                hintText: 'Chia sẻ trải nghiệm của bạn...',
+                hintText: context.l10n.feedbackCommentHint,
                 hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.textHint,
                     ),

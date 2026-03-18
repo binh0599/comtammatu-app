@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/cart_item.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../domain/cart_notifier.dart';
 
@@ -26,14 +27,14 @@ String _formatPrice(double price) {
   return buffer.toString();
 }
 
-String _paymentLabel(PaymentMethod method) {
+String _paymentLabel(BuildContext context, PaymentMethod method) {
   switch (method) {
     case PaymentMethod.cod:
-      return 'Thanh to\u00e1n khi nh\u1eadn h\u00e0ng';
+      return context.l10n.cartPaymentCod;
     case PaymentMethod.momo:
-      return 'V\u00ed MoMo';
+      return context.l10n.cartPaymentMomo;
     case PaymentMethod.zalopay:
-      return 'ZaloPay';
+      return context.l10n.cartPaymentZalopay;
   }
 }
 
@@ -83,16 +84,16 @@ class CartScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gi\u1ecf h\u00e0ng'),
+        title: Text(context.l10n.cart),
         actions: [
           if (!cartState.isEmpty)
             TextButton(
               onPressed: () {
                 ref.read(cartNotifierProvider.notifier).clearCart();
               },
-              child: const Text(
-                'X\u00f3a t\u1ea5t c\u1ea3',
-                style: TextStyle(color: AppColors.error),
+              child: Text(
+                context.l10n.cartClearAll,
+                style: const TextStyle(color: AppColors.error),
               ),
             ),
         ],
@@ -122,14 +123,14 @@ class _EmptyCart extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Gi\u1ecf h\u00e0ng tr\u1ed1ng',
+              context.l10n.emptyCart,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: AppColors.textSecondary,
                   ),
             ),
             const SizedBox(height: 8),
             Text(
-              'H\u00e3y th\u00eam m\u00f3n \u0103n t\u1eeb th\u1ef1c \u0111\u01a1n\n\u0111\u1ec3 b\u1eaft \u0111\u1ea7u \u0111\u1eb7t h\u00e0ng nh\u00e9!',
+              context.l10n.cartEmptyMessage,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.textHint,
@@ -137,7 +138,7 @@ class _EmptyCart extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             AppButton(
-              label: 'Xem th\u1ef1c \u0111\u01a1n',
+              label: context.l10n.cartViewMenu,
               icon: Icons.restaurant_menu,
               fullWidth: false,
               onPressed: () {
@@ -228,12 +229,12 @@ class _CartContent extends ConsumerWidget {
                       color: AppColors.primary,
                     ),
                     title: Text(
-                      '\u0110\u1ecba ch\u1ec9 giao h\u00e0ng',
+                      context.l10n.cartDeliveryAddress,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     subtitle: Text(
                       cartState.deliveryAddress ??
-                          'Ch\u01b0a ch\u1ecdn \u0111\u1ecba ch\u1ec9',
+                          context.l10n.cartNoAddress,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppColors.textHint,
                           ),
@@ -242,7 +243,7 @@ class _CartContent extends ConsumerWidget {
                       onPressed: () {
                         context.push(AppRoutes.savedAddresses);
                       },
-                      child: const Text('Ch\u1ecdn \u0111\u1ecba ch\u1ec9'),
+                      child: Text(context.l10n.cartSelectAddress),
                     ),
                   ),
                 ),
@@ -251,7 +252,7 @@ class _CartContent extends ConsumerWidget {
 
                 // Payment method
                 Text(
-                  'Ph\u01b0\u01a1ng th\u1ee9c thanh to\u00e1n',
+                  context.l10n.cartPaymentMethod,
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -284,7 +285,7 @@ class _CartContent extends ConsumerWidget {
                               }
                             },
                             title: Text(
-                              _paymentLabel(method),
+                              _paymentLabel(context, method),
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             secondary: Icon(
@@ -316,7 +317,7 @@ class _CartContent extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Chi ti\u1ebft \u0111\u01a1n h\u00e0ng',
+                          context.l10n.cartOrderDetails,
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall
@@ -324,18 +325,18 @@ class _CartContent extends ConsumerWidget {
                         ),
                         const SizedBox(height: 12),
                         _SummaryRow(
-                          label: 'T\u1ea1m t\u00ednh',
+                          label: context.l10n.cartSubtotal,
                           value: _formatPrice(subtotal),
                         ),
                         const SizedBox(height: 8),
                         _SummaryRow(
-                          label: 'Ph\u00ed giao h\u00e0ng',
+                          label: context.l10n.cartDeliveryFee,
                           value: _formatPrice(deliveryFee),
                         ),
                         if (discount > 0) ...[
                           const SizedBox(height: 8),
                           _SummaryRow(
-                            label: 'Gi\u1ea3m gi\u00e1',
+                            label: context.l10n.cartDiscount,
                             value: '-${_formatPrice(discount)}',
                             valueColor: AppColors.success,
                           ),
@@ -345,7 +346,7 @@ class _CartContent extends ConsumerWidget {
                           child: Divider(height: 1),
                         ),
                         _SummaryRow(
-                          label: 'T\u1ed5ng c\u1ed9ng',
+                          label: context.l10n.cartTotal,
                           value: _formatPrice(total),
                           isBold: true,
                         ),
@@ -382,7 +383,7 @@ class _CartContent extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'T\u1ed5ng c\u1ed9ng',
+                        context.l10n.cartTotal,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -400,7 +401,7 @@ class _CartContent extends ConsumerWidget {
                 ),
                 Expanded(
                   child: AppButton(
-                    label: '\u0110\u1eb7t h\u00e0ng',
+                    label: context.l10n.cartPlaceOrder,
                     icon: Icons.shopping_bag_outlined,
                     isLoading: isSubmitting,
                     onPressed: isSubmitting
@@ -426,8 +427,8 @@ class _CartContent extends ConsumerWidget {
     if (cartState.orderError == null && !cartState.isSubmitting) {
       // Order succeeded — cart was cleared by placeOrder()
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('\u0110\u1eb7t h\u00e0ng th\u00e0nh c\u00f4ng!'),
+        SnackBar(
+          content: Text(context.l10n.orderSuccess),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -545,8 +546,7 @@ class _CartItemTile extends StatelessWidget {
               onChanged: onNoteChanged,
               controller: TextEditingController(text: item.note ?? ''),
               decoration: InputDecoration(
-                hintText:
-                    'Ghi ch\u00fa (vd: \u00edt h\u00e0nh, th\u00eam n\u01b0\u1edbc m\u1eafm...)',
+                hintText: context.l10n.cartNoteHint,
                 hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: AppColors.textHint,
                     ),

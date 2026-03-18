@@ -8,6 +8,7 @@ import '../../../core/cache/cache_service.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/storage/app_database.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/extensions/context_extensions.dart';
 
 // -- Data models ----------------------------------------------------------
 
@@ -57,13 +58,21 @@ class MenuItem {
 
 // -- Sample data ----------------------------------------------------------
 
-const _kCategories = [
-  'Tất cả',
+const _kCategoryKeys = [
+  '',
   'Cơm tấm',
   'Món thêm',
   'Nước uống',
   'Tráng miệng',
 ];
+
+List<String> _categoryLabels(BuildContext context) => [
+      context.l10n.all,
+      context.l10n.menuCategoryComTam,
+      context.l10n.menuCategorySides,
+      context.l10n.menuCategoryDrinks,
+      context.l10n.menuCategoryDesserts,
+    ];
 
 const _kSampleItems = [
   MenuItem(
@@ -309,7 +318,7 @@ final filteredMenuItemsProvider = Provider<List<MenuItem>>((ref) {
 
   return items.where((item) {
     final matchesCategory =
-        catIndex == 0 || item.category == _kCategories[catIndex];
+        catIndex == 0 || item.category == _kCategoryKeys[catIndex];
     final matchesQuery =
         query.isEmpty || item.name.toLowerCase().contains(query);
     return matchesCategory && matchesQuery;
@@ -361,15 +370,15 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Thực đơn'),
+        title: Text(context.l10n.menu),
         actions: [
           if (menuState is MenuLoaded && menuState.fromCache)
-            const Padding(
-              padding: EdgeInsets.only(right: 8),
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
               child: Chip(
                 label: Text(
-                  'Ngoại tuyến',
-                  style: TextStyle(fontSize: 11, color: Colors.white),
+                  context.l10n.menuOffline,
+                  style: const TextStyle(fontSize: 11, color: Colors.white),
                 ),
                 backgroundColor: AppColors.warning,
                 visualDensity: VisualDensity.compact,
@@ -387,7 +396,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
               onChanged: (value) =>
                   ref.read(menuSearchQueryProvider.notifier).state = value,
               decoration: InputDecoration(
-                hintText: 'Tìm món ăn...',
+                hintText: context.l10n.menuSearchHint,
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
                 fillColor: AppColors.surface,
@@ -412,12 +421,12 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: _kCategories.length,
+              itemCount: _kCategoryKeys.length,
               separatorBuilder: (_, __) => const SizedBox(width: 8),
               itemBuilder: (context, index) {
                 final isSelected = selectedCategory == index;
                 return ChoiceChip(
-                  label: Text(_kCategories[index]),
+                  label: Text(_categoryLabels(context)[index]),
                   selected: isSelected,
                   onSelected: (_) =>
                       ref.read(menuCategoryProvider.notifier).state = index,
@@ -458,7 +467,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            'Không tìm thấy món ăn',
+                            context.l10n.menuNoResults,
                             style:
                                 Theme.of(context).textTheme.bodyLarge?.copyWith(
                                       color: AppColors.textSecondary,
@@ -555,9 +564,9 @@ class _MenuItemCard extends StatelessWidget {
                         color: AppColors.secondary,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Text(
-                        'Hot',
-                        style: TextStyle(
+                      child: Text(
+                        context.l10n.menuHotBadge,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -611,7 +620,7 @@ class _MenuItemCard extends StatelessWidget {
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Đã thêm ${item.name} vào giỏ hàng'),
+                      content: Text(context.l10n.menuAddedToCart(item.name)),
                       duration: const Duration(seconds: 1),
                       behavior: SnackBarBehavior.floating,
                     ),
@@ -624,7 +633,7 @@ class _MenuItemCard extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                child: const Text('Thêm'),
+                child: Text(context.l10n.menuAdd),
               ),
             ),
           ],

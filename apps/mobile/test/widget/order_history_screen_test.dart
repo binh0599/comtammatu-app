@@ -1,11 +1,14 @@
+import 'package:comtammatu/core/cache/cache_service.dart';
 import 'package:comtammatu/features/order/data/order_repository.dart';
 import 'package:comtammatu/features/order/domain/order_history_notifier.dart';
 import 'package:comtammatu/features/order/presentation/order_history_screen.dart';
+import 'package:comtammatu/l10n/app_localizations.dart';
 import 'package:comtammatu/models/delivery_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MockOrderRepository extends Mock implements OrderRepository {}
 
@@ -39,9 +42,13 @@ DeliveryOrder _sampleOrder({
 
 void main() {
   late MockOrderRepository mockOrderRepo;
+  late CacheService cacheService;
 
-  setUp(() {
+  setUp(() async {
     mockOrderRepo = MockOrderRepository();
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    cacheService = CacheService(prefs: prefs);
   });
 
   /// Build OrderHistoryScreen with a pre-loaded [OrderHistoryState].
@@ -49,12 +56,10 @@ void main() {
     return ProviderScope(
       overrides: [
         orderRepositoryProvider.overrideWithValue(mockOrderRepo),
+        cacheServiceProvider.overrideWithValue(cacheService),
         if (initialState != null)
           orderHistoryNotifierProvider.overrideWith(
             (ref) {
-              // We need a custom notifier that starts with the given state.
-              // Because the constructor always starts with default state, we
-              // use a tiny helper subclass.
               return _PreloadedOrderHistoryNotifier(
                 orderRepository: mockOrderRepo,
                 preloadedState: initialState,
@@ -62,8 +67,11 @@ void main() {
             },
           ),
       ],
-      child: const MaterialApp(
-        home: OrderHistoryScreen(),
+      child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('vi'),
+        home: const OrderHistoryScreen(),
       ),
     );
   }

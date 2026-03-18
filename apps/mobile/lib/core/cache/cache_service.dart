@@ -14,6 +14,10 @@ class _CacheKeys {
   static const String cart = 'cache_cart';
   static const String orders = 'cache_orders';
   static const String stores = 'cache_stores';
+  static const String loyalty = 'cache_loyalty';
+  static const String addresses = 'cache_addresses';
+  static const String vouchersAvailable = 'cache_vouchers_available';
+  static const String vouchersMine = 'cache_vouchers_mine';
   static String timestamp(String key) => '${key}_timestamp';
 }
 
@@ -104,6 +108,45 @@ class CacheService {
     return _getJsonList(_CacheKeys.stores);
   }
 
+  // -- Loyalty --------------------------------------------------------------
+
+  /// Caches the loyalty dashboard as a single JSON object.
+  Future<void> cacheLoyalty(Map<String, dynamic> data) async {
+    await _setJson(_CacheKeys.loyalty, data);
+  }
+
+  /// Returns cached loyalty dashboard, or null if no cache.
+  Map<String, dynamic>? getCachedLoyalty() {
+    return _getJson(_CacheKeys.loyalty);
+  }
+
+  // -- Addresses ------------------------------------------------------------
+
+  /// Caches the saved addresses list.
+  Future<void> cacheAddresses(List<Map<String, dynamic>> addresses) async {
+    await _setJsonList(_CacheKeys.addresses, addresses);
+  }
+
+  /// Returns cached addresses, or empty list if no cache.
+  List<Map<String, dynamic>> getCachedAddresses() {
+    return _getJsonList(_CacheKeys.addresses);
+  }
+
+  // -- Vouchers -------------------------------------------------------------
+
+  /// Caches the available vouchers list.
+  Future<void> cacheVouchers(
+    String key,
+    List<Map<String, dynamic>> vouchers,
+  ) async {
+    await _setJsonList(key, vouchers);
+  }
+
+  /// Returns cached vouchers for the given key, or empty list if no cache.
+  List<Map<String, dynamic>> getCachedVouchers(String key) {
+    return _getJsonList(key);
+  }
+
   // -- Clear ----------------------------------------------------------------
 
   /// Clears all cached data.
@@ -113,14 +156,20 @@ class CacheService {
       return;
     }
     final prefs = _prefs!;
-    await prefs.remove(_CacheKeys.menu);
-    await prefs.remove(_CacheKeys.cart);
-    await prefs.remove(_CacheKeys.orders);
-    await prefs.remove(_CacheKeys.stores);
-    await prefs.remove(_CacheKeys.timestamp(_CacheKeys.menu));
-    await prefs.remove(_CacheKeys.timestamp(_CacheKeys.cart));
-    await prefs.remove(_CacheKeys.timestamp(_CacheKeys.orders));
-    await prefs.remove(_CacheKeys.timestamp(_CacheKeys.stores));
+    final keys = [
+      _CacheKeys.menu,
+      _CacheKeys.cart,
+      _CacheKeys.orders,
+      _CacheKeys.stores,
+      _CacheKeys.loyalty,
+      _CacheKeys.addresses,
+      _CacheKeys.vouchersAvailable,
+      _CacheKeys.vouchersMine,
+    ];
+    for (final key in keys) {
+      await prefs.remove(key);
+      await prefs.remove(_CacheKeys.timestamp(key));
+    }
   }
 
   // -- Timestamp & freshness ------------------------------------------------
@@ -203,6 +252,33 @@ class CacheService {
       _CacheKeys.timestamp(key),
       DateTime.now().millisecondsSinceEpoch,
     );
+  }
+
+  Future<void> _setJson(
+    String key,
+    Map<String, dynamic> data,
+  ) async {
+    final prefs = _prefs!;
+    final jsonString = jsonEncode(data);
+    await prefs.setString(key, jsonString);
+    await prefs.setInt(
+      _CacheKeys.timestamp(key),
+      DateTime.now().millisecondsSinceEpoch,
+    );
+  }
+
+  Map<String, dynamic>? _getJson(String key) {
+    final prefs = _prefs;
+    if (prefs == null) return null;
+    final jsonString = prefs.getString(key);
+    if (jsonString == null) return null;
+    try {
+      return Map<String, dynamic>.from(
+        jsonDecode(jsonString) as Map,
+      );
+    } catch (_) {
+      return null;
+    }
   }
 
   List<Map<String, dynamic>> _getJsonList(String key) {

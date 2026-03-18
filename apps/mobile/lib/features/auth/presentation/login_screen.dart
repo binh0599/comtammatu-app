@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../domain/auth_notifier.dart';
@@ -78,7 +79,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Cơm Tấm Má Tư',
+                  context.l10n.appTitle,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                         color: AppColors.primary,
@@ -87,7 +88,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Đăng nhập để tích điểm và đặt hàng',
+                  context.l10n.authLoginSubtitle,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textSecondary,
@@ -98,16 +99,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 // Phone field
                 AppTextField(
                   controller: _phoneController,
-                  label: 'Số điện thoại',
-                  hint: '0901234567',
+                  label: context.l10n.authPhone,
+                  hint: context.l10n.authPhoneHint,
                   keyboardType: TextInputType.phone,
                   prefixIcon: const Icon(Icons.phone_outlined),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Vui lòng nhập số điện thoại';
+                      return context.l10n.authPhoneRequired;
                     }
                     if (value.length < 10) {
-                      return 'Số điện thoại không hợp lệ';
+                      return context.l10n.authPhoneInvalid;
                     }
                     return null;
                   },
@@ -117,16 +118,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 // Password field
                 AppTextField(
                   controller: _passwordController,
-                  label: 'Mật khẩu',
-                  hint: 'Nhập mật khẩu',
+                  label: context.l10n.authPassword,
+                  hint: context.l10n.authPasswordHint,
                   obscureText: true,
                   prefixIcon: const Icon(Icons.lock_outlined),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Vui lòng nhập mật khẩu';
+                      return context.l10n.authPasswordRequired;
                     }
                     if (value.length < 6) {
-                      return 'Mật khẩu phải có ít nhất 6 ký tự';
+                      return context.l10n.authPasswordMinLength;
                     }
                     return null;
                   },
@@ -140,7 +141,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     onPressed: () {
                       // TODO: Forgot password flow (Phase 2)
                     },
-                    child: const Text('Quên mật khẩu?'),
+                    child: Text(context.l10n.authForgotPassword),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -160,7 +161,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 AppButton(
                   onPressed: _isLoading ? null : _handleLogin,
                   isLoading: _isLoading,
-                  label: 'Đăng nhập',
+                  label: context.l10n.login,
                 ),
                 const SizedBox(height: 16),
 
@@ -169,12 +170,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Chưa có tài khoản? ',
+                      context.l10n.authNoAccount,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     TextButton(
                       onPressed: () => context.push(AppRoutes.register),
-                      child: const Text('Đăng ký ngay'),
+                      child: Text(context.l10n.authRegisterNow),
                     ),
                   ],
                 ),

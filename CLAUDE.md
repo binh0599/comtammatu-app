@@ -4,21 +4,23 @@
 
 ---
 
-## 0. TRẠNG THÁI HIỆN TẠI (Updated: 2026-03-16)
+## 0. TRẠNG THÁI HIỆN TẠI (Updated: 2026-03-18)
 
-**Phase 0–4 HOÀN THÀNH.** App đã có 113 Dart files, 14 test files (167+ tests), CI PASSING.
+**Phase 0–4 HOÀN THÀNH. P5.3 + P5.4 HOÀN THÀNH.** App đã có 113+ Dart files, 14 test files (168 tests), CI PASSING.
 
 | Đã xong | Chưa xong |
 |---------|-----------|
 | 17 Freezed models | Push notifications (P5.1) |
 | 90% screens wired to API | Earn/Redeem points screens (P5.2) |
-| Offline cache (menu + store) | Localization completion (P5.3) |
-| PostHog + Sentry | Offline cache expansion (P5.4) |
-| Deep linking (Android + iOS) | E2E tests (P6.2) |
-| Fastlane + CI/CD | Monetary `double` → `int` audit (P6.1) |
+| Localization (258 strings, 15 screens) | E2E tests (P6.2) |
+| Offline cache (6/6 repos cache-first) | Monetary `double` → `int` audit (P6.1) |
+| PostHog + Sentry | Vietnamese diacritics audit |
+| Deep linking (Android + iOS) | |
+| Fastlane + CI/CD | |
+| Connectivity listener | |
 
-**Next:** Phase 5 — Push Notifications, Points screens, Localization, Offline expansion.
-**Blockers:** Logo, Apple/Google dev accounts, domain setup. Xem `tasks/todo.md` → "Chờ User Action".
+**Next:** P5.1 Push Notifications, P5.2 Points screens.
+**Blockers:** Logo, Apple/Google dev accounts, domain setup, Firebase FCM. Xem `tasks/todo.md` → "Chờ User Action".
 
 ---
 

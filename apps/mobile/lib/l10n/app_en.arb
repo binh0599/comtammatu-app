@@ -1,5 +1,6 @@
 {
   "@@locale": "en",
+
   "appTitle": "Cơm Tấm Má Tư",
   "home": "Home",
   "menu": "Menu",
@@ -65,25 +66,392 @@
   "pointsEarned": "You earned {points} points",
   "@pointsEarned": {
     "placeholders": {
-      "points": {
-        "type": "int"
-      }
+      "points": { "type": "int" }
     }
   },
   "itemCount": "{count} items",
   "@itemCount": {
     "placeholders": {
-      "count": {
-        "type": "int"
-      }
+      "count": { "type": "int" }
     }
   },
   "priceFormat": "{price}đ",
   "@priceFormat": {
     "placeholders": {
-      "price": {
-        "type": "String"
-      }
+      "price": { "type": "String" }
+    }
+  },
+
+  "authLoginSubtitle": "Login to earn points and order food",
+  "authPhone": "Phone number",
+  "authPhoneHint": "0901234567",
+  "authPhoneRequired": "Please enter your phone number",
+  "authPhoneInvalid": "Invalid phone number",
+  "authPassword": "Password",
+  "authPasswordHint": "Enter password",
+  "authPasswordRequired": "Please enter your password",
+  "authPasswordMinLength": "Password must be at least 6 characters",
+  "authForgotPassword": "Forgot password?",
+  "authLoginFailed": "Login failed. Please try again.",
+  "authNoAccount": "Don't have an account? ",
+  "authRegisterNow": "Register now",
+  "authCreateAccount": "Create a new account",
+  "authRegisterSubtitle": "Register to earn points and get offers",
+  "authFullName": "Full name",
+  "authFullNameHint": "Nguyễn Văn A",
+  "authFullNameRequired": "Please enter your full name",
+  "authFullNameMinLength": "Name must be at least 2 characters",
+  "authPasswordHintShort": "At least 6 characters",
+  "authConfirmPassword": "Confirm password",
+  "authConfirmPasswordHint": "Re-enter password",
+  "authConfirmPasswordRequired": "Please confirm your password",
+  "authPasswordMismatch": "Passwords do not match",
+  "authReferralCode": "Referral code (optional)",
+  "authReferralCodeHint": "Enter referral code if you have one",
+  "authRegisterFailed": "Registration failed. Please try again.",
+  "authHasAccount": "Already have an account? ",
+  "authOtpTitle": "OTP Verification",
+  "authOtpEnterCode": "Enter verification code",
+  "authOtpSentTo": "OTP code has been sent to\n",
+  "authOtpRequired": "Please enter the complete OTP code",
+  "authOtpInvalid": "Invalid OTP code. Please try again.",
+  "authOtpResendCountdown": "Resend code in {seconds}s",
+  "@authOtpResendCountdown": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "authOtpResend": "Resend OTP",
+  "authOtpResent": "OTP code resent",
+
+  "homeQuickActions": "Quick actions",
+  "homeAccumulatedPoints": "Accumulated points",
+  "homeAvailablePoints": "available points",
+  "homePromotionsForYou": "Promotions for you",
+  "homeLoadingPromotions": "Loading promotions...",
+  "homeNoPromotions": "No promotions available",
+  "homeEligible": "Eligible",
+  "homeRecentTransactions": "Recent transactions",
+  "homePointsToNextTier": "{points} more points to reach {tierName}",
+  "@homePointsToNextTier": {
+    "placeholders": {
+      "points": { "type": "String" },
+      "tierName": { "type": "String" }
+    }
+  },
+
+  "menuSearchHint": "Search for dishes...",
+  "menuNoResults": "No dishes found",
+  "menuOffline": "Offline",
+  "menuHotBadge": "Hot",
+  "menuAdd": "Add",
+  "menuAddedToCart": "Added {name} to cart",
+  "@menuAddedToCart": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "menuCategoryComTam": "Broken rice",
+  "menuCategorySides": "Sides",
+  "menuCategoryDrinks": "Drinks",
+  "menuCategoryDesserts": "Desserts",
+
+  "cartClearAll": "Clear all",
+  "cartEmptyMessage": "Add dishes from the menu\nto start ordering!",
+  "cartViewMenu": "View menu",
+  "cartDeliveryAddress": "Delivery address",
+  "cartNoAddress": "No address selected",
+  "cartSelectAddress": "Select address",
+  "cartPaymentMethod": "Payment method",
+  "cartPaymentCod": "Cash on delivery",
+  "cartPaymentMomo": "MoMo Wallet",
+  "cartPaymentZalopay": "ZaloPay",
+  "cartOrderDetails": "Order details",
+  "cartSubtotal": "Subtotal",
+  "cartDeliveryFee": "Delivery fee",
+  "cartDiscount": "Discount",
+  "cartTotal": "Total",
+  "cartPlaceOrder": "Place order",
+  "cartNoteHint": "Note (e.g.: less onion, extra fish sauce...)",
+
+  "orderCannotLoad": "Cannot load orders",
+  "orderStatusDelivered": "Delivered",
+  "orderStatusDelivering": "Delivering",
+  "orderStatusPickedUp": "Picked up",
+  "orderStatusPending": "Pending",
+  "orderStatusConfirmed": "Confirmed",
+  "orderStatusPreparing": "Preparing",
+  "orderStatusCancelled": "Cancelled",
+  "orderFilterDelivering": "Delivering",
+  "orderFilterDelivered": "Delivered",
+  "orderFilterCancelled": "Cancelled",
+  "orderEmptyAll": "No orders yet",
+  "orderEmptyDelivering": "No active deliveries",
+  "orderEmptyDelivered": "No completed orders",
+  "orderEmptyCancelled": "No cancelled orders",
+  "orderEmptyHint": "Order from the menu\nto get started!",
+  "orderNumber": "Order #{orderId}",
+  "@orderNumber": {
+    "placeholders": {
+      "orderId": { "type": "String" }
+    }
+  },
+  "orderPointsEarned": "+{points} points",
+  "@orderPointsEarned": {
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+  "orderTrack": "Track",
+  "orderRate": "Rate",
+  "orderReorder": "Reorder",
+  "orderReorderAdding": "Adding items to cart...",
+
+  "loyaltyCannotLoad": "Cannot load loyalty data",
+  "loyaltyPointsSuffix": "points",
+  "loyaltyTierName": "{name} tier",
+  "@loyaltyTierName": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "loyaltyPointsNeeded": "Need {points} more points to reach {tierName}",
+  "@loyaltyPointsNeeded": {
+    "placeholders": {
+      "points": { "type": "int" },
+      "tierName": { "type": "String" }
+    }
+  },
+  "loyaltyCurrentBenefits": "Current benefits",
+  "loyaltyTransactionHistory": "Transaction history",
+  "loyaltyNoTransactions": "No transactions yet",
+  "loyaltyPointsFormat": "{sign}{points} points",
+  "@loyaltyPointsFormat": {
+    "placeholders": {
+      "sign": { "type": "String" },
+      "points": { "type": "int" }
+    }
+  },
+
+  "profileUser": "User",
+  "profilePointsAccumulated": "{points} accumulated points",
+  "@profilePointsAccumulated": {
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+  "profileOffers": "Offers",
+  "profileStores": "Stores",
+  "profileEditInfo": "Edit information",
+  "profileMyOffers": "My offers",
+  "profileSupport": "Support",
+  "profileHotline": "Contact hotline: 1900 1234",
+  "profileLogoutConfirm": "Are you sure you want to logout?",
+  "profileAppVersion": "Cơm Tấm Má Tư v{version}",
+  "@profileAppVersion": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+
+  "editProfileTitle": "Edit profile",
+  "editProfileName": "Full name",
+  "editProfileNameHint": "Enter full name",
+  "editProfileNameRequired": "Please enter your full name",
+  "editProfileEmail": "Email",
+  "editProfileEmailHint": "Enter email",
+  "editProfileEmailInvalid": "Invalid email",
+  "editProfileDob": "Date of birth",
+  "editProfileDobHint": "Select date of birth",
+  "editProfileDobCancel": "Cancel",
+  "editProfileDobConfirm": "Select",
+  "editProfileGender": "Gender",
+  "editProfileGenderMale": "Male",
+  "editProfileGenderFemale": "Female",
+  "editProfileGenderOther": "Other",
+  "editProfileSave": "Save changes",
+  "editProfileSuccess": "Profile updated successfully",
+  "editProfileFeatureInDev": "Feature in development",
+
+  "addressCannotLoad": "Cannot load addresses",
+  "addressEmpty": "No saved addresses",
+  "addressDeleteTitle": "Delete address",
+  "addressDeleteConfirm": "Are you sure you want to delete this address?",
+  "addressDefault": "Default",
+  "addressSetDefault": "Set as default",
+  "addressAddNew": "Add new address",
+  "addressEditTitle": "Edit address",
+  "addressTypeLabel": "Address type",
+  "addressTypeHome": "Home",
+  "addressTypeWork": "Work",
+  "addressTypeOther": "Other",
+  "addressStreet": "Address",
+  "addressStreetHint": "House number, street name",
+  "addressStreetRequired": "Please enter an address",
+  "addressWard": "Ward",
+  "addressWardHint": "Enter ward",
+  "addressWardRequired": "Please enter ward",
+  "addressDistrict": "District",
+  "addressDistrictHint": "Enter district",
+  "addressDistrictRequired": "Please enter district",
+  "addressCity": "City",
+  "addressCityHint": "Enter city",
+  "addressCityRequired": "Please enter city",
+  "addressUpdate": "Update",
+  "addressAdd": "Add",
+
+  "storeNoResults": "No stores found",
+  "storeMapPlaceholder": "Store map",
+  "storeMapSubtitle": "Google Maps integration will display here",
+  "storeOpeningHours": "Hours: {open} - {close}",
+  "@storeOpeningHours": {
+    "placeholders": {
+      "open": { "type": "String" },
+      "close": { "type": "String" }
+    }
+  },
+  "storeDirections": "Directions",
+  "storeSortedByDistance": "Sorted by nearest distance",
+  "storeNearMe": "Near me",
+
+  "voucherAvailable": "Available",
+  "voucherMine": "Mine",
+  "voucherRedeemConfirmTitle": "Confirm redeem voucher",
+  "voucherRedeemConfirmMessage": "You will use {points} points to redeem this voucher.",
+  "@voucherRedeemConfirmMessage": {
+    "placeholders": {
+      "points": { "type": "String" }
+    }
+  },
+  "voucherRedeemNow": "Redeem now",
+  "voucherRedeemSuccess": "Successfully redeemed \"{title}\" voucher!",
+  "@voucherRedeemSuccess": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  },
+  "voucherRedeemFailed": "Failed to redeem voucher: {error}",
+  "@voucherRedeemFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "voucherCodeCopied": "Code \"{code}\" copied. Apply when ordering!",
+  "@voucherCodeCopied": {
+    "placeholders": {
+      "code": { "type": "String" }
+    }
+  },
+  "voucherEmptyAvailable": "No vouchers to redeem.\nCheck back later!",
+  "voucherEmptyMine": "You have no vouchers.\nRedeem points to get offers!",
+  "voucherDiscountPercent": "{value}% off",
+  "@voucherDiscountPercent": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "voucherDiscountFixed": "{value}₫ off",
+  "@voucherDiscountFixed": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "voucherMinOrder": "Min order: {amount}₫",
+  "@voucherMinOrder": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "voucherExpiry": "Exp: {date}",
+  "@voucherExpiry": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "voucherUse": "Use",
+
+  "notifReadAll": "Read all",
+  "notifCannotLoad": "Cannot load notifications",
+  "notifDeleted": "Notification deleted",
+  "notifUndo": "Undo",
+  "notifJustNow": "Just now",
+  "notifMinutesAgo": "{minutes} min ago",
+  "@notifMinutesAgo": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "notifHoursAgo": "{hours}h ago",
+  "@notifHoursAgo": {
+    "placeholders": {
+      "hours": { "type": "int" }
+    }
+  },
+  "notifYesterday": "Yesterday",
+  "notifDayBeforeYesterday": "2 days ago",
+  "notifDaysAgo": "{days} days ago",
+  "@notifDaysAgo": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+
+  "feedbackTitle": "Rate your order",
+  "feedbackOrderId": "Order #{orderId}",
+  "@feedbackOrderId": {
+    "placeholders": {
+      "orderId": { "type": "String" }
+    }
+  },
+  "feedbackShareExperience": "Tell us about your experience",
+  "feedbackHowWouldYouRate": "How would you rate?",
+  "feedbackWhatDidYouLike": "What did you like?",
+  "feedbackAdditionalComments": "Additional comments",
+  "feedbackCommentHint": "Share your experience...",
+  "feedbackSubmit": "Submit feedback",
+  "feedbackThankYou": "Thank you!",
+  "feedbackSuccessMessage": "Your feedback has been submitted.\nCơm Tấm Má Tư always listens to serve you better!",
+  "feedbackBack": "Go back",
+  "feedbackSelectRating": "Please select a star rating",
+  "feedbackTagDelicious": "Delicious",
+  "feedbackTagFast": "Fast",
+  "feedbackTagClean": "Clean",
+  "feedbackTagFriendly": "Friendly",
+  "feedbackTagFairPrice": "Fair price",
+  "feedbackTagLargePortions": "Large portions",
+  "feedbackRatingTerrible": "Terrible",
+  "feedbackRatingBad": "Bad",
+  "feedbackRatingAverage": "Average",
+  "feedbackRatingGood": "Good",
+  "feedbackRatingExcellent": "Excellent",
+
+  "deliveryCannotLoad": "Cannot load delivery info",
+  "deliveryStatusWaiting": "Waiting for driver",
+  "deliveryStatusAccepted": "Order accepted",
+  "deliveryStatusPickedUp": "Picked up",
+  "deliveryStatusOnTheWay": "On the way",
+  "deliveryStatusArrived": "Arrived",
+  "deliveryStatusCompleted": "Completed",
+  "deliveryOrderStatus": "Order status",
+  "deliveryDriver": "Driver",
+  "deliveryUpdating": "Updating...",
+  "deliveryMapPlaceholder": "Delivery map",
+  "deliveryEstimatedTime": "Estimated time",
+  "deliveryMinutesLeft": "About {minutes} min remaining",
+  "@deliveryMinutesLeft": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "deliveryArriving": "Arriving",
+  "deliveryOrderCode": "Order code",
+  "deliveryStatus": "Status",
+  "deliveryOrderInfo": "Order information",
+
+  "errorWithMessage": "Error: {message}",
+  "@errorWithMessage": {
+    "placeholders": {
+      "message": { "type": "String" }
     }
   }
 }

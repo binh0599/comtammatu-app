@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../../../shared/utils/formatters.dart';
 import '../../loyalty/domain/loyalty_notifier.dart';
 import '../../loyalty/domain/loyalty_state.dart';
@@ -32,7 +33,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cơm Tấm Má Tư'),
+        title: Text(context.l10n.appTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
@@ -57,7 +58,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                 // Quick actions
                 Text(
-                  'Thao tác nhanh',
+                  context.l10n.homeQuickActions,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 12),
@@ -66,7 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     Expanded(
                       child: _QuickAction(
                         icon: Icons.qr_code_scanner,
-                        label: 'Điểm danh',
+                        label: context.l10n.checkIn,
                         onTap: () => context.push(AppRoutes.checkin),
                       ),
                     ),
@@ -74,7 +75,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     Expanded(
                       child: _QuickAction(
                         icon: Icons.restaurant_menu,
-                        label: 'Thực đơn',
+                        label: context.l10n.menu,
                         onTap: () => context.go(AppRoutes.menu),
                       ),
                     ),
@@ -82,7 +83,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     Expanded(
                       child: _QuickAction(
                         icon: Icons.delivery_dining,
-                        label: 'Giao hàng',
+                        label: context.l10n.delivery,
                         onTap: () => context.go(AppRoutes.delivery),
                       ),
                     ),
@@ -90,7 +91,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     Expanded(
                       child: _QuickAction(
                         icon: Icons.location_on_outlined,
-                        label: 'Cửa hàng',
+                        label: context.l10n.profileStores,
                         onTap: () => context.go(AppRoutes.storeLocator),
                       ),
                     ),
@@ -137,7 +138,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Điểm tích lũy',
+                  context.l10n.homeAccumulatedPoints,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.white70,
                       ),
@@ -177,7 +178,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             const SizedBox(height: 4),
             Text(
-              'điểm khả dụng',
+              context.l10n.homeAvailablePoints,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Colors.white70,
                   ),
@@ -197,7 +198,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 loyaltyState.dashboard.tier.nextTier != null) ...[
               const SizedBox(height: 8),
               Text(
-                'Còn ${Formatters.formatNumber(loyaltyState.dashboard.tier.nextTier!.pointsNeeded)} điểm nữa lên hạng ${loyaltyState.dashboard.tier.nextTier!.name}',
+                context.l10n.homePointsToNextTier(
+                  Formatters.formatNumber(
+                      loyaltyState.dashboard.tier.nextTier!.pointsNeeded),
+                  loyaltyState.dashboard.tier.nextTier!.name,
+                ),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Colors.white70,
                     ),
@@ -214,7 +219,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Ưu đãi dành cho bạn',
+          context.l10n.homePromotionsForYou,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 12),
@@ -262,7 +267,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                'Đủ điều kiện',
+                                context.l10n.homeEligible,
                                 style: Theme.of(context)
                                     .textTheme
                                     .labelSmall
@@ -284,8 +289,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: Center(
                 child: Text(
                   loyaltyState is LoyaltyLoading
-                      ? 'Đang tải ưu đãi...'
-                      : 'Chưa có ưu đãi nào',
+                      ? context.l10n.homeLoadingPromotions
+                      : context.l10n.homeNoPromotions,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -311,12 +316,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Giao dịch gần đây',
+              context.l10n.homeRecentTransactions,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             TextButton(
               onPressed: () => context.go(AppRoutes.loyalty),
-              child: const Text('Xem tất cả'),
+              child: Text(context.l10n.seeAll),
             ),
           ],
         ),

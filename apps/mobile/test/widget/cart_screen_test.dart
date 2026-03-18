@@ -1,13 +1,16 @@
+import 'package:comtammatu/core/cache/cache_service.dart';
 import 'package:comtammatu/features/cart/domain/cart_notifier.dart';
 import 'package:comtammatu/features/cart/domain/cart_state.dart';
 import 'package:comtammatu/features/cart/presentation/cart_screen.dart';
 import 'package:comtammatu/features/order/data/order_repository.dart';
+import 'package:comtammatu/l10n/app_localizations.dart';
 import 'package:comtammatu/models/cart_item.dart';
 import 'package:comtammatu/models/menu_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MockOrderRepository extends Mock implements OrderRepository {}
 
@@ -21,15 +24,20 @@ MenuItem _menuItem({
 
 void main() {
   late MockOrderRepository mockOrderRepo;
+  late CacheService cacheService;
 
-  setUp(() {
+  setUp(() async {
     mockOrderRepo = MockOrderRepository();
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    cacheService = CacheService(prefs: prefs);
   });
 
   Widget buildSubject({CartState? initialState}) {
     return ProviderScope(
       overrides: [
         orderRepositoryProvider.overrideWithValue(mockOrderRepo),
+        cacheServiceProvider.overrideWithValue(cacheService),
         if (initialState != null)
           cartNotifierProvider.overrideWith(
             (ref) {
@@ -48,8 +56,11 @@ void main() {
             },
           ),
       ],
-      child: const MaterialApp(
-        home: CartScreen(),
+      child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('vi'),
+        home: const CartScreen(),
       ),
     );
   }

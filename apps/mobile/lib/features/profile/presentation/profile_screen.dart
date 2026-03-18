@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../../auth/domain/auth_notifier.dart';
 import '../../auth/domain/auth_state.dart';
 import '../../loyalty/domain/loyalty_notifier.dart';
@@ -30,7 +31,7 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tài khoản'),
+        title: Text(context.l10n.profile),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
@@ -60,7 +61,7 @@ class ProfileScreen extends ConsumerWidget {
 
             // App version
             Text(
-              'Cơm Tấm Má Tư v1.0.0',
+              context.l10n.profileAppVersion('1.0.0'),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppColors.textHint,
                   ),
@@ -88,10 +89,10 @@ class _UserHeader extends ConsumerWidget {
     final String displayPhone;
     if (authState is Authenticated) {
       final user = authState.user;
-      displayName = user.userMetadata?['full_name'] as String? ?? 'Người dùng';
+      displayName = user.userMetadata?['full_name'] as String? ?? context.l10n.profileUser;
       displayPhone = user.phone ?? '';
     } else {
-      displayName = 'Người dùng';
+      displayName = context.l10n.profileUser;
       displayPhone = '';
     }
 
@@ -101,9 +102,9 @@ class _UserHeader extends ConsumerWidget {
     final Color tierColor;
     if (loyaltyState is LoyaltyLoaded) {
       final dashboard = loyaltyState.dashboard;
-      tierName = 'Hạng ${dashboard.tier.name}';
+      tierName = context.l10n.loyaltyTierName(dashboard.tier.name);
       final pts = dashboard.member.availablePoints.toInt();
-      pointsText = '$pts điểm tích lũy';
+      pointsText = context.l10n.profilePointsAccumulated(pts);
       tierColor = _tierColor(dashboard.tier.tierCode);
     } else {
       tierName = '';
@@ -239,25 +240,25 @@ class _QuickActions extends StatelessWidget {
         children: [
           _QuickActionItem(
             icon: Icons.receipt_long_outlined,
-            label: 'Đơn hàng',
+            label: context.l10n.orders,
             onTap: () => context.go(AppRoutes.orders),
           ),
           const SizedBox(width: 12),
           _QuickActionItem(
             icon: Icons.local_offer_outlined,
-            label: 'Ưu đãi',
+            label: context.l10n.profileOffers,
             onTap: () => context.push(AppRoutes.vouchers),
           ),
           const SizedBox(width: 12),
           _QuickActionItem(
             icon: Icons.store_outlined,
-            label: 'Cửa hàng',
+            label: context.l10n.profileStores,
             onTap: () => context.go(AppRoutes.storeLocator),
           ),
           const SizedBox(width: 12),
           _QuickActionItem(
             icon: Icons.star_outline,
-            label: 'Tích điểm',
+            label: context.l10n.loyalty,
             onTap: () => context.go(AppRoutes.loyalty),
           ),
         ],
@@ -331,41 +332,41 @@ class _MenuSection extends ConsumerWidget {
           children: [
             _ProfileMenuItem(
               icon: Icons.receipt_long_outlined,
-              label: 'Lịch sử đơn hàng',
+              label: context.l10n.orderHistory,
               onTap: () => context.push(AppRoutes.orders),
             ),
             const Divider(height: 1, indent: 56),
             _ProfileMenuItem(
               icon: Icons.person_outline,
-              label: 'Chỉnh sửa thông tin',
+              label: context.l10n.profileEditInfo,
               onTap: () => context.push(AppRoutes.profileEdit),
             ),
             const Divider(height: 1, indent: 56),
             _ProfileMenuItem(
               icon: Icons.location_on_outlined,
-              label: 'Địa chỉ đã lưu',
+              label: context.l10n.savedAddresses,
               onTap: () => context.push(AppRoutes.savedAddresses),
             ),
             const Divider(height: 1, indent: 56),
             _ProfileMenuItem(
               icon: Icons.local_offer_outlined,
-              label: 'Ưu đãi của tôi',
+              label: context.l10n.profileMyOffers,
               onTap: () => context.push(AppRoutes.vouchers),
             ),
             const Divider(height: 1, indent: 56),
             _ProfileMenuItem(
               icon: Icons.settings_outlined,
-              label: 'Cài đặt',
+              label: context.l10n.settings,
               onTap: () => context.push(AppRoutes.settings),
             ),
             const Divider(height: 1, indent: 56),
             _ProfileMenuItem(
               icon: Icons.help_outline,
-              label: 'Hỗ trợ',
+              label: context.l10n.profileSupport,
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Liên hệ hotline: 1900 1234'),
+                  SnackBar(
+                    content: Text(context.l10n.profileHotline),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
@@ -374,29 +375,29 @@ class _MenuSection extends ConsumerWidget {
             const Divider(height: 1, indent: 56),
             _ProfileMenuItem(
               icon: Icons.logout,
-              label: 'Đăng xuất',
+              label: context.l10n.logout,
               isDestructive: true,
               onTap: () {
                 showDialog<void>(
                   context: context,
                   builder: (ctx) => AlertDialog(
-                    title: const Text('Đăng xuất'),
-                    content: const Text(
-                      'Bạn có chắc chắn muốn đăng xuất không?',
+                    title: Text(context.l10n.logout),
+                    content: Text(
+                      context.l10n.profileLogoutConfirm,
                     ),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.of(ctx).pop(),
-                        child: const Text('Hủy'),
+                        child: Text(context.l10n.cancel),
                       ),
                       TextButton(
                         onPressed: () {
                           Navigator.of(ctx).pop();
                           ref.read(authNotifierProvider.notifier).signOut();
                         },
-                        child: const Text(
-                          'Đăng xuất',
-                          style: TextStyle(color: AppColors.error),
+                        child: Text(
+                          context.l10n.logout,
+                          style: const TextStyle(color: AppColors.error),
                         ),
                       ),
                     ],

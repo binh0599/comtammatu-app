@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../data/profile_repository.dart';
@@ -24,10 +25,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   late final TextEditingController _emailController;
 
   DateTime? _selectedDate;
-  String _selectedGender = 'Nam';
+  String _selectedGender = 'male';
   bool _isSaving = false;
-
-  final List<String> _genderOptions = ['Nam', 'Nữ', 'Khác'];
 
   @override
   void initState() {
@@ -65,9 +64,9 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       firstDate: DateTime(1920),
       lastDate: DateTime.now(),
       locale: const Locale('vi', 'VN'),
-      helpText: 'Chọn ngày sinh',
-      cancelText: 'Hủy',
-      confirmText: 'Chọn',
+      helpText: context.l10n.editProfileDobHint,
+      cancelText: context.l10n.editProfileDobCancel,
+      confirmText: context.l10n.editProfileDobConfirm,
     );
     if (picked != null) {
       setState(() {
@@ -86,7 +85,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Cập nhật thông tin thành công'),
+            content: Text(context.l10n.editProfileSuccess),
             backgroundColor: AppColors.success,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
@@ -117,7 +116,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   void _onChangeAvatar() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('Chức năng đang phát triển'),
+        content: Text(context.l10n.editProfileFeatureInDev),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
@@ -130,7 +129,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chỉnh sửa thông tin'),
+        title: Text(context.l10n.editProfileTitle),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -146,13 +145,13 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
               // Name field
               AppTextField(
                 controller: _nameController,
-                label: 'Họ tên',
-                hint: 'Nhập họ tên',
+                label: context.l10n.editProfileName,
+                hint: context.l10n.editProfileNameHint,
                 textInputAction: TextInputAction.next,
                 prefixIcon: const Icon(Icons.person_outline),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Vui lòng nhập họ tên';
+                    return context.l10n.editProfileNameRequired;
                   }
                   return null;
                 },
@@ -162,8 +161,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
               // Phone field (read-only)
               AppTextField(
                 controller: _phoneController,
-                label: 'Số điện thoại',
-                hint: 'Số điện thoại',
+                label: context.l10n.authPhone,
+                hint: context.l10n.authPhone,
                 enabled: false,
                 prefixIcon: const Icon(Icons.phone_outlined),
                 keyboardType: TextInputType.phone,
@@ -173,8 +172,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
               // Email field
               AppTextField(
                 controller: _emailController,
-                label: 'Email',
-                hint: 'Nhập email',
+                label: context.l10n.editProfileEmail,
+                hint: context.l10n.editProfileEmailHint,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 prefixIcon: const Icon(Icons.email_outlined),
@@ -183,7 +182,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                     final emailRegex =
                         RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
                     if (!emailRegex.hasMatch(value)) {
-                      return 'Email không hợp lệ';
+                      return context.l10n.editProfileEmailInvalid;
                     }
                   }
                   return null;
@@ -193,10 +192,10 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
 
               // Date of birth
               _DatePickerField(
-                label: 'Ngày sinh',
+                label: context.l10n.editProfileDob,
                 value:
                     _selectedDate != null ? _formatDate(_selectedDate!) : null,
-                hint: 'Chọn ngày sinh',
+                hint: context.l10n.editProfileDobHint,
                 onTap: _pickDate,
               ),
               const SizedBox(height: 16),
@@ -204,7 +203,13 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
               // Gender dropdown
               _GenderDropdown(
                 value: _selectedGender,
-                options: _genderOptions,
+                options: const ['male', 'female', 'other'],
+                labels: {
+                  'male': context.l10n.editProfileGenderMale,
+                  'female': context.l10n.editProfileGenderFemale,
+                  'other': context.l10n.editProfileGenderOther,
+                },
+                genderLabel: context.l10n.editProfileGender,
                 onChanged: (value) {
                   if (value != null) {
                     setState(() {
@@ -217,7 +222,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
 
               // Save button
               AppButton(
-                label: 'Lưu thay đổi',
+                label: context.l10n.editProfileSave,
                 onPressed: _isSaving ? null : _onSave,
                 isLoading: _isSaving,
                 icon: Icons.save_outlined,
@@ -335,11 +340,15 @@ class _GenderDropdown extends StatelessWidget {
   const _GenderDropdown({
     required this.value,
     required this.options,
+    required this.labels,
+    required this.genderLabel,
     required this.onChanged,
   });
 
   final String value;
   final List<String> options;
+  final Map<String, String> labels;
+  final String genderLabel;
   final ValueChanged<String?> onChanged;
 
   @override
@@ -349,7 +358,7 @@ class _GenderDropdown extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          'Giới tính',
+          genderLabel,
           style: Theme.of(context).textTheme.labelMedium,
         ),
         const SizedBox(height: 6),
@@ -361,7 +370,7 @@ class _GenderDropdown extends StatelessWidget {
           items: options.map((gender) {
             return DropdownMenuItem(
               value: gender,
-              child: Text(gender),
+              child: Text(labels[gender] ?? gender),
             );
           }).toList(),
           onChanged: onChanged,

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/delivery_order.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../../../shared/utils/formatters.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../domain/order_history_notifier.dart';
@@ -45,34 +46,34 @@ Color _statusColor(String status) {
   }
 }
 
-String _statusLabel(String status) {
+String _statusLabel(BuildContext context, String status) {
   switch (status) {
     case 'delivered':
-      return 'Hoàn thành';
+      return context.l10n.orderStatusDelivered;
     case 'delivering':
     case 'on_the_way':
-      return 'Đang giao';
+      return context.l10n.orderStatusDelivering;
     case 'picked_up':
-      return 'Đã lấy hàng';
+      return context.l10n.orderStatusPickedUp;
     case 'pending':
-      return 'Chờ xác nhận';
+      return context.l10n.orderStatusPending;
     case 'confirmed':
-      return 'Đã xác nhận';
+      return context.l10n.orderStatusConfirmed;
     case 'preparing':
-      return 'Đang chuẩn bị';
+      return context.l10n.orderStatusPreparing;
     case 'cancelled':
-      return 'Đã hủy';
+      return context.l10n.orderStatusCancelled;
     default:
       return status;
   }
 }
 
-String _filterLabel(OrderFilter filter) {
+String _filterLabel(BuildContext context, OrderFilter filter) {
   return switch (filter) {
-    OrderFilter.all => 'Tất cả',
-    OrderFilter.delivering => 'Đang giao',
-    OrderFilter.delivered => 'Hoàn thành',
-    OrderFilter.cancelled => 'Đã hủy',
+    OrderFilter.all => context.l10n.all,
+    OrderFilter.delivering => context.l10n.orderFilterDelivering,
+    OrderFilter.delivered => context.l10n.orderFilterDelivered,
+    OrderFilter.cancelled => context.l10n.orderFilterCancelled,
   };
 }
 
@@ -121,7 +122,7 @@ class _OrderHistoryScreenState extends ConsumerState<OrderHistoryScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lịch sử đơn hàng'),
+        title: Text(context.l10n.orderHistory),
       ),
       body: Column(
         children: [
@@ -137,7 +138,7 @@ class _OrderHistoryScreenState extends ConsumerState<OrderHistoryScreen> {
                 final filter = OrderFilter.values[index];
                 final isSelected = _activeFilter == filter;
                 return ChoiceChip(
-                  label: Text(_filterLabel(filter)),
+                  label: Text(_filterLabel(context, filter)),
                   selected: isSelected,
                   onSelected: (_) => _onFilterSelected(filter),
                   selectedColor: AppColors.primary,
@@ -232,7 +233,7 @@ class _OrderHistoryScreenState extends ConsumerState<OrderHistoryScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Không thể tải đơn hàng',
+              context.l10n.orderCannotLoad,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: AppColors.textSecondary,
                   ),
@@ -249,7 +250,7 @@ class _OrderHistoryScreenState extends ConsumerState<OrderHistoryScreen> {
             ),
             const SizedBox(height: 24),
             AppButton(
-              label: 'Thử lại',
+              label: context.l10n.retry,
               icon: Icons.refresh,
               fullWidth: false,
               onPressed: () {
@@ -264,10 +265,10 @@ class _OrderHistoryScreenState extends ConsumerState<OrderHistoryScreen> {
 
   Widget _buildEmptyState(BuildContext context, OrderFilter filter) {
     final message = switch (filter) {
-      OrderFilter.all => 'Chưa có đơn hàng nào',
-      OrderFilter.delivering => 'Không có đơn đang giao',
-      OrderFilter.delivered => 'Chưa có đơn hoàn thành',
-      OrderFilter.cancelled => 'Không có đơn đã hủy',
+      OrderFilter.all => context.l10n.orderEmptyAll,
+      OrderFilter.delivering => context.l10n.orderEmptyDelivering,
+      OrderFilter.delivered => context.l10n.orderEmptyDelivered,
+      OrderFilter.cancelled => context.l10n.orderEmptyCancelled,
     };
 
     return Center(
@@ -291,7 +292,7 @@ class _OrderHistoryScreenState extends ConsumerState<OrderHistoryScreen> {
             if (filter == OrderFilter.all) ...[
               const SizedBox(height: 8),
               Text(
-                'Hãy đặt món từ thực đơn\nđể bắt đầu nhé!',
+                context.l10n.orderEmptyHint,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.textHint,
@@ -299,7 +300,7 @@ class _OrderHistoryScreenState extends ConsumerState<OrderHistoryScreen> {
               ),
               const SizedBox(height: 24),
               AppButton(
-                label: 'Xem thực đơn',
+                label: context.l10n.cartViewMenu,
                 icon: Icons.restaurant_menu,
                 fullWidth: false,
                 onPressed: () => context.go(AppRoutes.menu),
@@ -406,7 +407,7 @@ class _OrderCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Đơn #${order.orderId}',
+                    context.l10n.orderNumber(order.orderId.toString()),
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
@@ -419,7 +420,7 @@ class _OrderCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      _statusLabel(order.status),
+                      _statusLabel(context, order.status),
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: _statusColor(order.status),
                             fontWeight: FontWeight.w600,
@@ -468,7 +469,7 @@ class _OrderCard extends StatelessWidget {
                         size: 14, color: AppColors.secondary),
                     const SizedBox(width: 4),
                     Text(
-                      '+${order.pointsWillEarn} điểm',
+                      context.l10n.orderPointsEarned(order.pointsWillEarn),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppColors.secondary,
                             fontWeight: FontWeight.w600,
@@ -501,7 +502,7 @@ class _OrderCard extends StatelessWidget {
                                 .go('${AppRoutes.delivery}/${order.orderId}');
                           },
                           icon: const Icon(Icons.delivery_dining, size: 18),
-                          label: const Text('Theo dõi'),
+                          label: Text(context.l10n.orderTrack),
                           style: TextButton.styleFrom(
                             foregroundColor: AppColors.primary,
                             padding: const EdgeInsets.symmetric(
@@ -518,7 +519,7 @@ class _OrderCard extends StatelessWidget {
                           },
                           icon:
                               const Icon(Icons.rate_review_outlined, size: 18),
-                          label: const Text('Đánh giá'),
+                          label: Text(context.l10n.orderRate),
                           style: TextButton.styleFrom(
                             foregroundColor: AppColors.secondary,
                             padding: const EdgeInsets.symmetric(
@@ -529,16 +530,16 @@ class _OrderCard extends StatelessWidget {
                         TextButton.icon(
                           onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content:
-                                    Text('Đang thêm các món vào giỏ hàng...'),
-                                duration: Duration(seconds: 1),
+                                    Text(context.l10n.orderReorderAdding),
+                                duration: const Duration(seconds: 1),
                                 behavior: SnackBarBehavior.floating,
                               ),
                             );
                           },
                           icon: const Icon(Icons.replay, size: 18),
-                          label: const Text('Đặt lại'),
+                          label: Text(context.l10n.orderReorder),
                           style: TextButton.styleFrom(
                             foregroundColor: AppColors.primary,
                             padding: const EdgeInsets.symmetric(

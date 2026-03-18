@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../../../shared/utils/formatters.dart';
 import '../data/delivery_notifier.dart';
 import '../data/models/delivery_tracking_model.dart';
@@ -18,14 +19,17 @@ const _kStatuses = [
   'delivered',
 ];
 
-const _kStatusLabels = {
-  'waiting_driver': 'Chờ tài xế',
-  'driver_assigned': 'Đã nhận đơn',
-  'picked_up': 'Đã lấy hàng',
-  'on_the_way': 'Đang giao',
-  'arrived': 'Đã đến',
-  'delivered': 'Hoàn thành',
-};
+String _statusLabel(BuildContext context, String status) {
+  return switch (status) {
+    'waiting_driver' => context.l10n.deliveryStatusWaiting,
+    'driver_assigned' => context.l10n.deliveryStatusAccepted,
+    'picked_up' => context.l10n.deliveryStatusPickedUp,
+    'on_the_way' => context.l10n.deliveryStatusOnTheWay,
+    'arrived' => context.l10n.deliveryStatusArrived,
+    'delivered' => context.l10n.deliveryStatusCompleted,
+    _ => status,
+  };
+}
 
 const _kStatusIcons = {
   'waiting_driver': Icons.access_time,
@@ -72,7 +76,7 @@ class _DeliveryTrackingScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Theo dõi giao hàng'),
+        title: Text(context.l10n.deliveryTracking),
       ),
       body: _buildBody(context, state),
     );
@@ -93,7 +97,7 @@ class _DeliveryTrackingScreenState
               const Icon(Icons.error_outline, size: 64, color: AppColors.error),
               const SizedBox(height: 16),
               Text(
-                'Không thể tải thông tin giao hàng',
+                context.l10n.deliveryCannotLoad,
                 style: Theme.of(context).textTheme.titleMedium,
                 textAlign: TextAlign.center,
               ),
@@ -112,7 +116,7 @@ class _DeliveryTrackingScreenState
                       .read(deliveryNotifierProvider.notifier)
                       .loadTracking(widget.orderId);
                 },
-                child: const Text('Thử lại'),
+                child: Text(context.l10n.retry),
               ),
             ],
           ),
@@ -193,7 +197,7 @@ class _TrackingContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Trạng thái đơn hàng',
+              context.l10n.deliveryOrderStatus,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -201,7 +205,7 @@ class _TrackingContent extends StatelessWidget {
             const SizedBox(height: 16),
             ...List.generate(_kStatuses.length, (index) {
               final status = _kStatuses[index];
-              final label = _kStatusLabels[status] ?? status;
+              final label = _statusLabel(context, status);
               final icon = _kStatusIcons[status] ?? Icons.circle;
               final isCompleted = index <= currentStepIndex;
               final isCurrent = index == currentStepIndex;
@@ -300,14 +304,14 @@ class _TrackingContent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Tài xế',
+                    context.l10n.deliveryDriver,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: AppColors.textSecondary,
                         ),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    tracking.driverName ?? 'Đang cập nhật...',
+                    tracking.driverName ?? context.l10n.deliveryUpdating,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -360,7 +364,7 @@ class _TrackingContent extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Bản đồ giao hàng',
+            context.l10n.deliveryMapPlaceholder,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textSecondary,
                 ),
@@ -404,7 +408,7 @@ class _TrackingContent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Thời gian dự kiến',
+                    context.l10n.deliveryEstimatedTime,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: AppColors.textSecondary,
                         ),
@@ -412,8 +416,8 @@ class _TrackingContent extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     minutesLeft > 0
-                        ? 'Còn khoảng $minutesLeft phút'
-                        : 'Đang đến nơi',
+                        ? context.l10n.deliveryMinutesLeft(minutesLeft)
+                        : context.l10n.deliveryArriving,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w700,
@@ -448,7 +452,7 @@ class _TrackingContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Thông tin đơn hàng',
+              context.l10n.deliveryOrderInfo,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -458,7 +462,7 @@ class _TrackingContent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Mã đơn hàng',
+                  context.l10n.deliveryOrderCode,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -476,7 +480,7 @@ class _TrackingContent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Trạng thái',
+                  context.l10n.deliveryStatus,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -489,7 +493,7 @@ class _TrackingContent extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    _kStatusLabels[tracking.status] ?? tracking.status,
+                    _statusLabel(context, tracking.status),
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w600,

@@ -1,15 +1,23 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/cache/cache_service.dart';
 import '../../../core/network/api_client.dart';
 import '../../../models/cart_item.dart';
 import '../../../models/delivery_order.dart';
 
-/// Repository for order-related API calls.
+/// Repository for order-related API calls with offline cache support.
 class OrderRepository {
-  const OrderRepository({required ApiClient apiClient})
-      : _apiClient = apiClient;
+  const OrderRepository({
+    required ApiClient apiClient,
+    required CacheService cacheService,
+  })  : _apiClient = apiClient,
+        _cacheService = cacheService;
 
   final ApiClient _apiClient;
+  final CacheService _cacheService;
+
+  static const _cacheKey = 'cache_orders';
+  static const _cacheMaxAge = Duration(seconds: 300); // 5 min
 
   /// Creates a new delivery order from the cart.
   ///
@@ -48,6 +56,11 @@ class OrderRepository {
 
   /// Fetches paginated delivery order history.
   ///
+  /// Uses cache-first strategy:
+  /// 1. If cache is valid (< 5 min), return cached data immediately.
+  /// 2. Otherwise, fetch from API and update cache.
+  /// 3. On network error, fall back to stale cache.
+  ///
   /// [cursor] — pagination cursor from previous response.
   /// [limit] — max orders per page (default 20).
   /// [status] — optional status filter (e.g. 'delivered', 'cancelled').
@@ -56,17 +69,51 @@ class OrderRepository {
     int limit = 20,
     String? status,
   }) async {
-    return _apiClient.get<PaginatedOrders>(
-      '/get-transactions',
-      queryParameters: {
-        if (cursor != null) 'cursor': cursor,
-        'limit': limit,
-        if (status != null) 'status': status,
-        'type': 'delivery_orders',
-      },
-      fromJson: (json) =>
-          PaginatedOrders.fromJson(json as Map<String, dynamic>),
-    );
+    // 1. Check fresh cache (only for first page without filters)
+    if (cursor == null && status == null) {
+      if (_cacheService.isCacheValid(_cacheKey, _cacheMaxAge)) {
+        final cached = _cacheService.getCachedOrders();
+        if (cached.isNotEmpty) {
+          return PaginatedOrders.fromJson({'orders': cached, 'has_more': false});
+        }
+      }
+    }
+
+    // 2. Try network
+    try {
+      final result = await _apiClient.get<PaginatedOrders>(
+        '/get-transactions',
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          'limit': limit,
+          if (status != null) 'status': status,
+          'type': 'delivery_orders',
+        },
+        fromJson: (json) =>
+            PaginatedOrders.fromJson(json as Map<String, dynamic>),
+      );
+
+      // Cache first page of unfiltered results
+      if (cursor == null && status == null) {
+        await _cacheService.cacheOrders(
+          result.orders.map((o) => o.toJson()).toList(),
+        );
+      }
+
+      return result;
+    } catch (_) {
+      // 3. Fallback to stale cache on network error (first page only)
+      if (cursor == null && status == null) {
+        final staleCache = _cacheService.getCachedOrders();
+        if (staleCache.isNotEmpty) {
+          return PaginatedOrders.fromJson({
+            'orders': staleCache,
+            'has_more': false,
+          });
+        }
+      }
+      rethrow;
+    }
   }
 }
 
@@ -99,5 +146,6 @@ class PaginatedOrders {
 /// Riverpod provider for [OrderRepository].
 final orderRepositoryProvider = Provider<OrderRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
-  return OrderRepository(apiClient: apiClient);
+  final cacheService = ref.watch(cacheServiceProvider);
+  return OrderRepository(apiClient: apiClient, cacheService: cacheService);
 });

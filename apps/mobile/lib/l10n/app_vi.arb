@@ -1,5 +1,6 @@
 {
   "@@locale": "vi",
+
   "appTitle": "Cơm Tấm Má Tư",
   "home": "Trang chủ",
   "menu": "Thực đơn",
@@ -65,25 +66,392 @@
   "pointsEarned": "Bạn đã nhận được {points} điểm",
   "@pointsEarned": {
     "placeholders": {
-      "points": {
-        "type": "int"
-      }
+      "points": { "type": "int" }
     }
   },
   "itemCount": "{count} món",
   "@itemCount": {
     "placeholders": {
-      "count": {
-        "type": "int"
-      }
+      "count": { "type": "int" }
     }
   },
   "priceFormat": "{price}đ",
   "@priceFormat": {
     "placeholders": {
-      "price": {
-        "type": "String"
-      }
+      "price": { "type": "String" }
+    }
+  },
+
+  "authLoginSubtitle": "Đăng nhập để tích điểm và đặt hàng",
+  "authPhone": "Số điện thoại",
+  "authPhoneHint": "0901234567",
+  "authPhoneRequired": "Vui lòng nhập số điện thoại",
+  "authPhoneInvalid": "Số điện thoại không hợp lệ",
+  "authPassword": "Mật khẩu",
+  "authPasswordHint": "Nhập mật khẩu",
+  "authPasswordRequired": "Vui lòng nhập mật khẩu",
+  "authPasswordMinLength": "Mật khẩu phải có ít nhất 6 ký tự",
+  "authForgotPassword": "Quên mật khẩu?",
+  "authLoginFailed": "Đăng nhập thất bại. Vui lòng thử lại.",
+  "authNoAccount": "Chưa có tài khoản? ",
+  "authRegisterNow": "Đăng ký ngay",
+  "authCreateAccount": "Tạo tài khoản mới",
+  "authRegisterSubtitle": "Đăng ký để tích điểm và nhận ưu đãi",
+  "authFullName": "Họ và tên",
+  "authFullNameHint": "Nguyễn Văn A",
+  "authFullNameRequired": "Vui lòng nhập họ và tên",
+  "authFullNameMinLength": "Họ tên phải có ít nhất 2 ký tự",
+  "authPasswordHintShort": "Ít nhất 6 ký tự",
+  "authConfirmPassword": "Xác nhận mật khẩu",
+  "authConfirmPasswordHint": "Nhập lại mật khẩu",
+  "authConfirmPasswordRequired": "Vui lòng xác nhận mật khẩu",
+  "authPasswordMismatch": "Mật khẩu không khớp",
+  "authReferralCode": "Mã giới thiệu (không bắt buộc)",
+  "authReferralCodeHint": "Nhập mã giới thiệu nếu có",
+  "authRegisterFailed": "Đăng ký thất bại. Vui lòng thử lại.",
+  "authHasAccount": "Đã có tài khoản? ",
+  "authOtpTitle": "Xác thực OTP",
+  "authOtpEnterCode": "Nhập mã xác thực",
+  "authOtpSentTo": "Mã OTP đã được gửi đến số\n",
+  "authOtpRequired": "Vui lòng nhập đầy đủ mã OTP",
+  "authOtpInvalid": "Mã OTP không hợp lệ. Vui lòng thử lại.",
+  "authOtpResendCountdown": "Gửi lại mã sau {seconds}s",
+  "@authOtpResendCountdown": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "authOtpResend": "Gửi lại mã OTP",
+  "authOtpResent": "Đã gửi lại mã OTP",
+
+  "homeQuickActions": "Thao tác nhanh",
+  "homeAccumulatedPoints": "Điểm tích lũy",
+  "homeAvailablePoints": "điểm khả dụng",
+  "homePromotionsForYou": "Ưu đãi dành cho bạn",
+  "homeLoadingPromotions": "Đang tải ưu đãi...",
+  "homeNoPromotions": "Chưa có ưu đãi nào",
+  "homeEligible": "Đủ điều kiện",
+  "homeRecentTransactions": "Giao dịch gần đây",
+  "homePointsToNextTier": "Còn {points} điểm nữa lên hạng {tierName}",
+  "@homePointsToNextTier": {
+    "placeholders": {
+      "points": { "type": "String" },
+      "tierName": { "type": "String" }
+    }
+  },
+
+  "menuSearchHint": "Tìm món ăn...",
+  "menuNoResults": "Không tìm thấy món ăn",
+  "menuOffline": "Ngoại tuyến",
+  "menuHotBadge": "Hot",
+  "menuAdd": "Thêm",
+  "menuAddedToCart": "Đã thêm {name} vào giỏ hàng",
+  "@menuAddedToCart": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "menuCategoryComTam": "Cơm tấm",
+  "menuCategorySides": "Món thêm",
+  "menuCategoryDrinks": "Nước uống",
+  "menuCategoryDesserts": "Tráng miệng",
+
+  "cartClearAll": "Xóa tất cả",
+  "cartEmptyMessage": "Hãy thêm món ăn từ thực đơn\nđể bắt đầu đặt hàng nhé!",
+  "cartViewMenu": "Xem thực đơn",
+  "cartDeliveryAddress": "Địa chỉ giao hàng",
+  "cartNoAddress": "Chưa chọn địa chỉ",
+  "cartSelectAddress": "Chọn địa chỉ",
+  "cartPaymentMethod": "Phương thức thanh toán",
+  "cartPaymentCod": "Thanh toán khi nhận hàng",
+  "cartPaymentMomo": "Ví MoMo",
+  "cartPaymentZalopay": "ZaloPay",
+  "cartOrderDetails": "Chi tiết đơn hàng",
+  "cartSubtotal": "Tạm tính",
+  "cartDeliveryFee": "Phí giao hàng",
+  "cartDiscount": "Giảm giá",
+  "cartTotal": "Tổng cộng",
+  "cartPlaceOrder": "Đặt hàng",
+  "cartNoteHint": "Ghi chú (vd: ít hành, thêm nước mắm...)",
+
+  "orderCannotLoad": "Không thể tải đơn hàng",
+  "orderStatusDelivered": "Hoàn thành",
+  "orderStatusDelivering": "Đang giao",
+  "orderStatusPickedUp": "Đã lấy hàng",
+  "orderStatusPending": "Chờ xác nhận",
+  "orderStatusConfirmed": "Đã xác nhận",
+  "orderStatusPreparing": "Đang chuẩn bị",
+  "orderStatusCancelled": "Đã hủy",
+  "orderFilterDelivering": "Đang giao",
+  "orderFilterDelivered": "Hoàn thành",
+  "orderFilterCancelled": "Đã hủy",
+  "orderEmptyAll": "Chưa có đơn hàng nào",
+  "orderEmptyDelivering": "Không có đơn đang giao",
+  "orderEmptyDelivered": "Chưa có đơn hoàn thành",
+  "orderEmptyCancelled": "Không có đơn đã hủy",
+  "orderEmptyHint": "Hãy đặt món từ thực đơn\nđể bắt đầu nhé!",
+  "orderNumber": "Đơn #{orderId}",
+  "@orderNumber": {
+    "placeholders": {
+      "orderId": { "type": "String" }
+    }
+  },
+  "orderPointsEarned": "+{points} điểm",
+  "@orderPointsEarned": {
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+  "orderTrack": "Theo dõi",
+  "orderRate": "Đánh giá",
+  "orderReorder": "Đặt lại",
+  "orderReorderAdding": "Đang thêm các món vào giỏ hàng...",
+
+  "loyaltyCannotLoad": "Không thể tải dữ liệu tích điểm",
+  "loyaltyPointsSuffix": "điểm",
+  "loyaltyTierName": "Hạng {name}",
+  "@loyaltyTierName": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "loyaltyPointsNeeded": "Cần thêm {points} điểm để lên hạng {tierName}",
+  "@loyaltyPointsNeeded": {
+    "placeholders": {
+      "points": { "type": "int" },
+      "tierName": { "type": "String" }
+    }
+  },
+  "loyaltyCurrentBenefits": "Quyền lợi hiện tại",
+  "loyaltyTransactionHistory": "Lịch sử giao dịch",
+  "loyaltyNoTransactions": "Chưa có giao dịch nào",
+  "loyaltyPointsFormat": "{sign}{points} điểm",
+  "@loyaltyPointsFormat": {
+    "placeholders": {
+      "sign": { "type": "String" },
+      "points": { "type": "int" }
+    }
+  },
+
+  "profileUser": "Người dùng",
+  "profilePointsAccumulated": "{points} điểm tích lũy",
+  "@profilePointsAccumulated": {
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+  "profileOffers": "Ưu đãi",
+  "profileStores": "Cửa hàng",
+  "profileEditInfo": "Chỉnh sửa thông tin",
+  "profileMyOffers": "Ưu đãi của tôi",
+  "profileSupport": "Hỗ trợ",
+  "profileHotline": "Liên hệ hotline: 1900 1234",
+  "profileLogoutConfirm": "Bạn có chắc chắn muốn đăng xuất không?",
+  "profileAppVersion": "Cơm Tấm Má Tư v{version}",
+  "@profileAppVersion": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+
+  "editProfileTitle": "Chỉnh sửa thông tin",
+  "editProfileName": "Họ tên",
+  "editProfileNameHint": "Nhập họ tên",
+  "editProfileNameRequired": "Vui lòng nhập họ tên",
+  "editProfileEmail": "Email",
+  "editProfileEmailHint": "Nhập email",
+  "editProfileEmailInvalid": "Email không hợp lệ",
+  "editProfileDob": "Ngày sinh",
+  "editProfileDobHint": "Chọn ngày sinh",
+  "editProfileDobCancel": "Hủy",
+  "editProfileDobConfirm": "Chọn",
+  "editProfileGender": "Giới tính",
+  "editProfileGenderMale": "Nam",
+  "editProfileGenderFemale": "Nữ",
+  "editProfileGenderOther": "Khác",
+  "editProfileSave": "Lưu thay đổi",
+  "editProfileSuccess": "Cập nhật thông tin thành công",
+  "editProfileFeatureInDev": "Chức năng đang phát triển",
+
+  "addressCannotLoad": "Không thể tải địa chỉ",
+  "addressEmpty": "Bạn chưa lưu địa chỉ nào",
+  "addressDeleteTitle": "Xóa địa chỉ",
+  "addressDeleteConfirm": "Bạn có chắc chắn muốn xóa địa chỉ này không?",
+  "addressDefault": "Mặc định",
+  "addressSetDefault": "Đặt làm mặc định",
+  "addressAddNew": "Thêm địa chỉ mới",
+  "addressEditTitle": "Chỉnh sửa địa chỉ",
+  "addressTypeLabel": "Loại địa chỉ",
+  "addressTypeHome": "Nhà",
+  "addressTypeWork": "Công ty",
+  "addressTypeOther": "Khác",
+  "addressStreet": "Địa chỉ",
+  "addressStreetHint": "Số nhà, tên đường",
+  "addressStreetRequired": "Vui lòng nhập địa chỉ",
+  "addressWard": "Phường/Xã",
+  "addressWardHint": "Nhập phường/xã",
+  "addressWardRequired": "Vui lòng nhập phường/xã",
+  "addressDistrict": "Quận/Huyện",
+  "addressDistrictHint": "Nhập quận/huyện",
+  "addressDistrictRequired": "Vui lòng nhập quận/huyện",
+  "addressCity": "Thành phố",
+  "addressCityHint": "Nhập thành phố",
+  "addressCityRequired": "Vui lòng nhập thành phố",
+  "addressUpdate": "Cập nhật",
+  "addressAdd": "Thêm",
+
+  "storeNoResults": "Không tìm thấy cửa hàng",
+  "storeMapPlaceholder": "Bản đồ cửa hàng",
+  "storeMapSubtitle": "Tích hợp Google Maps sẽ hiển thị ở đây",
+  "storeOpeningHours": "Giờ mở cửa: {open} - {close}",
+  "@storeOpeningHours": {
+    "placeholders": {
+      "open": { "type": "String" },
+      "close": { "type": "String" }
+    }
+  },
+  "storeDirections": "Chỉ đường",
+  "storeSortedByDistance": "Đã sắp xếp theo khoảng cách gần nhất",
+  "storeNearMe": "Gần tôi",
+
+  "voucherAvailable": "Có sẵn",
+  "voucherMine": "Của tôi",
+  "voucherRedeemConfirmTitle": "Xác nhận đổi voucher",
+  "voucherRedeemConfirmMessage": "Bạn sẽ sử dụng {points} điểm để đổi voucher này.",
+  "@voucherRedeemConfirmMessage": {
+    "placeholders": {
+      "points": { "type": "String" }
+    }
+  },
+  "voucherRedeemNow": "Đổi ngay",
+  "voucherRedeemSuccess": "Đổi voucher \"{title}\" thành công!",
+  "@voucherRedeemSuccess": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  },
+  "voucherRedeemFailed": "Đổi voucher thất bại: {error}",
+  "@voucherRedeemFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "voucherCodeCopied": "Mã \"{code}\" đã được sao chép. Áp dụng khi đặt hàng!",
+  "@voucherCodeCopied": {
+    "placeholders": {
+      "code": { "type": "String" }
+    }
+  },
+  "voucherEmptyAvailable": "Chưa có voucher nào để đổi.\nHãy quay lại sau nhé!",
+  "voucherEmptyMine": "Bạn chưa có voucher nào.\nĐổi điểm để nhận ưu đãi ngay!",
+  "voucherDiscountPercent": "Giảm {value}%",
+  "@voucherDiscountPercent": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "voucherDiscountFixed": "Giảm {value}₫",
+  "@voucherDiscountFixed": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "voucherMinOrder": "Đơn tối thiểu: {amount}₫",
+  "@voucherMinOrder": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "voucherExpiry": "HSD: {date}",
+  "@voucherExpiry": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "voucherUse": "Sử dụng",
+
+  "notifReadAll": "Đọc tất cả",
+  "notifCannotLoad": "Không thể tải thông báo",
+  "notifDeleted": "Đã xóa thông báo",
+  "notifUndo": "Hoàn tác",
+  "notifJustNow": "Vừa xong",
+  "notifMinutesAgo": "{minutes} phút trước",
+  "@notifMinutesAgo": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "notifHoursAgo": "{hours} giờ trước",
+  "@notifHoursAgo": {
+    "placeholders": {
+      "hours": { "type": "int" }
+    }
+  },
+  "notifYesterday": "Hôm qua",
+  "notifDayBeforeYesterday": "Hôm kia",
+  "notifDaysAgo": "{days} ngày trước",
+  "@notifDaysAgo": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+
+  "feedbackTitle": "Đánh giá đơn hàng",
+  "feedbackOrderId": "Đơn hàng #{orderId}",
+  "@feedbackOrderId": {
+    "placeholders": {
+      "orderId": { "type": "String" }
+    }
+  },
+  "feedbackShareExperience": "Hãy cho chúng tôi biết trải nghiệm của bạn",
+  "feedbackHowWouldYouRate": "Bạn đánh giá thế nào?",
+  "feedbackWhatDidYouLike": "Điều gì bạn thích?",
+  "feedbackAdditionalComments": "Nhận xét thêm",
+  "feedbackCommentHint": "Chia sẻ trải nghiệm của bạn...",
+  "feedbackSubmit": "Gửi đánh giá",
+  "feedbackThankYou": "Cảm ơn bạn!",
+  "feedbackSuccessMessage": "Đánh giá của bạn đã được gửi thành công.\nCơm Tấm Má Tư luôn lắng nghe để phục vụ bạn tốt hơn!",
+  "feedbackBack": "Quay lại",
+  "feedbackSelectRating": "Vui lòng chọn số sao đánh giá",
+  "feedbackTagDelicious": "Ngon",
+  "feedbackTagFast": "Nhanh",
+  "feedbackTagClean": "Sạch sẽ",
+  "feedbackTagFriendly": "Thân thiện",
+  "feedbackTagFairPrice": "Giá hợp lý",
+  "feedbackTagLargePortions": "Phần lượng nhiều",
+  "feedbackRatingTerrible": "Rất tệ",
+  "feedbackRatingBad": "Tệ",
+  "feedbackRatingAverage": "Bình thường",
+  "feedbackRatingGood": "Tốt",
+  "feedbackRatingExcellent": "Tuyệt vời",
+
+  "deliveryCannotLoad": "Không thể tải thông tin giao hàng",
+  "deliveryStatusWaiting": "Chờ tài xế",
+  "deliveryStatusAccepted": "Đã nhận đơn",
+  "deliveryStatusPickedUp": "Đã lấy hàng",
+  "deliveryStatusOnTheWay": "Đang giao",
+  "deliveryStatusArrived": "Đã đến",
+  "deliveryStatusCompleted": "Hoàn thành",
+  "deliveryOrderStatus": "Trạng thái đơn hàng",
+  "deliveryDriver": "Tài xế",
+  "deliveryUpdating": "Đang cập nhật...",
+  "deliveryMapPlaceholder": "Bản đồ giao hàng",
+  "deliveryEstimatedTime": "Thời gian dự kiến",
+  "deliveryMinutesLeft": "Còn khoảng {minutes} phút",
+  "@deliveryMinutesLeft": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "deliveryArriving": "Đang đến nơi",
+  "deliveryOrderCode": "Mã đơn hàng",
+  "deliveryStatus": "Trạng thái",
+  "deliveryOrderInfo": "Thông tin đơn hàng",
+
+  "errorWithMessage": "Lỗi: {message}",
+  "@errorWithMessage": {
+    "placeholders": {
+      "message": { "type": "String" }
     }
   }
 }

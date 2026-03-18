@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../../../shared/utils/formatters.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../data/models/store_model.dart';
@@ -27,7 +28,7 @@ class _StoreLocatorScreenState extends ConsumerState<StoreLocatorScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tìm cửa hàng'),
+        title: Text(context.l10n.storeLocator),
       ),
       body: Column(
         children: [
@@ -48,7 +49,7 @@ class _StoreLocatorScreenState extends ConsumerState<StoreLocatorScreen> {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          'Không tìm thấy cửa hàng',
+                          context.l10n.storeNoResults,
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge
@@ -75,9 +76,9 @@ class _StoreLocatorScreenState extends ConsumerState<StoreLocatorScreen> {
           });
           if (_sortedByNearest) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Đã sắp xếp theo khoảng cách gần nhất'),
-                duration: Duration(seconds: 2),
+              SnackBar(
+                content: Text(context.l10n.storeSortedByDistance),
+                duration: const Duration(seconds: 2),
                 behavior: SnackBarBehavior.floating,
               ),
             );
@@ -86,7 +87,7 @@ class _StoreLocatorScreenState extends ConsumerState<StoreLocatorScreen> {
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         icon: const Icon(Icons.near_me),
-        label: const Text('Gần tôi'),
+        label: Text(context.l10n.storeNearMe),
       ),
     );
   }
@@ -106,14 +107,14 @@ class _StoreLocatorScreenState extends ConsumerState<StoreLocatorScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Bản đồ cửa hàng',
+            context.l10n.storeMapPlaceholder,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: AppColors.textSecondary,
                 ),
           ),
           const SizedBox(height: 4),
           Text(
-            'Tích hợp Google Maps sẽ hiển thị ở đây',
+            context.l10n.storeMapSubtitle,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: AppColors.textHint,
                 ),
@@ -243,7 +244,7 @@ class _StoreCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  'Giờ mở cửa: ${store.openingTime} - ${store.closingTime}',
+                  context.l10n.storeOpeningHours(store.openingTime, store.closingTime),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -256,7 +257,7 @@ class _StoreCard extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: AppButton(
-                label: 'Chỉ đường',
+                label: context.l10n.storeDirections,
                 variant: AppButtonVariant.outlined,
                 icon: Icons.directions,
                 onPressed: () {

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/cache/cache_service.dart';
 import '../../../core/network/api_client.dart';
 import '../../../models/checkin_result.dart';
 import '../../../models/loyalty_dashboard.dart';
@@ -60,20 +61,53 @@ class PaginatedTransactions {
   }
 }
 
-/// Repository for loyalty-related API calls.
+/// Repository for loyalty-related API calls with offline cache support.
 class LoyaltyRepository {
-  const LoyaltyRepository({required ApiClient apiClient})
-      : _apiClient = apiClient;
+  const LoyaltyRepository({
+    required ApiClient apiClient,
+    required CacheService cacheService,
+  })  : _apiClient = apiClient,
+        _cacheService = cacheService;
 
   final ApiClient _apiClient;
+  final CacheService _cacheService;
+
+  static const _cacheKey = 'cache_loyalty';
+  static const _cacheMaxAge = Duration(seconds: 300); // 5 min
 
   /// Fetches the full loyalty dashboard (member, tier, transactions, promotions, stats).
+  ///
+  /// Uses cache-first strategy:
+  /// 1. If cache is valid (< 5 min), return cached data immediately.
+  /// 2. Otherwise, fetch from API and update cache.
+  /// 3. On network error, fall back to stale cache.
   Future<LoyaltyDashboard> getDashboard() async {
-    return _apiClient.get<LoyaltyDashboard>(
-      '/get-loyalty-dashboard',
-      fromJson: (json) =>
-          LoyaltyDashboard.fromJson(json as Map<String, dynamic>),
-    );
+    // 1. Check fresh cache
+    if (_cacheService.isCacheValid(_cacheKey, _cacheMaxAge)) {
+      final cached = _cacheService.getCachedLoyalty();
+      if (cached != null) {
+        return LoyaltyDashboard.fromJson(cached);
+      }
+    }
+
+    // 2. Try network
+    try {
+      final dashboard = await _apiClient.get<LoyaltyDashboard>(
+        '/get-loyalty-dashboard',
+        fromJson: (json) =>
+            LoyaltyDashboard.fromJson(json as Map<String, dynamic>),
+      );
+      // Cache the raw JSON for offline use
+      await _cacheService.cacheLoyalty(dashboard.toJson());
+      return dashboard;
+    } catch (_) {
+      // 3. Fallback to stale cache on network error
+      final staleCache = _cacheService.getCachedLoyalty();
+      if (staleCache != null) {
+        return LoyaltyDashboard.fromJson(staleCache);
+      }
+      rethrow;
+    }
   }
 
   /// Verifies a check-in via QR code or branch ID.
@@ -133,5 +167,6 @@ class LoyaltyRepository {
 /// Riverpod provider for [LoyaltyRepository].
 final loyaltyRepositoryProvider = Provider<LoyaltyRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
-  return LoyaltyRepository(apiClient: apiClient);
+  final cacheService = ref.watch(cacheServiceProvider);
+  return LoyaltyRepository(apiClient: apiClient, cacheService: cacheService);
 });

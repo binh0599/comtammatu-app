@@ -8,6 +8,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../models/loyalty_dashboard.dart';
 import '../../../models/point_transaction.dart';
 import '../../../models/tier.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../domain/loyalty_notifier.dart';
 import '../domain/loyalty_state.dart';
 
@@ -58,7 +59,7 @@ class _LoyaltyScreenState extends ConsumerState<LoyaltyScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tích điểm'),
+        title: Text(context.l10n.loyalty),
       ),
       body: switch (loyaltyState) {
         LoyaltyLoading() => const Center(child: CircularProgressIndicator()),
@@ -93,7 +94,7 @@ class _ErrorBody extends StatelessWidget {
             const Icon(Icons.error_outline, size: 48, color: AppColors.error),
             const SizedBox(height: 16),
             Text(
-              'Không thể tải dữ liệu tích điểm',
+              context.l10n.loyaltyCannotLoad,
               style: Theme.of(context).textTheme.titleMedium,
               textAlign: TextAlign.center,
             ),
@@ -109,7 +110,7 @@ class _ErrorBody extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: const Text('Thử lại'),
+              label: Text(context.l10n.retry),
             ),
           ],
         ),
@@ -149,7 +150,7 @@ class _LoadedBody extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    'Điểm tích lũy',
+                    context.l10n.homeAccumulatedPoints,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Colors.white70,
                         ),
@@ -164,7 +165,7 @@ class _LoadedBody extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'điểm',
+                    context.l10n.loyaltyPointsSuffix,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: Colors.white70,
                         ),
@@ -177,7 +178,7 @@ class _LoadedBody extends StatelessWidget {
                       Expanded(
                         child: _ActionButton(
                           icon: Icons.arrow_upward,
-                          label: 'Tích điểm',
+                          label: context.l10n.earnPoints,
                           onTap: () =>
                               context.push(AppRoutes.earnPoints),
                         ),
@@ -186,7 +187,7 @@ class _LoadedBody extends StatelessWidget {
                       Expanded(
                         child: _ActionButton(
                           icon: Icons.card_giftcard,
-                          label: 'Đổi điểm',
+                          label: context.l10n.redeemPoints,
                           onTap: () =>
                               context.push(AppRoutes.redeemPoints),
                         ),
@@ -195,7 +196,7 @@ class _LoadedBody extends StatelessWidget {
                       Expanded(
                         child: _ActionButton(
                           icon: Icons.qr_code_scanner,
-                          label: 'Điểm danh',
+                          label: context.l10n.checkIn,
                           onTap: () =>
                               context.push(AppRoutes.checkin),
                         ),
@@ -227,7 +228,7 @@ class _LoadedBody extends StatelessWidget {
                           color: tierColor, size: 28),
                       const SizedBox(width: 10),
                       Text(
-                        'Hạng ${tier.name}',
+                        context.l10n.loyaltyTierName(tier.name),
                         style: Theme.of(context)
                             .textTheme
                             .titleMedium
@@ -242,7 +243,7 @@ class _LoadedBody extends StatelessWidget {
                     _TierProgressBar(nextTier: tier.nextTier!),
                     const SizedBox(height: 10),
                     Text(
-                      'Cần thêm ${tier.nextTier!.pointsNeeded.toInt()} điểm để lên hạng ${tier.nextTier!.name}',
+                      context.l10n.loyaltyPointsNeeded(tier.nextTier!.pointsNeeded.toInt(), tier.nextTier!.name),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppColors.textSecondary,
                           ),
@@ -254,7 +255,7 @@ class _LoadedBody extends StatelessWidget {
                   const SizedBox(height: 12),
 
                   Text(
-                    'Quyền lợi hiện tại',
+                    context.l10n.loyaltyCurrentBenefits,
                     style: Theme.of(context)
                         .textTheme
                         .titleSmall
@@ -291,7 +292,7 @@ class _LoadedBody extends StatelessWidget {
 
           // Recent transactions
           Text(
-            'Lịch sử giao dịch',
+            context.l10n.loyaltyTransactionHistory,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 12),
@@ -301,7 +302,7 @@ class _LoadedBody extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: Text(
-                  'Chưa có giao dịch nào',
+                  context.l10n.loyaltyNoTransactions,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -442,7 +443,7 @@ class _TransactionTile extends StatelessWidget {
           style: Theme.of(context).textTheme.bodySmall,
         ),
         trailing: Text(
-          '${isCredit ? '+' : '-'}$pts điểm',
+          context.l10n.loyaltyPointsFormat(isCredit ? '+' : '-', pts),
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 color: isCredit ? AppColors.success : AppColors.error,
                 fontWeight: FontWeight.w600,

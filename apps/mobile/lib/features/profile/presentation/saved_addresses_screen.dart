@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../models/address_model.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../../../shared/widgets/empty_view.dart';
 import '../domain/address_notifier.dart';
 
@@ -37,12 +38,12 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Xóa địa chỉ'),
-        content: const Text('Bạn có chắc chắn muốn xóa địa chỉ này không?'),
+        title: Text(context.l10n.addressDeleteTitle),
+        content: Text(context.l10n.addressDeleteConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Hủy'),
+            child: Text(context.l10n.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -51,9 +52,9 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
                   .read(addressNotifierProvider.notifier)
                   .deleteAddress(address.id!);
             },
-            child: const Text(
-              'Xóa',
-              style: TextStyle(color: AppColors.error),
+            child: Text(
+              context.l10n.delete,
+              style: const TextStyle(color: AppColors.error),
             ),
           ),
         ],
@@ -89,7 +90,7 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Địa chỉ đã lưu'),
+        title: Text(context.l10n.savedAddresses),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddEditDialog,
@@ -113,14 +114,14 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
             const Icon(Icons.error_outline, size: 48, color: AppColors.error),
             const SizedBox(height: 16),
             Text(
-              'Không thể tải địa chỉ',
+              context.l10n.addressCannotLoad,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
             TextButton(
               onPressed: () =>
                   ref.read(addressNotifierProvider.notifier).loadAddresses(),
-              child: const Text('Thử lại'),
+              child: Text(context.l10n.retry),
             ),
           ],
         ),
@@ -128,9 +129,9 @@ class _SavedAddressesScreenState extends ConsumerState<SavedAddressesScreen> {
     }
 
     if (addresses.isEmpty) {
-      return const EmptyView(
+      return EmptyView(
         icon: Icons.location_off_outlined,
-        message: 'Bạn chưa lưu địa chỉ nào',
+        message: context.l10n.addressEmpty,
       );
     }
 
@@ -199,7 +200,7 @@ class _AddressCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      'Mặc định',
+                      context.l10n.addressDefault,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: AppColors.success,
                             fontWeight: FontWeight.w600,
@@ -218,7 +219,7 @@ class _AddressCard extends StatelessWidget {
                   onPressed: onEdit,
                   constraints: const BoxConstraints(),
                   padding: const EdgeInsets.all(8),
-                  tooltip: 'Chỉnh sửa',
+                  tooltip: context.l10n.edit,
                 ),
                 // Delete button
                 IconButton(
@@ -230,7 +231,7 @@ class _AddressCard extends StatelessWidget {
                   onPressed: onDelete,
                   constraints: const BoxConstraints(),
                   padding: const EdgeInsets.all(8),
-                  tooltip: 'Xóa',
+                  tooltip: context.l10n.delete,
                 ),
               ],
             ),
@@ -251,7 +252,7 @@ class _AddressCard extends StatelessWidget {
               GestureDetector(
                 onTap: onSetDefault,
                 child: Text(
-                  'Đặt làm mặc định',
+                  context.l10n.addressSetDefault,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,
@@ -358,7 +359,7 @@ class _AddEditAddressDialogState extends State<_AddEditAddressDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(_isEditing ? 'Chỉnh sửa địa chỉ' : 'Thêm địa chỉ mới'),
+      title: Text(_isEditing ? context.l10n.addressEditTitle : context.l10n.addressAddNew),
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -368,14 +369,14 @@ class _AddEditAddressDialogState extends State<_AddEditAddressDialog> {
               // Label selector
               DropdownButtonFormField<String>(
                 value: _selectedLabel,
-                decoration: const InputDecoration(
-                  labelText: 'Loại địa chỉ',
-                  prefixIcon: Icon(Icons.label_outline),
+                decoration: InputDecoration(
+                  labelText: context.l10n.addressTypeLabel,
+                  prefixIcon: const Icon(Icons.label_outline),
                 ),
-                items: const [
-                  DropdownMenuItem(value: 'home', child: Text('Nhà')),
-                  DropdownMenuItem(value: 'work', child: Text('Công ty')),
-                  DropdownMenuItem(value: 'other', child: Text('Khác')),
+                items: [
+                  DropdownMenuItem(value: 'home', child: Text(context.l10n.addressTypeHome)),
+                  DropdownMenuItem(value: 'work', child: Text(context.l10n.addressTypeWork)),
+                  DropdownMenuItem(value: 'other', child: Text(context.l10n.addressTypeOther)),
                 ],
                 onChanged: (value) {
                   if (value != null) {
@@ -390,14 +391,14 @@ class _AddEditAddressDialogState extends State<_AddEditAddressDialog> {
               // Address line
               TextFormField(
                 controller: _addressLineController,
-                decoration: const InputDecoration(
-                  labelText: 'Địa chỉ',
-                  hintText: 'Số nhà, tên đường',
-                  prefixIcon: Icon(Icons.home_outlined),
+                decoration: InputDecoration(
+                  labelText: context.l10n.addressStreet,
+                  hintText: context.l10n.addressStreetHint,
+                  prefixIcon: const Icon(Icons.home_outlined),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Vui lòng nhập địa chỉ';
+                    return context.l10n.addressStreetRequired;
                   }
                   return null;
                 },
@@ -407,14 +408,14 @@ class _AddEditAddressDialogState extends State<_AddEditAddressDialog> {
               // Ward
               TextFormField(
                 controller: _wardController,
-                decoration: const InputDecoration(
-                  labelText: 'Phường/Xã',
-                  hintText: 'Nhập phường/xã',
-                  prefixIcon: Icon(Icons.location_city_outlined),
+                decoration: InputDecoration(
+                  labelText: context.l10n.addressWard,
+                  hintText: context.l10n.addressWardHint,
+                  prefixIcon: const Icon(Icons.location_city_outlined),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Vui lòng nhập phường/xã';
+                    return context.l10n.addressWardRequired;
                   }
                   return null;
                 },
@@ -424,14 +425,14 @@ class _AddEditAddressDialogState extends State<_AddEditAddressDialog> {
               // District
               TextFormField(
                 controller: _districtController,
-                decoration: const InputDecoration(
-                  labelText: 'Quận/Huyện',
-                  hintText: 'Nhập quận/huyện',
-                  prefixIcon: Icon(Icons.map_outlined),
+                decoration: InputDecoration(
+                  labelText: context.l10n.addressDistrict,
+                  hintText: context.l10n.addressDistrictHint,
+                  prefixIcon: const Icon(Icons.map_outlined),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Vui lòng nhập quận/huyện';
+                    return context.l10n.addressDistrictRequired;
                   }
                   return null;
                 },
@@ -441,14 +442,14 @@ class _AddEditAddressDialogState extends State<_AddEditAddressDialog> {
               // City
               TextFormField(
                 controller: _cityController,
-                decoration: const InputDecoration(
-                  labelText: 'Thành phố',
-                  hintText: 'Nhập thành phố',
-                  prefixIcon: Icon(Icons.apartment_outlined),
+                decoration: InputDecoration(
+                  labelText: context.l10n.addressCity,
+                  hintText: context.l10n.addressCityHint,
+                  prefixIcon: const Icon(Icons.apartment_outlined),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Vui lòng nhập thành phố';
+                    return context.l10n.addressCityRequired;
                   }
                   return null;
                 },
@@ -460,11 +461,11 @@ class _AddEditAddressDialogState extends State<_AddEditAddressDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Hủy'),
+          child: Text(context.l10n.cancel),
         ),
         ElevatedButton(
           onPressed: _onSave,
-          child: Text(_isEditing ? 'Cập nhật' : 'Thêm'),
+          child: Text(_isEditing ? context.l10n.addressUpdate : context.l10n.addressAdd),
         ),
       ],
     );

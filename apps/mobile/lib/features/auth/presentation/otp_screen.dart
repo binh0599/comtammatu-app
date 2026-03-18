@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../data/auth_repository.dart';
 
@@ -132,8 +133,8 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
         )
         .ignore();
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Đã gửi lại mã OTP'),
+      SnackBar(
+        content: Text(context.l10n.authOtpResent),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -144,7 +145,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Xác thực OTP'),
+        title: Text(context.l10n.authOtpTitle),
       ),
       body: SafeArea(
         child: Padding(
@@ -164,7 +165,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
               // Title
               Text(
-                'Nhập mã xác thực',
+                context.l10n.authOtpEnterCode,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
@@ -175,7 +176,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
               // Subtitle with phone
               Text.rich(
                 TextSpan(
-                  text: 'Mã OTP đã được gửi đến số\n',
+                  text: context.l10n.authOtpSentTo,
                   children: [
                     TextSpan(
                       text: widget.phoneNumber,
@@ -268,7 +269,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
               Center(
                 child: _remainingSeconds > 0
                     ? Text(
-                        'Gửi lại mã sau ${_remainingSeconds}s',
+                        context.l10n.authOtpResendCountdown(_remainingSeconds),
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium
@@ -276,7 +277,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                       )
                     : TextButton(
                         onPressed: _handleResend,
-                        child: const Text('Gửi lại mã OTP'),
+                        child: Text(context.l10n.authOtpResend),
                       ),
               ),
 
@@ -286,7 +287,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
               AppButton(
                 onPressed: _isLoading || !_isOtpComplete ? null : _handleVerify,
                 isLoading: _isLoading,
-                label: 'Xác nhận',
+                label: context.l10n.confirm,
               ),
               const SizedBox(height: 16),
             ],

@@ -13,11 +13,11 @@
 | Test files | 1 (0% coverage) | 14 files, 167+ tests |
 | CI/CD | FAILING (281 lint issues) | PASSING (analyze + test + build) |
 | Freezed models | NONE | All 17 migrated |
-| Offline-first (Drift) | Not wired | Menu + Store cache-first |
+| Offline-first (Drift) | Not wired | 6/6 repos cache-first + connectivity |
 | Feature completeness | ~40% screens | ~90% screens wired to API |
 | Deep linking | Not configured | Android + iOS configured |
 | Analytics/Monitoring | Not wired | PostHog + Sentry integrated |
-| i18n | Hardcoded | ARB setup done, strings partial |
+| i18n | Hardcoded | 258 ARB strings, 15 screens wired |
 | Fastlane | Not configured | Android + iOS configured |
 | Store metadata | None | 12 files (vi-VN + en-US) |
 
@@ -109,21 +109,23 @@
 - **Owner:** `sr-flutter-dev`
 - **Dependencies:** Backend endpoints `earn-points`, `redeem-points` phải sẵn sàng
 
-### P5.3 — Localization Completion 🟡
-- [ ] Audit tất cả hardcoded Vietnamese strings trong `lib/`
-- [ ] Di chuyển vào `app_vi.arb` + `app_en.arb`
-- [ ] Wire `AppLocalizations.of(context)` thay thế hardcoded text
-- [ ] Vietnamese diacritics audit (VIETNAMESE_DIACRITICS rule)
+### P5.3 — Localization Completion ✅ (2026-03-18)
+- [x] Audit tất cả hardcoded Vietnamese strings trong `lib/` — 250+ strings identified
+- [x] Di chuyển vào `app_vi.arb` + `app_en.arb` — 88 → 258 strings
+- [x] Wire `AppLocalizations.of(context)` thay thế hardcoded text — 15 screens wired
+- [x] Widget tests updated with l10n delegates
+- [ ] Vietnamese diacritics audit (VIETNAMESE_DIACRITICS rule) — deferred to P6
 - **Owner:** `sr-flutter-dev`
 
-### P5.4 — Offline Cache Expansion 🟡
-- [ ] Orders cache-first via Drift (hiện chỉ có menu + store)
-- [ ] Loyalty dashboard cache-first
-- [ ] Addresses cache-first
-- [ ] Vouchers cache-first
-- [ ] Network connectivity listener + auto-sync khi có mạng lại
+### P5.4 — Offline Cache Expansion ✅ (2026-03-18)
+- [x] Orders cache-first via CacheService (3-tier: fresh → API → stale fallback)
+- [x] Loyalty dashboard cache-first
+- [x] Addresses cache-first (write ops invalidate cache)
+- [x] Vouchers cache-first (available + mine, separate cache keys)
+- [x] CacheService expanded: loyalty, addresses, vouchers keys + clearCache updated
+- [x] Network connectivity listener (`connectivity_plus` + Riverpod providers)
 - **Owner:** `sr-flutter-dev`
-- **Rule:** OFFLINE_FIRST — mọi data hiển thị phải có local cache
+- **Rule:** OFFLINE_FIRST — ✅ 6/6 customer-facing repositories now cache-first
 
 ---
 

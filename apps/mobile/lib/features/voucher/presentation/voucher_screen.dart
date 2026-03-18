@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../models/voucher_model.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../../../shared/utils/formatters.dart';
 import '../../../shared/widgets/empty_view.dart';
 import '../../../shared/widgets/error_view.dart';
@@ -49,7 +50,7 @@ class _VoucherScreenState extends ConsumerState<VoucherScreen>
           borderRadius: BorderRadius.circular(16),
         ),
         title: Text(
-          'Xác nhận đổi voucher',
+          context.l10n.voucherRedeemConfirmTitle,
           style: Theme.of(ctx).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,
@@ -68,7 +69,7 @@ class _VoucherScreenState extends ConsumerState<VoucherScreen>
             ),
             const SizedBox(height: 8),
             Text(
-              'Bạn sẽ sử dụng ${Formatters.number(voucher.pointsCost)} điểm để đổi voucher này.',
+              context.l10n.voucherRedeemConfirmMessage(Formatters.number(voucher.pointsCost)),
               style: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
                     color: AppColors.textSecondary,
                   ),
@@ -78,9 +79,9 @@ class _VoucherScreenState extends ConsumerState<VoucherScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text(
-              'Huỷ',
-              style: TextStyle(color: AppColors.textSecondary),
+            child: Text(
+              context.l10n.cancel,
+              style: const TextStyle(color: AppColors.textSecondary),
             ),
           ),
           ElevatedButton(
@@ -95,7 +96,7 @@ class _VoucherScreenState extends ConsumerState<VoucherScreen>
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text('Đổi ngay'),
+            child: Text(context.l10n.voucherRedeemNow),
           ),
         ],
       ),
@@ -116,7 +117,7 @@ class _VoucherScreenState extends ConsumerState<VoucherScreen>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Đổi voucher "${voucher.title}" thành công!',
+            context.l10n.voucherRedeemSuccess(voucher.title),
           ),
           behavior: SnackBarBehavior.floating,
           backgroundColor: AppColors.success,
@@ -133,7 +134,7 @@ class _VoucherScreenState extends ConsumerState<VoucherScreen>
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Đổi voucher thất bại: $e'),
+          content: Text(context.l10n.voucherRedeemFailed(e.toString())),
           behavior: SnackBarBehavior.floating,
           backgroundColor: AppColors.error,
           shape: RoundedRectangleBorder(
@@ -148,8 +149,7 @@ class _VoucherScreenState extends ConsumerState<VoucherScreen>
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Mã "${voucher.code}" đã được sao chép. '
-          'Áp dụng khi đặt hàng!',
+          context.l10n.voucherCodeCopied(voucher.code),
         ),
         behavior: SnackBarBehavior.floating,
         backgroundColor: AppColors.info,
@@ -165,7 +165,7 @@ class _VoucherScreenState extends ConsumerState<VoucherScreen>
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Ưu đãi của tôi'),
+        title: Text(context.l10n.profileMyOffers),
         bottom: TabBar(
           controller: _tabController,
           labelColor: AppColors.primary,
@@ -180,9 +180,9 @@ class _VoucherScreenState extends ConsumerState<VoucherScreen>
             fontWeight: FontWeight.normal,
             fontSize: 15,
           ),
-          tabs: const [
-            Tab(text: 'Có sẵn'),
-            Tab(text: 'Của tôi'),
+          tabs: [
+            Tab(text: context.l10n.voucherAvailable),
+            Tab(text: context.l10n.voucherMine),
           ],
         ),
       ),
@@ -220,9 +220,9 @@ class _AvailableVouchersTab extends ConsumerWidget {
               ref.read(availableVouchersProvider.notifier).loadVouchers(),
         ),
       VoucherListLoaded(vouchers: final vouchers) => vouchers.isEmpty
-          ? const EmptyView(
+          ? EmptyView(
               icon: Icons.card_giftcard_outlined,
-              message: 'Chưa có voucher nào để đổi.\nHãy quay lại sau nhé!',
+              message: context.l10n.voucherEmptyAvailable,
             )
           : RefreshIndicator(
               color: AppColors.primary,
@@ -265,10 +265,9 @@ class _MyVouchersTab extends ConsumerWidget {
           onRetry: () => ref.read(myVouchersProvider.notifier).loadVouchers(),
         ),
       VoucherListLoaded(vouchers: final vouchers) => vouchers.isEmpty
-          ? const EmptyView(
+          ? EmptyView(
               icon: Icons.confirmation_number_outlined,
-              message:
-                  'Bạn chưa có voucher nào.\nĐổi điểm để nhận ưu đãi ngay!',
+              message: context.l10n.voucherEmptyMine,
             )
           : RefreshIndicator(
               color: AppColors.primary,
@@ -310,11 +309,11 @@ class _VoucherCard extends StatelessWidget {
   final _VoucherCardVariant variant;
   final VoidCallback onAction;
 
-  String _discountLabel() {
+  String _discountLabel(BuildContext context) {
     if (voucher.discountType == 'percentage') {
-      return 'Giảm ${voucher.discountValue}%';
+      return context.l10n.voucherDiscountPercent(voucher.discountValue.toString());
     }
-    return 'Giảm ${Formatters.formatNumber(voucher.discountValue)}\u20AB';
+    return context.l10n.voucherDiscountFixed(Formatters.formatNumber(voucher.discountValue));
   }
 
   Color get _stripColor {
@@ -346,7 +345,7 @@ class _VoucherCard extends StatelessWidget {
               // Left colored strip with discount badge
               _LeftStrip(
                 color: _stripColor,
-                label: _discountLabel(),
+                label: _discountLabel(context),
               ),
 
               // Content area
@@ -403,14 +402,14 @@ class _VoucherCard extends StatelessWidget {
                               children: [
                                 _InfoChip(
                                   icon: Icons.shopping_bag_outlined,
-                                  text:
-                                      'Đơn tối thiểu: ${Formatters.formatNumber(voucher.minOrderAmount)}\u20AB',
+                                  text: context.l10n.voucherMinOrder(
+                                      Formatters.formatNumber(voucher.minOrderAmount)),
                                 ),
                                 const SizedBox(height: 4),
                                 _InfoChip(
                                   icon: Icons.schedule_outlined,
-                                  text:
-                                      'HSD: ${Formatters.date(voucher.expiresAt)}',
+                                  text: context.l10n.voucherExpiry(
+                                      Formatters.date(voucher.expiresAt)),
                                   isWarning: _isExpiringSoon(),
                                 ),
                               ],
@@ -613,7 +612,7 @@ class _ActionButton extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        child: Text(isAvailable ? 'Đổi ngay' : 'Sử dụng'),
+        child: Text(isAvailable ? context.l10n.voucherRedeemNow : context.l10n.voucherUse),
       ),
     );
   }

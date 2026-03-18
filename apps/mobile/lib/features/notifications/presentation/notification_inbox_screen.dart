@@ -2,42 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/notification_model.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import '../domain/notification_notifier.dart';
 
 // -- Relative time helper -----------------------------------------------------
 
-/// Formats a [DateTime] as a Vietnamese relative time string.
-String formatRelativeTime(DateTime dateTime) {
+/// Formats a [DateTime] as a localized relative time string.
+String formatRelativeTime(DateTime dateTime, AppLocalizations l10n) {
   final now = DateTime.now();
   final diff = now.difference(dateTime);
 
   if (diff.isNegative) {
-    return 'Vừa xong';
+    return l10n.notifJustNow;
   }
 
   if (diff.inMinutes < 1) {
-    return 'Vừa xong';
+    return l10n.notifJustNow;
   }
 
   if (diff.inMinutes < 60) {
-    return '${diff.inMinutes} phút trước';
+    return l10n.notifMinutesAgo(diff.inMinutes);
   }
 
   if (diff.inHours < 24) {
-    return '${diff.inHours} giờ trước';
+    return l10n.notifHoursAgo(diff.inHours);
   }
 
   if (diff.inDays == 1) {
-    return 'Hôm qua';
+    return l10n.notifYesterday;
   }
 
   if (diff.inDays == 2) {
-    return 'Hôm kia';
+    return l10n.notifDayBeforeYesterday;
   }
 
   if (diff.inDays <= 7) {
-    return '${diff.inDays} ngày trước';
+    return l10n.notifDaysAgo(diff.inDays);
   }
 
   // Over 7 days — show dd/MM/yyyy
@@ -108,7 +110,7 @@ class _NotificationInboxScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Thông báo'),
+        title: Text(context.l10n.notifications),
         actions: [
           if (unreadCount > 0)
             TextButton(
@@ -117,7 +119,7 @@ class _NotificationInboxScreenState
                     .read(notificationInboxNotifierProvider.notifier)
                     .markAllAsRead();
               },
-              child: const Text('Đọc tất cả'),
+              child: Text(context.l10n.notifReadAll),
             ),
         ],
       ),
@@ -142,7 +144,7 @@ class _NotificationInboxScreenState
                   size: 64, color: AppColors.textHint),
               const SizedBox(height: 16),
               Text(
-                'Không thể tải thông báo',
+                context.l10n.notifCannotLoad,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: AppColors.textSecondary,
                     ),
@@ -154,7 +156,7 @@ class _NotificationInboxScreenState
                       .read(notificationInboxNotifierProvider.notifier)
                       .loadNotifications();
                 },
-                child: const Text('Thử lại'),
+                child: Text(context.l10n.retry),
               ),
             ],
           ),
@@ -195,11 +197,11 @@ class _NotificationInboxScreenState
                     .deleteNotification(notification.id);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: const Text('Đã xóa thông báo'),
+                    content: Text(context.l10n.notifDeleted),
                     behavior: SnackBarBehavior.floating,
                     duration: const Duration(seconds: 2),
                     action: SnackBarAction(
-                      label: 'Hoàn tác',
+                      label: context.l10n.notifUndo,
                       onPressed: () {
                         // Reload to restore (in production, undo delete)
                         ref
@@ -233,7 +235,7 @@ class _NotificationInboxScreenState
             ),
             const SizedBox(height: 16),
             Text(
-              'Không có thông báo nào',
+              context.l10n.noNotifications,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: AppColors.textSecondary,
@@ -355,7 +357,7 @@ class _NotificationTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      formatRelativeTime(notification.createdAt),
+                      formatRelativeTime(notification.createdAt, context.l10n),
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: AppColors.textHint,
                           ),
