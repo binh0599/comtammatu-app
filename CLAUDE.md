@@ -11,7 +11,7 @@
 | Đã xong | Chưa xong |
 |---------|-----------|
 | 18 Freezed models | E2E tests (P6.2) |
-| 95% screens wired to API | Monetary `double` → `int` audit (P6.1) |
+| 95% screens wired to API | E2E tests (P6.2) |
 | Localization (285 strings, 17 screens) | Vietnamese diacritics audit |
 | Offline cache (6/6 repos cache-first) | UI polish + dark mode (P6.3) |
 | Push notifications (FCM + permission) | Performance optimization (P6.4) |
@@ -53,7 +53,7 @@
 > Violation = stop immediately and diagnose.
 
 1. **RLS_EVERYWHERE** — Mọi table phải có RLS policies.
-2. **MONEY_TYPE** — `NUMERIC(14,2)` totals, `NUMERIC(12,2)` prices. NEVER FLOAT. ⚠️ FE hiện dùng `double` — cần audit P6.1
+2. **MONEY_TYPE** — `NUMERIC(14,2)` totals, `NUMERIC(12,2)` prices. NEVER FLOAT. ✅ FE dùng `int` (VNĐ whole numbers)
 3. **TIME_TYPE** — `TIMESTAMPTZ` always.
 4. **PK_TYPE** — `BIGINT GENERATED ALWAYS AS IDENTITY`.
 5. **TEXT_TYPE** — `TEXT` always. Never VARCHAR.

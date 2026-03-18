@@ -142,7 +142,7 @@
 
 ### P6.1 — Tech Debt Resolution
 - [ ] `menu_screen.dart` has inline `MenuItem` class duplicating domain model → refactor
-- [ ] `double` used for monetary values → audit per MONEY_TYPE rule, chuyển sang `int` (đơn vị VND)
+- [x] `double` → `int` monetary audit: 28 fields across 12 models + CartState + UI + tests (2026-03-19)
 - [ ] Auth token refresh interceptor chưa handle edge cases (expired refresh token)
 - [ ] `CacheService` mixed SharedPreferences + Drift → chuẩn hóa sang Drift only
 - **Owner:** `sr-flutter-dev`
