@@ -74,7 +74,8 @@ class OrderRepository {
       if (_cacheService.isCacheValid(_cacheKey, _cacheMaxAge)) {
         final cached = _cacheService.getCachedOrders();
         if (cached.isNotEmpty) {
-          return PaginatedOrders.fromJson({'orders': cached, 'has_more': false});
+          return PaginatedOrders.fromJson(
+              {'orders': cached, 'has_more': false});
         }
       }
     }

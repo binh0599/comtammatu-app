@@ -244,7 +244,8 @@ class _StoreCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  context.l10n.storeOpeningHours(store.openingTime, store.closingTime),
+                  context.l10n
+                      .storeOpeningHours(store.openingTime, store.closingTime),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: AppColors.textSecondary,
                       ),

@@ -233,8 +233,7 @@ class _CartContent extends ConsumerWidget {
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     subtitle: Text(
-                      cartState.deliveryAddress ??
-                          context.l10n.cartNoAddress,
+                      cartState.deliveryAddress ?? context.l10n.cartNoAddress,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppColors.textHint,
                           ),

@@ -69,7 +69,8 @@ class _VoucherScreenState extends ConsumerState<VoucherScreen>
             ),
             const SizedBox(height: 8),
             Text(
-              context.l10n.voucherRedeemConfirmMessage(Formatters.number(voucher.pointsCost)),
+              context.l10n.voucherRedeemConfirmMessage(
+                  Formatters.number(voucher.pointsCost)),
               style: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
                     color: AppColors.textSecondary,
                   ),
@@ -311,9 +312,11 @@ class _VoucherCard extends StatelessWidget {
 
   String _discountLabel(BuildContext context) {
     if (voucher.discountType == 'percentage') {
-      return context.l10n.voucherDiscountPercent(voucher.discountValue.toString());
+      return context.l10n
+          .voucherDiscountPercent(voucher.discountValue.toString());
     }
-    return context.l10n.voucherDiscountFixed(Formatters.formatNumber(voucher.discountValue));
+    return context.l10n
+        .voucherDiscountFixed(Formatters.formatNumber(voucher.discountValue));
   }
 
   Color get _stripColor {
@@ -403,7 +406,8 @@ class _VoucherCard extends StatelessWidget {
                                 _InfoChip(
                                   icon: Icons.shopping_bag_outlined,
                                   text: context.l10n.voucherMinOrder(
-                                      Formatters.formatNumber(voucher.minOrderAmount)),
+                                      Formatters.formatNumber(
+                                          voucher.minOrderAmount)),
                                 ),
                                 const SizedBox(height: 4),
                                 _InfoChip(
@@ -612,7 +616,9 @@ class _ActionButton extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        child: Text(isAvailable ? context.l10n.voucherRedeemNow : context.l10n.voucherUse),
+        child: Text(isAvailable
+            ? context.l10n.voucherRedeemNow
+            : context.l10n.voucherUse),
       ),
     );
   }

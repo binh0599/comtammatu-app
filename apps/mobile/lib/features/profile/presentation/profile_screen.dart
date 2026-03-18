@@ -89,7 +89,8 @@ class _UserHeader extends ConsumerWidget {
     final String displayPhone;
     if (authState is Authenticated) {
       final user = authState.user;
-      displayName = user.userMetadata?['full_name'] as String? ?? context.l10n.profileUser;
+      displayName = user.userMetadata?['full_name'] as String? ??
+          context.l10n.profileUser;
       displayPhone = user.phone ?? '';
     } else {
       displayName = context.l10n.profileUser;

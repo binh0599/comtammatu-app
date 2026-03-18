@@ -53,9 +53,7 @@ class AddressRepository {
       // 3. Fallback to stale cache on network error
       final staleCache = _cacheService.getCachedAddresses();
       if (staleCache.isNotEmpty) {
-        return staleCache
-            .map((e) => Address.fromJson(e))
-            .toList();
+        return staleCache.map((e) => Address.fromJson(e)).toList();
       }
       rethrow;
     }

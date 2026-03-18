@@ -10,8 +10,7 @@ class RedeemPointsScreen extends ConsumerStatefulWidget {
   const RedeemPointsScreen({super.key});
 
   @override
-  ConsumerState<RedeemPointsScreen> createState() =>
-      _RedeemPointsScreenState();
+  ConsumerState<RedeemPointsScreen> createState() => _RedeemPointsScreenState();
 }
 
 class _RedeemPointsScreenState extends ConsumerState<RedeemPointsScreen> {
@@ -37,7 +36,8 @@ class _RedeemPointsScreenState extends ConsumerState<RedeemPointsScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Đổi điểm')),
       body: switch (loyaltyState) {
-        LoyaltyLoading() || LoyaltyInitial() =>
+        LoyaltyLoading() ||
+        LoyaltyInitial() =>
           const Center(child: CircularProgressIndicator()),
         LoyaltyError(:final message) => Center(
             child: Column(
@@ -49,8 +49,9 @@ class _RedeemPointsScreenState extends ConsumerState<RedeemPointsScreen> {
                 Text(message, textAlign: TextAlign.center),
                 const SizedBox(height: 16),
                 ElevatedButton.icon(
-                  onPressed: () =>
-                      ref.read(loyaltyNotifierProvider.notifier).loadDashboard(),
+                  onPressed: () => ref
+                      .read(loyaltyNotifierProvider.notifier)
+                      .loadDashboard(),
                   icon: const Icon(Icons.refresh),
                   label: const Text('Thử lại'),
                 ),
@@ -110,8 +111,7 @@ class _RedeemPointsScreenState extends ConsumerState<RedeemPointsScreen> {
                 ..._rewards.map(
                   (reward) => _RewardCard(
                     reward: reward,
-                    availablePoints:
-                        dashboard.member.availablePoints.toInt(),
+                    availablePoints: dashboard.member.availablePoints.toInt(),
                     isRedeeming: _isRedeeming,
                     onRedeem: () => _handleRedeem(reward),
                   ),
@@ -286,8 +286,7 @@ class _RewardCard extends StatelessWidget {
                   : AppColors.textSecondary.withValues(alpha: 0.1),
               child: Icon(
                 reward.icon,
-                color:
-                    canAfford ? AppColors.primary : AppColors.textSecondary,
+                color: canAfford ? AppColors.primary : AppColors.textSecondary,
                 size: 24,
               ),
             ),

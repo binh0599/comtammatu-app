@@ -179,8 +179,7 @@ class _LoadedBody extends StatelessWidget {
                         child: _ActionButton(
                           icon: Icons.arrow_upward,
                           label: context.l10n.earnPoints,
-                          onTap: () =>
-                              context.push(AppRoutes.earnPoints),
+                          onTap: () => context.push(AppRoutes.earnPoints),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -188,8 +187,7 @@ class _LoadedBody extends StatelessWidget {
                         child: _ActionButton(
                           icon: Icons.card_giftcard,
                           label: context.l10n.redeemPoints,
-                          onTap: () =>
-                              context.push(AppRoutes.redeemPoints),
+                          onTap: () => context.push(AppRoutes.redeemPoints),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -197,8 +195,7 @@ class _LoadedBody extends StatelessWidget {
                         child: _ActionButton(
                           icon: Icons.qr_code_scanner,
                           label: context.l10n.checkIn,
-                          onTap: () =>
-                              context.push(AppRoutes.checkin),
+                          onTap: () => context.push(AppRoutes.checkin),
                         ),
                       ),
                     ],
@@ -243,7 +240,9 @@ class _LoadedBody extends StatelessWidget {
                     _TierProgressBar(nextTier: tier.nextTier!),
                     const SizedBox(height: 10),
                     Text(
-                      context.l10n.loyaltyPointsNeeded(tier.nextTier!.pointsNeeded.toInt(), tier.nextTier!.name),
+                      context.l10n.loyaltyPointsNeeded(
+                          tier.nextTier!.pointsNeeded.toInt(),
+                          tier.nextTier!.name),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppColors.textSecondary,
                           ),

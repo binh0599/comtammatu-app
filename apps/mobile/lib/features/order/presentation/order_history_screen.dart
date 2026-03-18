@@ -531,8 +531,7 @@ class _OrderCard extends StatelessWidget {
                           onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content:
-                                    Text(context.l10n.orderReorderAdding),
+                                content: Text(context.l10n.orderReorderAdding),
                                 duration: const Duration(seconds: 1),
                                 behavior: SnackBarBehavior.floating,
                               ),

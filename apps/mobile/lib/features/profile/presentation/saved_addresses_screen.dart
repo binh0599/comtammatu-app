@@ -359,7 +359,9 @@ class _AddEditAddressDialogState extends State<_AddEditAddressDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(_isEditing ? context.l10n.addressEditTitle : context.l10n.addressAddNew),
+      title: Text(_isEditing
+          ? context.l10n.addressEditTitle
+          : context.l10n.addressAddNew),
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -374,9 +376,13 @@ class _AddEditAddressDialogState extends State<_AddEditAddressDialog> {
                   prefixIcon: const Icon(Icons.label_outline),
                 ),
                 items: [
-                  DropdownMenuItem(value: 'home', child: Text(context.l10n.addressTypeHome)),
-                  DropdownMenuItem(value: 'work', child: Text(context.l10n.addressTypeWork)),
-                  DropdownMenuItem(value: 'other', child: Text(context.l10n.addressTypeOther)),
+                  DropdownMenuItem(
+                      value: 'home', child: Text(context.l10n.addressTypeHome)),
+                  DropdownMenuItem(
+                      value: 'work', child: Text(context.l10n.addressTypeWork)),
+                  DropdownMenuItem(
+                      value: 'other',
+                      child: Text(context.l10n.addressTypeOther)),
                 ],
                 onChanged: (value) {
                   if (value != null) {
@@ -465,7 +471,9 @@ class _AddEditAddressDialogState extends State<_AddEditAddressDialog> {
         ),
         ElevatedButton(
           onPressed: _onSave,
-          child: Text(_isEditing ? context.l10n.addressUpdate : context.l10n.addressAdd),
+          child: Text(_isEditing
+              ? context.l10n.addressUpdate
+              : context.l10n.addressAdd),
         ),
       ],
     );
