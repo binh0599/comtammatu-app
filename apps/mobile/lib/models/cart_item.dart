@@ -20,5 +20,5 @@ class CartItem with _$CartItem {
       _$CartItemFromJson(json);
 
   /// Total price for this cart line (unit price * quantity).
-  double get total => menuItem.price * quantity;
+  int get total => menuItem.price * quantity;
 }

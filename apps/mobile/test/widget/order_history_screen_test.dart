@@ -15,7 +15,7 @@ class MockOrderRepository extends Mock implements OrderRepository {}
 DeliveryOrder _sampleOrder({
   int orderId = 101,
   String status = 'delivered',
-  double total = 95000,
+  int total = 95000,
 }) {
   return DeliveryOrder(
     orderId: orderId,

@@ -10,9 +10,9 @@ class LoyaltyMember with _$LoyaltyMember {
     required int id,
     required String fullName,
     required String phone,
-    required double totalPoints,
-    required double availablePoints,
-    required double lifetimePoints,
+    required int totalPoints,
+    required int availablePoints,
+    required int lifetimePoints,
     required int version,
     String? avatarUrl,
   }) = _LoyaltyMember;

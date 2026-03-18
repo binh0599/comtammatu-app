@@ -17,7 +17,7 @@ class MockOrderRepository extends Mock implements OrderRepository {}
 MenuItem _menuItem({
   int id = 1,
   String name = 'Cơm tấm sườn',
-  double price = 45000,
+  int price = 45000,
 }) {
   return MenuItem(id: id, name: name, price: price);
 }

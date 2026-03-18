@@ -9,8 +9,8 @@ class PointTransaction with _$PointTransaction {
   const factory PointTransaction({
     required int id,
     required String type,
-    required double points,
-    required double balanceAfter,
+    required int points,
+    required int balanceAfter,
     required String description,
     required DateTime createdAt,
     String? referenceType,

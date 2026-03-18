@@ -24,7 +24,7 @@ mixin _$Promotion {
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   String get cashbackType => throw _privateConstructorUsedError;
-  double get cashbackValue => throw _privateConstructorUsedError;
+  int get cashbackValue => throw _privateConstructorUsedError;
   DateTime get startDate => throw _privateConstructorUsedError;
   DateTime get endDate => throw _privateConstructorUsedError;
   bool get eligible => throw _privateConstructorUsedError;
@@ -50,7 +50,7 @@ abstract class $PromotionCopyWith<$Res> {
       String name,
       String description,
       String cashbackType,
-      double cashbackValue,
+      int cashbackValue,
       DateTime startDate,
       DateTime endDate,
       bool eligible,
@@ -102,7 +102,7 @@ class _$PromotionCopyWithImpl<$Res, $Val extends Promotion>
       cashbackValue: null == cashbackValue
           ? _value.cashbackValue
           : cashbackValue // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
@@ -136,7 +136,7 @@ abstract class _$$PromotionImplCopyWith<$Res>
       String name,
       String description,
       String cashbackType,
-      double cashbackValue,
+      int cashbackValue,
       DateTime startDate,
       DateTime endDate,
       bool eligible,
@@ -186,7 +186,7 @@ class __$$PromotionImplCopyWithImpl<$Res>
       cashbackValue: null == cashbackValue
           ? _value.cashbackValue
           : cashbackValue // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
@@ -235,7 +235,7 @@ class _$PromotionImpl extends _Promotion {
   @override
   final String cashbackType;
   @override
-  final double cashbackValue;
+  final int cashbackValue;
   @override
   final DateTime startDate;
   @override
@@ -299,7 +299,7 @@ abstract class _Promotion extends Promotion {
       required final String name,
       required final String description,
       required final String cashbackType,
-      required final double cashbackValue,
+      required final int cashbackValue,
       required final DateTime startDate,
       required final DateTime endDate,
       required final bool eligible,
@@ -318,7 +318,7 @@ abstract class _Promotion extends Promotion {
   @override
   String get cashbackType;
   @override
-  double get cashbackValue;
+  int get cashbackValue;
   @override
   DateTime get startDate;
   @override

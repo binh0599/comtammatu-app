@@ -12,7 +12,7 @@ _$PromotionImpl _$$PromotionImplFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       description: json['description'] as String,
       cashbackType: json['cashback_type'] as String,
-      cashbackValue: (json['cashback_value'] as num).toDouble(),
+      cashbackValue: (json['cashback_value'] as num).toInt(),
       startDate: DateTime.parse(json['start_date'] as String),
       endDate: DateTime.parse(json['end_date'] as String),
       eligible: json['eligible'] as bool,

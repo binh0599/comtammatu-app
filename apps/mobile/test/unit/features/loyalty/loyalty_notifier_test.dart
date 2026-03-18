@@ -48,7 +48,7 @@ LoyaltyDashboard _sampleDashboard() {
         name: 'Double Points Weekend',
         description: 'Nhân đôi điểm cuối tuần',
         cashbackType: 'percent',
-        cashbackValue: 5.0,
+        cashbackValue: 5,
         startDate: DateTime(2026, 3, 15),
         endDate: DateTime(2026, 3, 31),
         eligible: true,
@@ -135,7 +135,7 @@ void main() {
       final json = {
         'redemption_id': 6001,
         'points_deducted': 500,
-        'new_balance': 1000.0,
+        'new_balance': 1000,
         'reward': {
           'id': 201,
           'name': 'Cơm tấm sườn bì chả miễn phí',
@@ -151,7 +151,7 @@ void main() {
 
       expect(result.redemptionId, 6001);
       expect(result.pointsDeducted, 500);
-      expect(result.newBalance, 1000.0);
+      expect(result.newBalance, 1000);
       expect(result.reward, isNotNull);
       expect(result.reward!.name, 'Cơm tấm sườn bì chả miễn phí');
       expect(result.reward!.voucherCode, 'RDM-2026-6001');
@@ -162,7 +162,7 @@ void main() {
       final json = {
         'redemption_id': 6002,
         'points_deducted': 100,
-        'new_balance': 1400.0,
+        'new_balance': 1400,
       };
 
       final result = RedemptionResult.fromJson(json);

@@ -22,8 +22,8 @@ TierProgress _$TierProgressFromJson(Map<String, dynamic> json) {
 mixin _$TierProgress {
   String get name => throw _privateConstructorUsedError;
   String get tierCode => throw _privateConstructorUsedError;
-  double get minPoints => throw _privateConstructorUsedError;
-  double get pointsNeeded => throw _privateConstructorUsedError;
+  int get minPoints => throw _privateConstructorUsedError;
+  int get pointsNeeded => throw _privateConstructorUsedError;
   double get progressPercent => throw _privateConstructorUsedError;
 
   /// Serializes this TierProgress to a JSON map.
@@ -45,8 +45,8 @@ abstract class $TierProgressCopyWith<$Res> {
   $Res call(
       {String name,
       String tierCode,
-      double minPoints,
-      double pointsNeeded,
+      int minPoints,
+      int pointsNeeded,
       double progressPercent});
 }
 
@@ -83,11 +83,11 @@ class _$TierProgressCopyWithImpl<$Res, $Val extends TierProgress>
       minPoints: null == minPoints
           ? _value.minPoints
           : minPoints // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       pointsNeeded: null == pointsNeeded
           ? _value.pointsNeeded
           : pointsNeeded // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       progressPercent: null == progressPercent
           ? _value.progressPercent
           : progressPercent // ignore: cast_nullable_to_non_nullable
@@ -107,8 +107,8 @@ abstract class _$$TierProgressImplCopyWith<$Res>
   $Res call(
       {String name,
       String tierCode,
-      double minPoints,
-      double pointsNeeded,
+      int minPoints,
+      int pointsNeeded,
       double progressPercent});
 }
 
@@ -143,11 +143,11 @@ class __$$TierProgressImplCopyWithImpl<$Res>
       minPoints: null == minPoints
           ? _value.minPoints
           : minPoints // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       pointsNeeded: null == pointsNeeded
           ? _value.pointsNeeded
           : pointsNeeded // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       progressPercent: null == progressPercent
           ? _value.progressPercent
           : progressPercent // ignore: cast_nullable_to_non_nullable
@@ -175,9 +175,9 @@ class _$TierProgressImpl implements _TierProgress {
   @override
   final String tierCode;
   @override
-  final double minPoints;
+  final int minPoints;
   @override
-  final double pointsNeeded;
+  final int pointsNeeded;
   @override
   final double progressPercent;
 
@@ -227,8 +227,8 @@ abstract class _TierProgress implements TierProgress {
   const factory _TierProgress(
       {required final String name,
       required final String tierCode,
-      required final double minPoints,
-      required final double pointsNeeded,
+      required final int minPoints,
+      required final int pointsNeeded,
       required final double progressPercent}) = _$TierProgressImpl;
 
   factory _TierProgress.fromJson(Map<String, dynamic> json) =
@@ -239,9 +239,9 @@ abstract class _TierProgress implements TierProgress {
   @override
   String get tierCode;
   @override
-  double get minPoints;
+  int get minPoints;
   @override
-  double get pointsNeeded;
+  int get pointsNeeded;
   @override
   double get progressPercent;
 

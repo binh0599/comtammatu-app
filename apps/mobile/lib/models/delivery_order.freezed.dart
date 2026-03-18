@@ -23,8 +23,8 @@ mixin _$OrderItem {
   int get menuItemId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   int get quantity => throw _privateConstructorUsedError;
-  double get unitPrice => throw _privateConstructorUsedError;
-  double get subtotal => throw _privateConstructorUsedError;
+  int get unitPrice => throw _privateConstructorUsedError;
+  int get subtotal => throw _privateConstructorUsedError;
 
   /// Serializes this OrderItem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,11 +42,7 @@ abstract class $OrderItemCopyWith<$Res> {
       _$OrderItemCopyWithImpl<$Res, OrderItem>;
   @useResult
   $Res call(
-      {int menuItemId,
-      String name,
-      int quantity,
-      double unitPrice,
-      double subtotal});
+      {int menuItemId, String name, int quantity, int unitPrice, int subtotal});
 }
 
 /// @nodoc
@@ -86,11 +82,11 @@ class _$OrderItemCopyWithImpl<$Res, $Val extends OrderItem>
       unitPrice: null == unitPrice
           ? _value.unitPrice
           : unitPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       subtotal: null == subtotal
           ? _value.subtotal
           : subtotal // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
     ) as $Val);
   }
 }
@@ -104,11 +100,7 @@ abstract class _$$OrderItemImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int menuItemId,
-      String name,
-      int quantity,
-      double unitPrice,
-      double subtotal});
+      {int menuItemId, String name, int quantity, int unitPrice, int subtotal});
 }
 
 /// @nodoc
@@ -146,11 +138,11 @@ class __$$OrderItemImplCopyWithImpl<$Res>
       unitPrice: null == unitPrice
           ? _value.unitPrice
           : unitPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       subtotal: null == subtotal
           ? _value.subtotal
           : subtotal // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
     ));
   }
 }
@@ -177,9 +169,9 @@ class _$OrderItemImpl extends _OrderItem {
   @override
   final int quantity;
   @override
-  final double unitPrice;
+  final int unitPrice;
   @override
-  final double subtotal;
+  final int subtotal;
 
   @override
   String toString() {
@@ -228,8 +220,8 @@ abstract class _OrderItem extends OrderItem {
       {required final int menuItemId,
       required final String name,
       required final int quantity,
-      required final double unitPrice,
-      required final double subtotal}) = _$OrderItemImpl;
+      required final int unitPrice,
+      required final int subtotal}) = _$OrderItemImpl;
   const _OrderItem._() : super._();
 
   factory _OrderItem.fromJson(Map<String, dynamic> json) =
@@ -242,9 +234,9 @@ abstract class _OrderItem extends OrderItem {
   @override
   int get quantity;
   @override
-  double get unitPrice;
+  int get unitPrice;
   @override
-  double get subtotal;
+  int get subtotal;
 
   /// Create a copy of OrderItem
   /// with the given fields replaced by the non-null parameter values.
@@ -264,10 +256,10 @@ mixin _$DeliveryOrder {
   int get deliveryOrderId => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
   List<OrderItem> get items => throw _privateConstructorUsedError;
-  double get subtotal => throw _privateConstructorUsedError;
-  double get deliveryFee => throw _privateConstructorUsedError;
-  double get discount => throw _privateConstructorUsedError;
-  double get total => throw _privateConstructorUsedError;
+  int get subtotal => throw _privateConstructorUsedError;
+  int get deliveryFee => throw _privateConstructorUsedError;
+  int get discount => throw _privateConstructorUsedError;
+  int get total => throw _privateConstructorUsedError;
   DateTime get estimatedDeliveryAt => throw _privateConstructorUsedError;
   int get pointsWillEarn => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -293,10 +285,10 @@ abstract class $DeliveryOrderCopyWith<$Res> {
       int deliveryOrderId,
       String status,
       List<OrderItem> items,
-      double subtotal,
-      double deliveryFee,
-      double discount,
-      double total,
+      int subtotal,
+      int deliveryFee,
+      int discount,
+      int total,
       DateTime estimatedDeliveryAt,
       int pointsWillEarn,
       DateTime createdAt});
@@ -349,19 +341,19 @@ class _$DeliveryOrderCopyWithImpl<$Res, $Val extends DeliveryOrder>
       subtotal: null == subtotal
           ? _value.subtotal
           : subtotal // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       deliveryFee: null == deliveryFee
           ? _value.deliveryFee
           : deliveryFee // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       discount: null == discount
           ? _value.discount
           : discount // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       total: null == total
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       estimatedDeliveryAt: null == estimatedDeliveryAt
           ? _value.estimatedDeliveryAt
           : estimatedDeliveryAt // ignore: cast_nullable_to_non_nullable
@@ -391,10 +383,10 @@ abstract class _$$DeliveryOrderImplCopyWith<$Res>
       int deliveryOrderId,
       String status,
       List<OrderItem> items,
-      double subtotal,
-      double deliveryFee,
-      double discount,
-      double total,
+      int subtotal,
+      int deliveryFee,
+      int discount,
+      int total,
       DateTime estimatedDeliveryAt,
       int pointsWillEarn,
       DateTime createdAt});
@@ -445,19 +437,19 @@ class __$$DeliveryOrderImplCopyWithImpl<$Res>
       subtotal: null == subtotal
           ? _value.subtotal
           : subtotal // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       deliveryFee: null == deliveryFee
           ? _value.deliveryFee
           : deliveryFee // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       discount: null == discount
           ? _value.discount
           : discount // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       total: null == total
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       estimatedDeliveryAt: null == estimatedDeliveryAt
           ? _value.estimatedDeliveryAt
           : estimatedDeliveryAt // ignore: cast_nullable_to_non_nullable
@@ -511,13 +503,13 @@ class _$DeliveryOrderImpl extends _DeliveryOrder {
   }
 
   @override
-  final double subtotal;
+  final int subtotal;
   @override
-  final double deliveryFee;
+  final int deliveryFee;
   @override
-  final double discount;
+  final int discount;
   @override
-  final double total;
+  final int total;
   @override
   final DateTime estimatedDeliveryAt;
   @override
@@ -593,10 +585,10 @@ abstract class _DeliveryOrder extends DeliveryOrder {
       required final int deliveryOrderId,
       required final String status,
       required final List<OrderItem> items,
-      required final double subtotal,
-      required final double deliveryFee,
-      required final double discount,
-      required final double total,
+      required final int subtotal,
+      required final int deliveryFee,
+      required final int discount,
+      required final int total,
       required final DateTime estimatedDeliveryAt,
       required final int pointsWillEarn,
       required final DateTime createdAt}) = _$DeliveryOrderImpl;
@@ -614,13 +606,13 @@ abstract class _DeliveryOrder extends DeliveryOrder {
   @override
   List<OrderItem> get items;
   @override
-  double get subtotal;
+  int get subtotal;
   @override
-  double get deliveryFee;
+  int get deliveryFee;
   @override
-  double get discount;
+  int get discount;
   @override
-  double get total;
+  int get total;
   @override
   DateTime get estimatedDeliveryAt;
   @override

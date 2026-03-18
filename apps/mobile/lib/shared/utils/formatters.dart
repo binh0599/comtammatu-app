@@ -12,7 +12,7 @@ class Formatters {
   );
 
   /// Format amount as Vietnamese currency (e.g., 150.000đ).
-  static String currency(num amount) {
+  static String currency(int amount) {
     return _currencyFormat.format(amount);
   }
 
@@ -77,5 +77,5 @@ class Formatters {
   static String formatDateTime(DateTime dt) => dateTime(dt);
 
   /// Alias for currency() — used across screens.
-  static String formatCurrency(num amount) => currency(amount);
+  static String formatCurrency(int amount) => currency(amount);
 }

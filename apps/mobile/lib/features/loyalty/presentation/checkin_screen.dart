@@ -86,7 +86,7 @@ class _CheckinScreenState extends ConsumerState<CheckinScreen> {
   }
 
   void _showSuccessDialog({
-    required double pointsEarned,
+    required int pointsEarned,
     required String branchName,
     required int streakDays,
   }) {

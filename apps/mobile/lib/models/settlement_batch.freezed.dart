@@ -26,10 +26,10 @@ mixin _$SettlementBatch {
   int? get id => throw _privateConstructorUsedError;
   int? get posSessionId => throw _privateConstructorUsedError;
   String? get provider => throw _privateConstructorUsedError;
-  double get totalSales => throw _privateConstructorUsedError;
-  double get totalRefunds => throw _privateConstructorUsedError;
-  double get totalFees => throw _privateConstructorUsedError;
-  double get netAmount => throw _privateConstructorUsedError;
+  int get totalSales => throw _privateConstructorUsedError;
+  int get totalRefunds => throw _privateConstructorUsedError;
+  int get totalFees => throw _privateConstructorUsedError;
+  int get netAmount => throw _privateConstructorUsedError;
   int get transactionCount => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
   String? get reconciledBy => throw _privateConstructorUsedError;
@@ -61,10 +61,10 @@ abstract class $SettlementBatchCopyWith<$Res> {
       int? id,
       int? posSessionId,
       String? provider,
-      double totalSales,
-      double totalRefunds,
-      double totalFees,
-      double netAmount,
+      int totalSales,
+      int totalRefunds,
+      int totalFees,
+      int netAmount,
       int transactionCount,
       String status,
       String? reconciledBy,
@@ -135,19 +135,19 @@ class _$SettlementBatchCopyWithImpl<$Res, $Val extends SettlementBatch>
       totalSales: null == totalSales
           ? _value.totalSales
           : totalSales // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       totalRefunds: null == totalRefunds
           ? _value.totalRefunds
           : totalRefunds // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       totalFees: null == totalFees
           ? _value.totalFees
           : totalFees // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       netAmount: null == netAmount
           ? _value.netAmount
           : netAmount // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       transactionCount: null == transactionCount
           ? _value.transactionCount
           : transactionCount // ignore: cast_nullable_to_non_nullable
@@ -195,10 +195,10 @@ abstract class _$$SettlementBatchImplCopyWith<$Res>
       int? id,
       int? posSessionId,
       String? provider,
-      double totalSales,
-      double totalRefunds,
-      double totalFees,
-      double netAmount,
+      int totalSales,
+      int totalRefunds,
+      int totalFees,
+      int netAmount,
       int transactionCount,
       String status,
       String? reconciledBy,
@@ -267,19 +267,19 @@ class __$$SettlementBatchImplCopyWithImpl<$Res>
       totalSales: null == totalSales
           ? _value.totalSales
           : totalSales // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       totalRefunds: null == totalRefunds
           ? _value.totalRefunds
           : totalRefunds // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       totalFees: null == totalFees
           ? _value.totalFees
           : totalFees // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       netAmount: null == netAmount
           ? _value.netAmount
           : netAmount // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       transactionCount: null == transactionCount
           ? _value.transactionCount
           : transactionCount // ignore: cast_nullable_to_non_nullable
@@ -353,16 +353,16 @@ class _$SettlementBatchImpl extends _SettlementBatch {
   final String? provider;
   @override
   @JsonKey()
-  final double totalSales;
+  final int totalSales;
   @override
   @JsonKey()
-  final double totalRefunds;
+  final int totalRefunds;
   @override
   @JsonKey()
-  final double totalFees;
+  final int totalFees;
   @override
   @JsonKey()
-  final double netAmount;
+  final int netAmount;
   @override
   @JsonKey()
   final int transactionCount;
@@ -469,10 +469,10 @@ abstract class _SettlementBatch extends SettlementBatch {
       final int? id,
       final int? posSessionId,
       final String? provider,
-      final double totalSales,
-      final double totalRefunds,
-      final double totalFees,
-      final double netAmount,
+      final int totalSales,
+      final int totalRefunds,
+      final int totalFees,
+      final int netAmount,
       final int transactionCount,
       final String status,
       final String? reconciledBy,
@@ -498,13 +498,13 @@ abstract class _SettlementBatch extends SettlementBatch {
   @override
   String? get provider;
   @override
-  double get totalSales;
+  int get totalSales;
   @override
-  double get totalRefunds;
+  int get totalRefunds;
   @override
-  double get totalFees;
+  int get totalFees;
   @override
-  double get netAmount;
+  int get netAmount;
   @override
   int get transactionCount;
   @override

@@ -11,7 +11,7 @@ class Promotion with _$Promotion {
     required String name,
     required String description,
     required String cashbackType,
-    required double cashbackValue,
+    required int cashbackValue,
     required DateTime startDate,
     required DateTime endDate,
     required bool eligible,

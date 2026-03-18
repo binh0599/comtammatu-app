@@ -9,7 +9,7 @@ import 'package:mocktail/mocktail.dart';
 class MockOrderRepository extends Mock implements OrderRepository {}
 
 MenuItem _menuItem(
-    {int id = 1, String name = 'Com tam suon', double price = 45000}) {
+    {int id = 1, String name = 'Com tam suon', int price = 45000}) {
   return MenuItem(id: id, name: name, price: price);
 }
 

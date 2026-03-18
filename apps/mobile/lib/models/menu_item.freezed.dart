@@ -23,7 +23,7 @@ mixin _$MenuItem {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   @JsonKey(name: 'base_price')
-  double get price => throw _privateConstructorUsedError;
+  int get price => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   String get category => throw _privateConstructorUsedError;
@@ -49,7 +49,7 @@ abstract class $MenuItemCopyWith<$Res> {
   $Res call(
       {int id,
       String name,
-      @JsonKey(name: 'base_price') double price,
+      @JsonKey(name: 'base_price') int price,
       String? description,
       String? imageUrl,
       String category,
@@ -93,7 +93,7 @@ class _$MenuItemCopyWithImpl<$Res, $Val extends MenuItem>
       price: null == price
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -129,7 +129,7 @@ abstract class _$$MenuItemImplCopyWith<$Res>
   $Res call(
       {int id,
       String name,
-      @JsonKey(name: 'base_price') double price,
+      @JsonKey(name: 'base_price') int price,
       String? description,
       String? imageUrl,
       String category,
@@ -171,7 +171,7 @@ class __$$MenuItemImplCopyWithImpl<$Res>
       price: null == price
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -221,7 +221,7 @@ class _$MenuItemImpl extends _MenuItem {
   final String name;
   @override
   @JsonKey(name: 'base_price')
-  final double price;
+  final int price;
   @override
   final String? description;
   @override
@@ -299,7 +299,7 @@ abstract class _MenuItem extends MenuItem {
   const factory _MenuItem(
       {required final int id,
       required final String name,
-      @JsonKey(name: 'base_price') required final double price,
+      @JsonKey(name: 'base_price') required final int price,
       final String? description,
       final String? imageUrl,
       final String category,
@@ -316,7 +316,7 @@ abstract class _MenuItem extends MenuItem {
   String get name;
   @override
   @JsonKey(name: 'base_price')
-  double get price;
+  int get price;
   @override
   String? get description;
   @override

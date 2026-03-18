@@ -10,8 +10,8 @@ class OrderItem with _$OrderItem {
     required int menuItemId,
     required String name,
     required int quantity,
-    required double unitPrice,
-    required double subtotal,
+    required int unitPrice,
+    required int subtotal,
   }) = _OrderItem;
 
   const OrderItem._();
@@ -28,10 +28,10 @@ class DeliveryOrder with _$DeliveryOrder {
     required int deliveryOrderId,
     required String status,
     required List<OrderItem> items,
-    required double subtotal,
-    required double deliveryFee,
-    required double discount,
-    required double total,
+    required int subtotal,
+    required int deliveryFee,
+    required int discount,
+    required int total,
     required DateTime estimatedDeliveryAt,
     required int pointsWillEarn,
     required DateTime createdAt,

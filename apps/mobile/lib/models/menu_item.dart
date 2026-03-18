@@ -9,7 +9,7 @@ class MenuItem with _$MenuItem {
   const factory MenuItem({
     required int id,
     required String name,
-    @JsonKey(name: 'base_price') required double price,
+    @JsonKey(name: 'base_price') required int price,
     String? description,
     String? imageUrl,
     @Default('') String category,

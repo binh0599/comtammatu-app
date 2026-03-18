@@ -10,7 +10,7 @@ _$RefundImpl _$$RefundImplFromJson(Map<String, dynamic> json) => _$RefundImpl(
       paymentId: (json['payment_id'] as num).toInt(),
       orderId: (json['order_id'] as num).toInt(),
       branchId: (json['branch_id'] as num).toInt(),
-      amount: (json['amount'] as num).toDouble(),
+      amount: (json['amount'] as num).toInt(),
       reason: json['reason'] as String,
       method: json['method'] as String,
       requestedBy: json['requested_by'] as String,

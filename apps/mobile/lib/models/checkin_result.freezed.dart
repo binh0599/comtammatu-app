@@ -415,8 +415,8 @@ CheckinResult _$CheckinResultFromJson(Map<String, dynamic> json) {
 mixin _$CheckinResult {
   int get checkinId => throw _privateConstructorUsedError;
   Branch get branch => throw _privateConstructorUsedError;
-  double get pointsEarned => throw _privateConstructorUsedError;
-  double get newBalance => throw _privateConstructorUsedError;
+  int get pointsEarned => throw _privateConstructorUsedError;
+  int get newBalance => throw _privateConstructorUsedError;
   CheckinStreak get streak => throw _privateConstructorUsedError;
   DateTime get checkedInAt => throw _privateConstructorUsedError;
 
@@ -439,8 +439,8 @@ abstract class $CheckinResultCopyWith<$Res> {
   $Res call(
       {int checkinId,
       Branch branch,
-      double pointsEarned,
-      double newBalance,
+      int pointsEarned,
+      int newBalance,
       CheckinStreak streak,
       DateTime checkedInAt});
 
@@ -482,11 +482,11 @@ class _$CheckinResultCopyWithImpl<$Res, $Val extends CheckinResult>
       pointsEarned: null == pointsEarned
           ? _value.pointsEarned
           : pointsEarned // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       newBalance: null == newBalance
           ? _value.newBalance
           : newBalance // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       streak: null == streak
           ? _value.streak
           : streak // ignore: cast_nullable_to_non_nullable
@@ -530,8 +530,8 @@ abstract class _$$CheckinResultImplCopyWith<$Res>
   $Res call(
       {int checkinId,
       Branch branch,
-      double pointsEarned,
-      double newBalance,
+      int pointsEarned,
+      int newBalance,
       CheckinStreak streak,
       DateTime checkedInAt});
 
@@ -573,11 +573,11 @@ class __$$CheckinResultImplCopyWithImpl<$Res>
       pointsEarned: null == pointsEarned
           ? _value.pointsEarned
           : pointsEarned // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       newBalance: null == newBalance
           ? _value.newBalance
           : newBalance // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       streak: null == streak
           ? _value.streak
           : streak // ignore: cast_nullable_to_non_nullable
@@ -610,9 +610,9 @@ class _$CheckinResultImpl implements _CheckinResult {
   @override
   final Branch branch;
   @override
-  final double pointsEarned;
+  final int pointsEarned;
   @override
-  final double newBalance;
+  final int newBalance;
   @override
   final CheckinStreak streak;
   @override
@@ -665,8 +665,8 @@ abstract class _CheckinResult implements CheckinResult {
   const factory _CheckinResult(
       {required final int checkinId,
       required final Branch branch,
-      required final double pointsEarned,
-      required final double newBalance,
+      required final int pointsEarned,
+      required final int newBalance,
       required final CheckinStreak streak,
       required final DateTime checkedInAt}) = _$CheckinResultImpl;
 
@@ -678,9 +678,9 @@ abstract class _CheckinResult implements CheckinResult {
   @override
   Branch get branch;
   @override
-  double get pointsEarned;
+  int get pointsEarned;
   @override
-  double get newBalance;
+  int get newBalance;
   @override
   CheckinStreak get streak;
   @override

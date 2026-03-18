@@ -9,8 +9,8 @@ class TierProgress with _$TierProgress {
   const factory TierProgress({
     required String name,
     required String tierCode,
-    required double minPoints,
-    required double pointsNeeded,
+    required int minPoints,
+    required int pointsNeeded,
     required double progressPercent,
   }) = _TierProgress;
 

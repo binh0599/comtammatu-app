@@ -18,8 +18,8 @@ class CartState {
   });
 
   final List<CartItem> items;
-  final double deliveryFee;
-  final double discount;
+  final int deliveryFee;
+  final int discount;
   final String paymentMethod;
   final String? deliveryAddress;
   final double? latitude;
@@ -30,9 +30,9 @@ class CartState {
   final bool isSubmitting;
   final String? orderError;
 
-  double get subtotal => items.fold(0, (sum, item) => sum + item.total);
+  int get subtotal => items.fold(0, (sum, item) => sum + item.total);
 
-  double get total => subtotal + deliveryFee - discount;
+  int get total => subtotal + deliveryFee - discount;
 
   int get itemCount => items.fold(0, (sum, item) => sum + item.quantity);
 
@@ -40,8 +40,8 @@ class CartState {
 
   CartState copyWith({
     List<CartItem>? items,
-    double? deliveryFee,
-    double? discount,
+    int? deliveryFee,
+    int? discount,
     String? paymentMethod,
     String? deliveryAddress,
     double? latitude,

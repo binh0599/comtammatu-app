@@ -23,9 +23,9 @@ mixin _$LoyaltyMember {
   int get id => throw _privateConstructorUsedError;
   String get fullName => throw _privateConstructorUsedError;
   String get phone => throw _privateConstructorUsedError;
-  double get totalPoints => throw _privateConstructorUsedError;
-  double get availablePoints => throw _privateConstructorUsedError;
-  double get lifetimePoints => throw _privateConstructorUsedError;
+  int get totalPoints => throw _privateConstructorUsedError;
+  int get availablePoints => throw _privateConstructorUsedError;
+  int get lifetimePoints => throw _privateConstructorUsedError;
   int get version => throw _privateConstructorUsedError;
   String? get avatarUrl => throw _privateConstructorUsedError;
 
@@ -49,9 +49,9 @@ abstract class $LoyaltyMemberCopyWith<$Res> {
       {int id,
       String fullName,
       String phone,
-      double totalPoints,
-      double availablePoints,
-      double lifetimePoints,
+      int totalPoints,
+      int availablePoints,
+      int lifetimePoints,
       int version,
       String? avatarUrl});
 }
@@ -96,15 +96,15 @@ class _$LoyaltyMemberCopyWithImpl<$Res, $Val extends LoyaltyMember>
       totalPoints: null == totalPoints
           ? _value.totalPoints
           : totalPoints // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       availablePoints: null == availablePoints
           ? _value.availablePoints
           : availablePoints // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       lifetimePoints: null == lifetimePoints
           ? _value.lifetimePoints
           : lifetimePoints // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       version: null == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
@@ -129,9 +129,9 @@ abstract class _$$LoyaltyMemberImplCopyWith<$Res>
       {int id,
       String fullName,
       String phone,
-      double totalPoints,
-      double availablePoints,
-      double lifetimePoints,
+      int totalPoints,
+      int availablePoints,
+      int lifetimePoints,
       int version,
       String? avatarUrl});
 }
@@ -174,15 +174,15 @@ class __$$LoyaltyMemberImplCopyWithImpl<$Res>
       totalPoints: null == totalPoints
           ? _value.totalPoints
           : totalPoints // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       availablePoints: null == availablePoints
           ? _value.availablePoints
           : availablePoints // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       lifetimePoints: null == lifetimePoints
           ? _value.lifetimePoints
           : lifetimePoints // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       version: null == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
@@ -219,11 +219,11 @@ class _$LoyaltyMemberImpl implements _LoyaltyMember {
   @override
   final String phone;
   @override
-  final double totalPoints;
+  final int totalPoints;
   @override
-  final double availablePoints;
+  final int availablePoints;
   @override
-  final double lifetimePoints;
+  final int lifetimePoints;
   @override
   final int version;
   @override
@@ -280,9 +280,9 @@ abstract class _LoyaltyMember implements LoyaltyMember {
       {required final int id,
       required final String fullName,
       required final String phone,
-      required final double totalPoints,
-      required final double availablePoints,
-      required final double lifetimePoints,
+      required final int totalPoints,
+      required final int availablePoints,
+      required final int lifetimePoints,
       required final int version,
       final String? avatarUrl}) = _$LoyaltyMemberImpl;
 
@@ -296,11 +296,11 @@ abstract class _LoyaltyMember implements LoyaltyMember {
   @override
   String get phone;
   @override
-  double get totalPoints;
+  int get totalPoints;
   @override
-  double get availablePoints;
+  int get availablePoints;
   @override
-  double get lifetimePoints;
+  int get lifetimePoints;
   @override
   int get version;
   @override

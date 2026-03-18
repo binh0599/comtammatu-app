@@ -24,9 +24,9 @@ mixin _$SupplierInvoice {
   int get supplierId => throw _privateConstructorUsedError;
   String get invoiceNumber => throw _privateConstructorUsedError;
   DateTime get invoiceDate => throw _privateConstructorUsedError;
-  double get subtotal => throw _privateConstructorUsedError;
-  double get vatAmount => throw _privateConstructorUsedError;
-  double get totalAmount => throw _privateConstructorUsedError;
+  int get subtotal => throw _privateConstructorUsedError;
+  int get vatAmount => throw _privateConstructorUsedError;
+  int get totalAmount => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
   int? get poId => throw _privateConstructorUsedError;
   int? get grnId => throw _privateConstructorUsedError;
@@ -60,9 +60,9 @@ abstract class $SupplierInvoiceCopyWith<$Res> {
       int supplierId,
       String invoiceNumber,
       DateTime invoiceDate,
-      double subtotal,
-      double vatAmount,
-      double totalAmount,
+      int subtotal,
+      int vatAmount,
+      int totalAmount,
       int? id,
       int? poId,
       int? grnId,
@@ -130,15 +130,15 @@ class _$SupplierInvoiceCopyWithImpl<$Res, $Val extends SupplierInvoice>
       subtotal: null == subtotal
           ? _value.subtotal
           : subtotal // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       vatAmount: null == vatAmount
           ? _value.vatAmount
           : vatAmount // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       totalAmount: null == totalAmount
           ? _value.totalAmount
           : totalAmount // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -200,9 +200,9 @@ abstract class _$$SupplierInvoiceImplCopyWith<$Res>
       int supplierId,
       String invoiceNumber,
       DateTime invoiceDate,
-      double subtotal,
-      double vatAmount,
-      double totalAmount,
+      int subtotal,
+      int vatAmount,
+      int totalAmount,
       int? id,
       int? poId,
       int? grnId,
@@ -268,15 +268,15 @@ class __$$SupplierInvoiceImplCopyWithImpl<$Res>
       subtotal: null == subtotal
           ? _value.subtotal
           : subtotal // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       vatAmount: null == vatAmount
           ? _value.vatAmount
           : vatAmount // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       totalAmount: null == totalAmount
           ? _value.totalAmount
           : totalAmount // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -362,11 +362,11 @@ class _$SupplierInvoiceImpl extends _SupplierInvoice {
   @override
   final DateTime invoiceDate;
   @override
-  final double subtotal;
+  final int subtotal;
   @override
-  final double vatAmount;
+  final int vatAmount;
   @override
-  final double totalAmount;
+  final int totalAmount;
   @override
   final int? id;
   @override
@@ -478,9 +478,9 @@ abstract class _SupplierInvoice extends SupplierInvoice {
       required final int supplierId,
       required final String invoiceNumber,
       required final DateTime invoiceDate,
-      required final double subtotal,
-      required final double vatAmount,
-      required final double totalAmount,
+      required final int subtotal,
+      required final int vatAmount,
+      required final int totalAmount,
       final int? id,
       final int? poId,
       final int? grnId,
@@ -506,11 +506,11 @@ abstract class _SupplierInvoice extends SupplierInvoice {
   @override
   DateTime get invoiceDate;
   @override
-  double get subtotal;
+  int get subtotal;
   @override
-  double get vatAmount;
+  int get vatAmount;
   @override
-  double get totalAmount;
+  int get totalAmount;
   @override
   int? get id;
   @override

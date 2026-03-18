@@ -35,8 +35,8 @@ class CheckinResult with _$CheckinResult {
   const factory CheckinResult({
     required int checkinId,
     required Branch branch,
-    required double pointsEarned,
-    required double newBalance,
+    required int pointsEarned,
+    required int newBalance,
     required CheckinStreak streak,
     required DateTime checkedInAt,
   }) = _CheckinResult;

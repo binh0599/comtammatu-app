@@ -11,8 +11,8 @@ _$OrderItemImpl _$$OrderItemImplFromJson(Map<String, dynamic> json) =>
       menuItemId: (json['menu_item_id'] as num).toInt(),
       name: json['name'] as String,
       quantity: (json['quantity'] as num).toInt(),
-      unitPrice: (json['unit_price'] as num).toDouble(),
-      subtotal: (json['subtotal'] as num).toDouble(),
+      unitPrice: (json['unit_price'] as num).toInt(),
+      subtotal: (json['subtotal'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$OrderItemImplToJson(_$OrderItemImpl instance) =>
@@ -32,10 +32,10 @@ _$DeliveryOrderImpl _$$DeliveryOrderImplFromJson(Map<String, dynamic> json) =>
       items: (json['items'] as List<dynamic>)
           .map((e) => OrderItem.fromJson(e as Map<String, dynamic>))
           .toList(),
-      subtotal: (json['subtotal'] as num).toDouble(),
-      deliveryFee: (json['delivery_fee'] as num).toDouble(),
-      discount: (json['discount'] as num).toDouble(),
-      total: (json['total'] as num).toDouble(),
+      subtotal: (json['subtotal'] as num).toInt(),
+      deliveryFee: (json['delivery_fee'] as num).toInt(),
+      discount: (json['discount'] as num).toInt(),
+      total: (json['total'] as num).toInt(),
       estimatedDeliveryAt:
           DateTime.parse(json['estimated_delivery_at'] as String),
       pointsWillEarn: (json['points_will_earn'] as num).toInt(),

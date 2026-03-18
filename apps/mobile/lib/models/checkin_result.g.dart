@@ -39,8 +39,8 @@ _$CheckinResultImpl _$$CheckinResultImplFromJson(Map<String, dynamic> json) =>
     _$CheckinResultImpl(
       checkinId: (json['checkin_id'] as num).toInt(),
       branch: Branch.fromJson(json['branch'] as Map<String, dynamic>),
-      pointsEarned: (json['points_earned'] as num).toDouble(),
-      newBalance: (json['new_balance'] as num).toDouble(),
+      pointsEarned: (json['points_earned'] as num).toInt(),
+      newBalance: (json['new_balance'] as num).toInt(),
       streak: CheckinStreak.fromJson(json['streak'] as Map<String, dynamic>),
       checkedInAt: DateTime.parse(json['checked_in_at'] as String),
     );

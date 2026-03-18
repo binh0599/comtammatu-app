@@ -11,9 +11,9 @@ _$LoyaltyMemberImpl _$$LoyaltyMemberImplFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num).toInt(),
       fullName: json['full_name'] as String,
       phone: json['phone'] as String,
-      totalPoints: (json['total_points'] as num).toDouble(),
-      availablePoints: (json['available_points'] as num).toDouble(),
-      lifetimePoints: (json['lifetime_points'] as num).toDouble(),
+      totalPoints: (json['total_points'] as num).toInt(),
+      availablePoints: (json['available_points'] as num).toInt(),
+      lifetimePoints: (json['lifetime_points'] as num).toInt(),
       version: (json['version'] as num).toInt(),
       avatarUrl: json['avatar_url'] as String?,
     );

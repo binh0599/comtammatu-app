@@ -10,7 +10,7 @@ class GrnItem with _$GrnItem {
     required int grnId,
     required int ingredientId,
     required double quantityReceived,
-    required double unitCost,
+    required int unitCost,
     int? id,
     @Default(0) double quantityOrdered,
     @Default(0) double quantityRejected,
@@ -25,5 +25,5 @@ class GrnItem with _$GrnItem {
       _$GrnItemFromJson(json);
 
   double get quantityAccepted => quantityReceived - quantityRejected;
-  double get lineTotal => quantityReceived * unitCost;
+  int get lineTotal => (quantityReceived * unitCost).round();
 }

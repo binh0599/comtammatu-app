@@ -23,7 +23,7 @@ mixin _$Refund {
   int get paymentId => throw _privateConstructorUsedError;
   int get orderId => throw _privateConstructorUsedError;
   int get branchId => throw _privateConstructorUsedError;
-  double get amount => throw _privateConstructorUsedError;
+  int get amount => throw _privateConstructorUsedError;
   String get reason => throw _privateConstructorUsedError;
   String get method => throw _privateConstructorUsedError;
   String get requestedBy => throw _privateConstructorUsedError;
@@ -55,7 +55,7 @@ abstract class $RefundCopyWith<$Res> {
       {int paymentId,
       int orderId,
       int branchId,
-      double amount,
+      int amount,
       String reason,
       String method,
       String requestedBy,
@@ -118,7 +118,7 @@ class _$RefundCopyWithImpl<$Res, $Val extends Refund>
       amount: null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       reason: null == reason
           ? _value.reason
           : reason // ignore: cast_nullable_to_non_nullable
@@ -182,7 +182,7 @@ abstract class _$$RefundImplCopyWith<$Res> implements $RefundCopyWith<$Res> {
       {int paymentId,
       int orderId,
       int branchId,
-      double amount,
+      int amount,
       String reason,
       String method,
       String requestedBy,
@@ -243,7 +243,7 @@ class __$$RefundImplCopyWithImpl<$Res>
       amount: null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       reason: null == reason
           ? _value.reason
           : reason // ignore: cast_nullable_to_non_nullable
@@ -329,7 +329,7 @@ class _$RefundImpl extends _Refund {
   @override
   final int branchId;
   @override
-  final double amount;
+  final int amount;
   @override
   final String reason;
   @override
@@ -435,7 +435,7 @@ abstract class _Refund extends Refund {
       {required final int paymentId,
       required final int orderId,
       required final int branchId,
-      required final double amount,
+      required final int amount,
       required final String reason,
       required final String method,
       required final String requestedBy,
@@ -459,7 +459,7 @@ abstract class _Refund extends Refund {
   @override
   int get branchId;
   @override
-  double get amount;
+  int get amount;
   @override
   String get reason;
   @override

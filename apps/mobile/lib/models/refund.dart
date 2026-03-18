@@ -10,7 +10,7 @@ class Refund with _$Refund {
     required int paymentId,
     required int orderId,
     required int branchId,
-    required double amount,
+    required int amount,
     required String reason,
     required String method,
     required String requestedBy,

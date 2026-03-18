@@ -10,8 +10,8 @@ _$TierProgressImpl _$$TierProgressImplFromJson(Map<String, dynamic> json) =>
     _$TierProgressImpl(
       name: json['name'] as String,
       tierCode: json['tier_code'] as String,
-      minPoints: (json['min_points'] as num).toDouble(),
-      pointsNeeded: (json['points_needed'] as num).toDouble(),
+      minPoints: (json['min_points'] as num).toInt(),
+      pointsNeeded: (json['points_needed'] as num).toInt(),
       progressPercent: (json['progress_percent'] as num).toDouble(),
     );
 

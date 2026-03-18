@@ -11,8 +11,8 @@ _$PointTransactionImpl _$$PointTransactionImplFromJson(
     _$PointTransactionImpl(
       id: (json['id'] as num).toInt(),
       type: json['type'] as String,
-      points: (json['points'] as num).toDouble(),
-      balanceAfter: (json['balance_after'] as num).toDouble(),
+      points: (json['points'] as num).toInt(),
+      balanceAfter: (json['balance_after'] as num).toInt(),
       description: json['description'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
       referenceType: json['reference_type'] as String?,

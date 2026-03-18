@@ -15,9 +15,8 @@ enum PaymentMethod { cod, momo, zalopay }
 
 // -- Helpers --------------------------------------------------------------
 
-String _formatPrice(double price) {
-  final intPrice = price.round();
-  final str = intPrice.toString();
+String _formatPrice(int price) {
+  final str = price.toString();
   final buffer = StringBuffer();
   for (var i = 0; i < str.length; i++) {
     if (i > 0 && (str.length - i) % 3 == 0) buffer.write('.');

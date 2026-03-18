@@ -23,7 +23,7 @@ mixin _$GrnItem {
   int get grnId => throw _privateConstructorUsedError;
   int get ingredientId => throw _privateConstructorUsedError;
   double get quantityReceived => throw _privateConstructorUsedError;
-  double get unitCost => throw _privateConstructorUsedError;
+  int get unitCost => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
   double get quantityOrdered => throw _privateConstructorUsedError;
   double get quantityRejected => throw _privateConstructorUsedError;
@@ -49,7 +49,7 @@ abstract class $GrnItemCopyWith<$Res> {
       {int grnId,
       int ingredientId,
       double quantityReceived,
-      double unitCost,
+      int unitCost,
       int? id,
       double quantityOrdered,
       double quantityRejected,
@@ -100,7 +100,7 @@ class _$GrnItemCopyWithImpl<$Res, $Val extends GrnItem>
       unitCost: null == unitCost
           ? _value.unitCost
           : unitCost // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -140,7 +140,7 @@ abstract class _$$GrnItemImplCopyWith<$Res> implements $GrnItemCopyWith<$Res> {
       {int grnId,
       int ingredientId,
       double quantityReceived,
-      double unitCost,
+      int unitCost,
       int? id,
       double quantityOrdered,
       double quantityRejected,
@@ -189,7 +189,7 @@ class __$$GrnItemImplCopyWithImpl<$Res>
       unitCost: null == unitCost
           ? _value.unitCost
           : unitCost // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -245,7 +245,7 @@ class _$GrnItemImpl extends _GrnItem {
   @override
   final double quantityReceived;
   @override
-  final double unitCost;
+  final int unitCost;
   @override
   final int? id;
   @override
@@ -326,7 +326,7 @@ abstract class _GrnItem extends GrnItem {
       {required final int grnId,
       required final int ingredientId,
       required final double quantityReceived,
-      required final double unitCost,
+      required final int unitCost,
       final int? id,
       final double quantityOrdered,
       final double quantityRejected,
@@ -344,7 +344,7 @@ abstract class _GrnItem extends GrnItem {
   @override
   double get quantityReceived;
   @override
-  double get unitCost;
+  int get unitCost;
   @override
   int? get id;
   @override

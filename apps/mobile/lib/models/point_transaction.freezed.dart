@@ -22,8 +22,8 @@ PointTransaction _$PointTransactionFromJson(Map<String, dynamic> json) {
 mixin _$PointTransaction {
   int get id => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
-  double get points => throw _privateConstructorUsedError;
-  double get balanceAfter => throw _privateConstructorUsedError;
+  int get points => throw _privateConstructorUsedError;
+  int get balanceAfter => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   String? get referenceType => throw _privateConstructorUsedError;
@@ -48,8 +48,8 @@ abstract class $PointTransactionCopyWith<$Res> {
   $Res call(
       {int id,
       String type,
-      double points,
-      double balanceAfter,
+      int points,
+      int balanceAfter,
       String description,
       DateTime createdAt,
       String? referenceType,
@@ -92,11 +92,11 @@ class _$PointTransactionCopyWithImpl<$Res, $Val extends PointTransaction>
       points: null == points
           ? _value.points
           : points // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       balanceAfter: null == balanceAfter
           ? _value.balanceAfter
           : balanceAfter // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -128,8 +128,8 @@ abstract class _$$PointTransactionImplCopyWith<$Res>
   $Res call(
       {int id,
       String type,
-      double points,
-      double balanceAfter,
+      int points,
+      int balanceAfter,
       String description,
       DateTime createdAt,
       String? referenceType,
@@ -170,11 +170,11 @@ class __$$PointTransactionImplCopyWithImpl<$Res>
       points: null == points
           ? _value.points
           : points // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       balanceAfter: null == balanceAfter
           ? _value.balanceAfter
           : balanceAfter // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -218,9 +218,9 @@ class _$PointTransactionImpl extends _PointTransaction {
   @override
   final String type;
   @override
-  final double points;
+  final int points;
   @override
-  final double balanceAfter;
+  final int balanceAfter;
   @override
   final String description;
   @override
@@ -281,8 +281,8 @@ abstract class _PointTransaction extends PointTransaction {
   const factory _PointTransaction(
       {required final int id,
       required final String type,
-      required final double points,
-      required final double balanceAfter,
+      required final int points,
+      required final int balanceAfter,
       required final String description,
       required final DateTime createdAt,
       final String? referenceType,
@@ -297,9 +297,9 @@ abstract class _PointTransaction extends PointTransaction {
   @override
   String get type;
   @override
-  double get points;
+  int get points;
   @override
-  double get balanceAfter;
+  int get balanceAfter;
   @override
   String get description;
   @override

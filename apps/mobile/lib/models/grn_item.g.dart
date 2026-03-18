@@ -11,7 +11,7 @@ _$GrnItemImpl _$$GrnItemImplFromJson(Map<String, dynamic> json) =>
       grnId: (json['grn_id'] as num).toInt(),
       ingredientId: (json['ingredient_id'] as num).toInt(),
       quantityReceived: (json['quantity_received'] as num).toDouble(),
-      unitCost: (json['unit_cost'] as num).toDouble(),
+      unitCost: (json['unit_cost'] as num).toInt(),
       id: (json['id'] as num?)?.toInt(),
       quantityOrdered: (json['quantity_ordered'] as num?)?.toDouble() ?? 0,
       quantityRejected: (json['quantity_rejected'] as num?)?.toDouble() ?? 0,

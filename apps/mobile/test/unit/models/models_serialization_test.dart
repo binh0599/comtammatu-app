@@ -37,7 +37,7 @@ void main() {
       const item = MenuItem(
         id: 1,
         name: 'Com Tam Suon Bi Cha',
-        price: 55000.0,
+        price: 55000,
         description: 'Delicious broken rice',
         imageUrl: 'https://example.com/img.png',
         category: 'Com Tam',
@@ -48,7 +48,7 @@ void main() {
       final restored = MenuItem.fromJson(json);
 
       expect(restored, equals(item));
-      expect(json['base_price'], 55000.0);
+      expect(json['base_price'], 55000);
       expect(json['is_available'], true);
     });
 
@@ -56,7 +56,7 @@ void main() {
       const item = MenuItem(
         id: 2,
         name: 'Nuoc Mia',
-        price: 15000.0,
+        price: 15000,
       );
 
       final json = _roundTripJson(item.toJson());
@@ -69,12 +69,12 @@ void main() {
     });
 
     test('copyWith works correctly', () {
-      const item = MenuItem(id: 1, name: 'A', price: 10000.0);
-      final updated = item.copyWith(name: 'B', price: 20000.0);
+      const item = MenuItem(id: 1, name: 'A', price: 10000);
+      final updated = item.copyWith(name: 'B', price: 20000);
 
       expect(updated.id, 1);
       expect(updated.name, 'B');
-      expect(updated.price, 20000.0);
+      expect(updated.price, 20000);
     });
   });
 
@@ -92,7 +92,7 @@ void main() {
           {
             'id': 1,
             'name': 'Suon Bi Cha',
-            'base_price': 55000.0,
+            'base_price': 55000,
             'description': null,
             'image_url': null,
             'category': 'Com Tam',
@@ -108,7 +108,7 @@ void main() {
       expect(restored.id, 10);
       expect(restored.items.length, 1);
       expect(restored.items.first.name, 'Suon Bi Cha');
-      expect(restored.items.first.price, 55000.0);
+      expect(restored.items.first.price, 55000);
       // Custom fromJson overrides category from parent name
       expect(restored.items.first.category, 'Com Tam');
     });
@@ -133,7 +133,7 @@ void main() {
           {
             'id': 5,
             'name': 'Tra Da',
-            'price': 8000.0, // uses 'price' fallback, not 'base_price'
+            'price': 8000, // uses 'price' fallback, not 'base_price'
           },
         ],
       };
@@ -141,7 +141,7 @@ void main() {
       final restored = MenuCategory.fromJson(json);
 
       expect(restored.items.first.category, 'Nuoc Uong');
-      expect(restored.items.first.price, 8000.0);
+      expect(restored.items.first.price, 8000);
     });
 
     test('copyWith works correctly', () {
@@ -159,7 +159,7 @@ void main() {
   group('CartItem', () {
     test('round-trip with all fields populated', () {
       const cart = CartItem(
-        menuItem: MenuItem(id: 1, name: 'Com Tam', price: 50000.0),
+        menuItem: MenuItem(id: 1, name: 'Com Tam', price: 50000),
         quantity: 3,
         note: 'Extra sauce',
       );
@@ -176,7 +176,7 @@ void main() {
 
     test('round-trip with nullable note as null', () {
       const cart = CartItem(
-        menuItem: MenuItem(id: 2, name: 'Nuoc Mia', price: 15000.0),
+        menuItem: MenuItem(id: 2, name: 'Nuoc Mia', price: 15000),
         quantity: 1,
       );
 
@@ -189,7 +189,7 @@ void main() {
 
     test('copyWith works correctly', () {
       const cart = CartItem(
-        menuItem: MenuItem(id: 1, name: 'A', price: 10000.0),
+        menuItem: MenuItem(id: 1, name: 'A', price: 10000),
         quantity: 1,
       );
       final updated = cart.copyWith(quantity: 5, note: 'No spice');
@@ -208,8 +208,8 @@ void main() {
         menuItemId: 10,
         name: 'Suon Nuong',
         quantity: 2,
-        unitPrice: 55000.0,
-        subtotal: 110000.0,
+        unitPrice: 55000,
+        subtotal: 110000,
       );
 
       final json = _roundTripJson(item.toJson());
@@ -223,13 +223,13 @@ void main() {
         menuItemId: 1,
         name: 'A',
         quantity: 1,
-        unitPrice: 10000.0,
-        subtotal: 10000.0,
+        unitPrice: 10000,
+        subtotal: 10000,
       );
-      final updated = item.copyWith(quantity: 3, subtotal: 30000.0);
+      final updated = item.copyWith(quantity: 3, subtotal: 30000);
 
       expect(updated.quantity, 3);
-      expect(updated.subtotal, 30000.0);
+      expect(updated.subtotal, 30000);
     });
   });
 
@@ -247,14 +247,14 @@ void main() {
             menuItemId: 1,
             name: 'Com Tam',
             quantity: 2,
-            unitPrice: 55000.0,
-            subtotal: 110000.0,
+            unitPrice: 55000,
+            subtotal: 110000,
           ),
         ],
-        subtotal: 110000.0,
-        deliveryFee: 15000.0,
-        discount: 10000.0,
-        total: 115000.0,
+        subtotal: 110000,
+        deliveryFee: 15000,
+        discount: 10000,
+        total: 115000,
         estimatedDeliveryAt: fixedDate,
         pointsWillEarn: 115,
         createdAt: fixedDate2,
@@ -291,10 +291,10 @@ void main() {
         pointsWillEarn: 0,
         createdAt: fixedDate,
       );
-      final updated = order.copyWith(status: 'delivered', total: 100000.0);
+      final updated = order.copyWith(status: 'delivered', total: 100000);
 
       expect(updated.status, 'delivered');
-      expect(updated.total, 100000.0);
+      expect(updated.total, 100000);
     });
   });
 
@@ -509,9 +509,9 @@ void main() {
         id: 1,
         fullName: 'Nguyen Van A',
         phone: '0901234567',
-        totalPoints: 1500.0,
-        availablePoints: 1200.0,
-        lifetimePoints: 5000.0,
+        totalPoints: 1500,
+        availablePoints: 1200,
+        lifetimePoints: 5000,
         version: 3,
         avatarUrl: 'https://example.com/avatar.png',
       );
@@ -527,9 +527,9 @@ void main() {
         id: 2,
         fullName: 'Tran B',
         phone: '0907654321',
-        totalPoints: 0.0,
-        availablePoints: 0.0,
-        lifetimePoints: 0.0,
+        totalPoints: 0,
+        availablePoints: 0,
+        lifetimePoints: 0,
         version: 1,
       );
 
@@ -545,14 +545,14 @@ void main() {
         id: 1,
         fullName: 'A',
         phone: '0900000000',
-        totalPoints: 100.0,
-        availablePoints: 50.0,
-        lifetimePoints: 200.0,
+        totalPoints: 100,
+        availablePoints: 50,
+        lifetimePoints: 200,
         version: 1,
       );
-      final updated = member.copyWith(availablePoints: 75.0, version: 2);
+      final updated = member.copyWith(availablePoints: 75, version: 2);
 
-      expect(updated.availablePoints, 75.0);
+      expect(updated.availablePoints, 75);
       expect(updated.version, 2);
     });
   });
@@ -565,8 +565,8 @@ void main() {
       final tx = PointTransaction(
         id: 10,
         type: 'earn',
-        points: 150.0,
-        balanceAfter: 1350.0,
+        points: 150,
+        balanceAfter: 1350,
         description: 'Order #100 cashback',
         createdAt: fixedDate,
         referenceType: 'order',
@@ -583,8 +583,8 @@ void main() {
       final tx = PointTransaction(
         id: 11,
         type: 'redeem',
-        points: -200.0,
-        balanceAfter: 1150.0,
+        points: -200,
+        balanceAfter: 1150,
         description: 'Voucher redemption',
         createdAt: fixedDate,
       );
@@ -601,14 +601,14 @@ void main() {
       final tx = PointTransaction(
         id: 1,
         type: 'earn',
-        points: 10.0,
-        balanceAfter: 10.0,
+        points: 10,
+        balanceAfter: 10,
         description: 'test',
         createdAt: fixedDate,
       );
-      final updated = tx.copyWith(points: 20.0, referenceId: 5);
+      final updated = tx.copyWith(points: 20, referenceId: 5);
 
-      expect(updated.points, 20.0);
+      expect(updated.points, 20);
       expect(updated.referenceId, 5);
     });
   });
@@ -1057,8 +1057,8 @@ void main() {
       final result = CheckinResult(
         checkinId: 42,
         branch: const Branch(id: 1, name: 'Q1', address: '123 Nguyen Hue'),
-        pointsEarned: 10.0,
-        newBalance: 1510.0,
+        pointsEarned: 10,
+        newBalance: 1510,
         streak: const CheckinStreak(
           current: 5,
           bonus: 50,
@@ -1084,8 +1084,8 @@ void main() {
       final result = CheckinResult(
         checkinId: 1,
         branch: const Branch(id: 1, name: 'A', address: 'Addr'),
-        pointsEarned: 5.0,
-        newBalance: 100.0,
+        pointsEarned: 5,
+        newBalance: 100,
         streak: const CheckinStreak(
           current: 1,
           bonus: 0,
@@ -1094,10 +1094,10 @@ void main() {
         ),
         checkedInAt: fixedDate,
       );
-      final updated = result.copyWith(pointsEarned: 20.0, newBalance: 120.0);
+      final updated = result.copyWith(pointsEarned: 20, newBalance: 120);
 
-      expect(updated.pointsEarned, 20.0);
-      expect(updated.newBalance, 120.0);
+      expect(updated.pointsEarned, 20);
+      expect(updated.newBalance, 120);
     });
   });
 
@@ -1111,7 +1111,7 @@ void main() {
         name: 'Tet Sale',
         description: 'Giam gia dip Tet',
         cashbackType: 'percentage',
-        cashbackValue: 10.0,
+        cashbackValue: 10,
         startDate: fixedDate,
         endDate: fixedDate2,
         eligible: true,
@@ -1130,7 +1130,7 @@ void main() {
         name: 'Summer',
         description: 'Summer sale',
         cashbackType: 'fixed',
-        cashbackValue: 5000.0,
+        cashbackValue: 5000,
         startDate: fixedDate,
         endDate: fixedDate2,
         eligible: false,
@@ -1149,15 +1149,15 @@ void main() {
         name: 'A',
         description: 'D',
         cashbackType: 'percentage',
-        cashbackValue: 5.0,
+        cashbackValue: 5,
         startDate: fixedDate,
         endDate: fixedDate2,
         eligible: false,
       );
-      final updated = promo.copyWith(eligible: true, cashbackValue: 15.0);
+      final updated = promo.copyWith(eligible: true, cashbackValue: 15);
 
       expect(updated.eligible, true);
-      expect(updated.cashbackValue, 15.0);
+      expect(updated.cashbackValue, 15);
     });
   });
 
@@ -1169,8 +1169,8 @@ void main() {
       const progress = TierProgress(
         name: 'Gold',
         tierCode: 'GOLD',
-        minPoints: 1000.0,
-        pointsNeeded: 500.0,
+        minPoints: 1000,
+        pointsNeeded: 500,
         progressPercent: 0.5,
       );
 
@@ -1184,8 +1184,8 @@ void main() {
       const progress = TierProgress(
         name: 'Silver',
         tierCode: 'SILVER',
-        minPoints: 500.0,
-        pointsNeeded: 200.0,
+        minPoints: 500,
+        pointsNeeded: 200,
         progressPercent: 0.6,
       );
       final updated = progress.copyWith(progressPercent: 0.8);
@@ -1210,8 +1210,8 @@ void main() {
         nextTier: TierProgress(
           name: 'Gold',
           tierCode: 'GOLD',
-          minPoints: 1000.0,
-          pointsNeeded: 500.0,
+          minPoints: 1000,
+          pointsNeeded: 500,
           progressPercent: 0.5,
         ),
       );
@@ -1227,7 +1227,7 @@ void main() {
       expect(restored.benefits, tier.benefits);
       expect(restored.nextTier, isNotNull);
       expect(restored.nextTier!.name, 'Gold');
-      expect(restored.nextTier!.pointsNeeded, 500.0);
+      expect(restored.nextTier!.pointsNeeded, 500);
     });
 
     test('round-trip with nullable nextTier as null', () {
@@ -1278,9 +1278,9 @@ void main() {
           id: 1,
           fullName: 'Nguyen Van A',
           phone: '0901234567',
-          totalPoints: 1500.0,
-          availablePoints: 1200.0,
-          lifetimePoints: 5000.0,
+          totalPoints: 1500,
+          availablePoints: 1200,
+          lifetimePoints: 5000,
           version: 3,
           avatarUrl: 'https://example.com/avatar.png',
         ),
@@ -1294,8 +1294,8 @@ void main() {
           nextTier: TierProgress(
             name: 'Platinum',
             tierCode: 'PLATINUM',
-            minPoints: 5000.0,
-            pointsNeeded: 3500.0,
+            minPoints: 5000,
+            pointsNeeded: 3500,
             progressPercent: 0.3,
           ),
         ),
@@ -1303,8 +1303,8 @@ void main() {
           PointTransaction(
             id: 1,
             type: 'earn',
-            points: 100.0,
-            balanceAfter: 1300.0,
+            points: 100,
+            balanceAfter: 1300,
             description: 'Order cashback',
             createdAt: fixedDate,
           ),
@@ -1315,7 +1315,7 @@ void main() {
             name: 'Tet Sale',
             description: 'Tet promo',
             cashbackType: 'percentage',
-            cashbackValue: 10.0,
+            cashbackValue: 10,
             startDate: fixedDate,
             endDate: fixedDate2,
             eligible: true,
@@ -1348,9 +1348,9 @@ void main() {
           id: 1,
           fullName: 'B',
           phone: '0900000000',
-          totalPoints: 0.0,
-          availablePoints: 0.0,
-          lifetimePoints: 0.0,
+          totalPoints: 0,
+          availablePoints: 0,
+          lifetimePoints: 0,
           version: 1,
         ),
         tier: Tier(
@@ -1383,9 +1383,9 @@ void main() {
           id: 1,
           fullName: 'A',
           phone: '0900000000',
-          totalPoints: 0.0,
-          availablePoints: 0.0,
-          lifetimePoints: 0.0,
+          totalPoints: 0,
+          availablePoints: 0,
+          lifetimePoints: 0,
           version: 1,
         ),
         tier: Tier(

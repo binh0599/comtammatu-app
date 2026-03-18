@@ -10,7 +10,7 @@ _$MenuItemImpl _$$MenuItemImplFromJson(Map<String, dynamic> json) =>
     _$MenuItemImpl(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
-      price: (json['base_price'] as num).toDouble(),
+      price: (json['base_price'] as num).toInt(),
       description: json['description'] as String?,
       imageUrl: json['image_url'] as String?,
       category: json['category'] as String? ?? '',
