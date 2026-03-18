@@ -15,7 +15,9 @@ import '../../features/feedback/presentation/feedback_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/inventory/presentation/inventory_screen.dart';
 import '../../features/loyalty/presentation/checkin_screen.dart';
+import '../../features/loyalty/presentation/earn_points_screen.dart';
 import '../../features/loyalty/presentation/loyalty_screen.dart';
+import '../../features/loyalty/presentation/redeem_points_screen.dart';
 import '../../features/menu/presentation/menu_screen.dart';
 import '../../features/notifications/presentation/notification_inbox_screen.dart';
 import '../../features/order/presentation/order_history_screen.dart';
@@ -54,6 +56,8 @@ class AppRoutes {
   static const String feedback = '/feedback';
   static const String vouchers = '/vouchers';
   static const String checkin = '/checkin';
+  static const String earnPoints = '/loyalty/earn';
+  static const String redeemPoints = '/loyalty/redeem';
 
   // Management routes (owner/manager)
   static const String dashboard = '/dashboard';
@@ -376,6 +380,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: AppRoutes.checkin,
             name: 'checkin',
             builder: (context, state) => const CheckinScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.earnPoints,
+            name: 'earnPoints',
+            builder: (context, state) => const EarnPointsScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.redeemPoints,
+            name: 'redeemPoints',
+            builder: (context, state) => const RedeemPointsScreen(),
           ),
         ],
       ),
