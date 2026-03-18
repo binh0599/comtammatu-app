@@ -185,16 +185,16 @@
 
 ## 🚨 CHỜ USER ACTION (Blockers)
 
-| # | Action | Blocking |
-|---|--------|----------|
-| 1 | Copy logo PNG 1024x1024 → `assets/icon/app_icon.png` | App icon + splash screen |
-| 2 | Chạy `dart run flutter_launcher_icons` + `flutter_native_splash:create` | Build final |
-| 3 | Đăng ký Apple Developer Account + Google Play Console | Store submission |
-| 4 | Cấu hình code signing theo `docs/CODE_SIGNING.md` | Release builds |
-| 5 | Mua domain `comtammatu.com` + host deep link verification files | Deep links |
-| 6 | Luật sư review privacy policy + terms of service | Store submission |
-| 7 | Firebase project setup (FCM server key) | Push notifications |
-| 8 | Supabase secrets cho `earn-points` + `redeem-points` | Points feature |
+| # | Action | Blocking | Status |
+|---|--------|----------|--------|
+| 1 | ~~Copy logo PNG 1024x1024 → `assets/icon/app_icon.png`~~ | App icon + splash screen | ✅ Done (logo.jpg → app_icon.png) |
+| 2 | ~~Chạy `flutter_launcher_icons` + `flutter_native_splash:create`~~ | Build final | ✅ Done (icons + splash generated) |
+| 3 | Đăng ký Apple Developer Account + Google Play Console | Store submission | |
+| 4 | Cấu hình code signing theo `docs/CODE_SIGNING.md` | Release builds | |
+| 5 | ~~Mua domain `comtammatu.com`~~ + host deep link verification files | Deep links | ✅ Domain đã mua |
+| 6 | Luật sư review privacy policy + terms of service | Store submission | |
+| 7 | ~~Firebase project setup (FCM server key)~~ | Push notifications | ✅ Đã tạo tài khoản |
+| 8 | Supabase secrets cho `earn-points` + `redeem-points` | Points feature | |
 
 ---
 
