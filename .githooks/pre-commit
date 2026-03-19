@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Pre-commit hook: auto-format staged Dart files with dart format
+# Installed via: git config core.hooksPath .githooks
+
+set -euo pipefail
+
+# Collect staged .dart files (Added, Copied, Modified, Renamed)
+STAGED_DART_FILES=$(git diff --cached --name-only --diff-filter=ACMR -- '*.dart' || true)
+
+if [ -z "$STAGED_DART_FILES" ]; then
+  exit 0
+fi
+
+echo "Running dart format on staged files..."
+echo "$STAGED_DART_FILES" | xargs dart format
+
+# Re-stage formatted files
+echo "$STAGED_DART_FILES" | xargs git add
+
+echo "Dart format applied."
