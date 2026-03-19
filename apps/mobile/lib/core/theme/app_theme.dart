@@ -94,11 +94,16 @@ class AppTheme {
         brightness: Brightness.dark,
         primary: AppColors.primary,
         secondary: AppColors.secondary,
+        surface: AppColors.darkSurface,
+        error: AppColors.darkError,
       ),
-      textTheme: AppTypography.textTheme,
+      scaffoldBackgroundColor: AppColors.darkBackground,
+      textTheme: AppTypography.darkTextTheme,
       appBarTheme: const AppBarTheme(
         centerTitle: true,
         elevation: 0,
+        backgroundColor: AppColors.darkSurface,
+        foregroundColor: AppColors.darkTextPrimary,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -110,9 +115,34 @@ class AppTheme {
           ),
         ),
       ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.primaryLight,
+          minimumSize: const Size(double.infinity, 48),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          side: const BorderSide(color: AppColors.primaryLight),
+        ),
+      ),
       inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.darkSurfaceVariant,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.darkBorder),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.darkBorder),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.darkError),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
@@ -121,10 +151,21 @@ class AppTheme {
       ),
       cardTheme: CardThemeData(
         elevation: 1,
+        color: AppColors.darkSurface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
         clipBehavior: Clip.antiAlias,
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: AppColors.darkSurface,
+        selectedItemColor: AppColors.primaryLight,
+        unselectedItemColor: AppColors.darkTextSecondary,
+        showUnselectedLabels: true,
+      ),
+      dividerTheme: const DividerThemeData(
+        color: AppColors.darkDivider,
       ),
     );
   }

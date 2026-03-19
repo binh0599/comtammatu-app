@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +8,8 @@ import '../../../core/network/api_client.dart';
 import '../../../core/storage/app_database.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/extensions/context_extensions.dart';
+import '../../../shared/widgets/app_network_image.dart';
+import '../../../shared/widgets/skeleton_loader.dart';
 
 // -- Data models ----------------------------------------------------------
 
@@ -449,8 +450,14 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
 
           // Loading state
           if (menuState is MenuLoading)
-            const Expanded(
-              child: Center(child: CircularProgressIndicator()),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                children: List.generate(
+                  6,
+                  (_) => const MenuItemSkeleton(),
+                ),
+              ),
             )
           // Menu items list
           else
@@ -530,22 +537,11 @@ class _MenuItemCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: item.imageUrl != null
-                      ? ClipRRect(
+                      ? AppNetworkImage(
+                          imageUrl: item.imageUrl!,
+                          width: 80,
+                          height: 80,
                           borderRadius: BorderRadius.circular(10),
-                          child: CachedNetworkImage(
-                            imageUrl: item.imageUrl!,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            ),
-                            errorWidget: (context, url, error) => const Icon(
-                              Icons.broken_image_outlined,
-                              size: 36,
-                              color: Colors.grey,
-                            ),
-                            fit: BoxFit.cover,
-                            width: 80,
-                            height: 80,
-                          ),
                         )
                       : Icon(
                           Icons.restaurant,

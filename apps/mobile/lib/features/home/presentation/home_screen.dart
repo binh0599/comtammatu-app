@@ -6,6 +6,7 @@ import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/extensions/context_extensions.dart';
 import '../../../shared/utils/formatters.dart';
+import '../../../shared/widgets/skeleton_loader.dart';
 import '../../loyalty/domain/loyalty_notifier.dart';
 import '../../loyalty/domain/loyalty_state.dart';
 import '../../notifications/domain/notification_notifier.dart';
@@ -167,10 +168,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             const SizedBox(height: 8),
             if (loyaltyState is LoyaltyLoading)
-              const SizedBox(
-                height: 40,
-                child: Center(
-                  child: CircularProgressIndicator(color: Colors.white),
+              SkeletonShimmer(
+                child: Container(
+                  height: 40,
+                  width: 120,
+                  decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
               )
             else

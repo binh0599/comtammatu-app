@@ -14,6 +14,7 @@ class MenuItem with _$MenuItem {
     String? imageUrl,
     @Default('') String category,
     @JsonKey(name: 'is_available') @Default(true) bool available,
+    @JsonKey(name: 'is_popular') @Default(false) bool isPopular,
     List<String>? tags,
   }) = _MenuItem;
 

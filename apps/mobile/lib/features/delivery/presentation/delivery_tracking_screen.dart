@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -287,7 +288,7 @@ class _TrackingContent extends StatelessWidget {
               radius: 28,
               backgroundColor: AppColors.primary.withValues(alpha: 0.1),
               backgroundImage: tracking.driverAvatarUrl != null
-                  ? NetworkImage(tracking.driverAvatarUrl!)
+                  ? CachedNetworkImageProvider(tracking.driverAvatarUrl!)
                   : null,
               child: tracking.driverAvatarUrl == null
                   ? const Icon(

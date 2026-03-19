@@ -15,6 +15,7 @@ _$MenuItemImpl _$$MenuItemImplFromJson(Map<String, dynamic> json) =>
       imageUrl: json['image_url'] as String?,
       category: json['category'] as String? ?? '',
       available: json['is_available'] as bool? ?? true,
+      isPopular: json['is_popular'] as bool? ?? false,
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
 
@@ -27,6 +28,7 @@ Map<String, dynamic> _$$MenuItemImplToJson(_$MenuItemImpl instance) =>
       'image_url': instance.imageUrl,
       'category': instance.category,
       'is_available': instance.available,
+      'is_popular': instance.isPopular,
       'tags': instance.tags,
     };
 

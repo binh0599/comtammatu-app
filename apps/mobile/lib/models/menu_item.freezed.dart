@@ -29,6 +29,8 @@ mixin _$MenuItem {
   String get category => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_available')
   bool get available => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_popular')
+  bool get isPopular => throw _privateConstructorUsedError;
   List<String>? get tags => throw _privateConstructorUsedError;
 
   /// Serializes this MenuItem to a JSON map.
@@ -54,6 +56,7 @@ abstract class $MenuItemCopyWith<$Res> {
       String? imageUrl,
       String category,
       @JsonKey(name: 'is_available') bool available,
+      @JsonKey(name: 'is_popular') bool isPopular,
       List<String>? tags});
 }
 
@@ -79,6 +82,7 @@ class _$MenuItemCopyWithImpl<$Res, $Val extends MenuItem>
     Object? imageUrl = freezed,
     Object? category = null,
     Object? available = null,
+    Object? isPopular = null,
     Object? tags = freezed,
   }) {
     return _then(_value.copyWith(
@@ -110,6 +114,10 @@ class _$MenuItemCopyWithImpl<$Res, $Val extends MenuItem>
           ? _value.available
           : available // ignore: cast_nullable_to_non_nullable
               as bool,
+      isPopular: null == isPopular
+          ? _value.isPopular
+          : isPopular // ignore: cast_nullable_to_non_nullable
+              as bool,
       tags: freezed == tags
           ? _value.tags
           : tags // ignore: cast_nullable_to_non_nullable
@@ -134,6 +142,7 @@ abstract class _$$MenuItemImplCopyWith<$Res>
       String? imageUrl,
       String category,
       @JsonKey(name: 'is_available') bool available,
+      @JsonKey(name: 'is_popular') bool isPopular,
       List<String>? tags});
 }
 
@@ -157,6 +166,7 @@ class __$$MenuItemImplCopyWithImpl<$Res>
     Object? imageUrl = freezed,
     Object? category = null,
     Object? available = null,
+    Object? isPopular = null,
     Object? tags = freezed,
   }) {
     return _then(_$MenuItemImpl(
@@ -188,6 +198,10 @@ class __$$MenuItemImplCopyWithImpl<$Res>
           ? _value.available
           : available // ignore: cast_nullable_to_non_nullable
               as bool,
+      isPopular: null == isPopular
+          ? _value.isPopular
+          : isPopular // ignore: cast_nullable_to_non_nullable
+              as bool,
       tags: freezed == tags
           ? _value._tags
           : tags // ignore: cast_nullable_to_non_nullable
@@ -208,6 +222,7 @@ class _$MenuItemImpl extends _MenuItem {
       this.imageUrl,
       this.category = '',
       @JsonKey(name: 'is_available') this.available = true,
+      @JsonKey(name: 'is_popular') this.isPopular = false,
       final List<String>? tags})
       : _tags = tags,
         super._();
@@ -232,6 +247,9 @@ class _$MenuItemImpl extends _MenuItem {
   @override
   @JsonKey(name: 'is_available')
   final bool available;
+  @override
+  @JsonKey(name: 'is_popular')
+  final bool isPopular;
   final List<String>? _tags;
   @override
   List<String>? get tags {
@@ -244,7 +262,7 @@ class _$MenuItemImpl extends _MenuItem {
 
   @override
   String toString() {
-    return 'MenuItem(id: $id, name: $name, price: $price, description: $description, imageUrl: $imageUrl, category: $category, available: $available, tags: $tags)';
+    return 'MenuItem(id: $id, name: $name, price: $price, description: $description, imageUrl: $imageUrl, category: $category, available: $available, isPopular: $isPopular, tags: $tags)';
   }
 
   @override
@@ -263,6 +281,8 @@ class _$MenuItemImpl extends _MenuItem {
                 other.category == category) &&
             (identical(other.available, available) ||
                 other.available == available) &&
+            (identical(other.isPopular, isPopular) ||
+                other.isPopular == isPopular) &&
             const DeepCollectionEquality().equals(other._tags, _tags));
   }
 
@@ -277,6 +297,7 @@ class _$MenuItemImpl extends _MenuItem {
       imageUrl,
       category,
       available,
+      isPopular,
       const DeepCollectionEquality().hash(_tags));
 
   /// Create a copy of MenuItem
@@ -304,6 +325,7 @@ abstract class _MenuItem extends MenuItem {
       final String? imageUrl,
       final String category,
       @JsonKey(name: 'is_available') final bool available,
+      @JsonKey(name: 'is_popular') final bool isPopular,
       final List<String>? tags}) = _$MenuItemImpl;
   const _MenuItem._() : super._();
 
@@ -326,6 +348,9 @@ abstract class _MenuItem extends MenuItem {
   @override
   @JsonKey(name: 'is_available')
   bool get available;
+  @override
+  @JsonKey(name: 'is_popular')
+  bool get isPopular;
   @override
   List<String>? get tags;
 

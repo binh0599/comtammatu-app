@@ -9,6 +9,7 @@ import '../../../models/loyalty_dashboard.dart';
 import '../../../models/point_transaction.dart';
 import '../../../models/tier.dart';
 import '../../../shared/extensions/context_extensions.dart';
+import '../../../shared/widgets/skeleton_loader.dart';
 import '../domain/loyalty_notifier.dart';
 import '../domain/loyalty_state.dart';
 
@@ -62,14 +63,14 @@ class _LoyaltyScreenState extends ConsumerState<LoyaltyScreen> {
         title: Text(context.l10n.loyalty),
       ),
       body: switch (loyaltyState) {
-        LoyaltyLoading() => const Center(child: CircularProgressIndicator()),
+        LoyaltyLoading() => const LoyaltySkeleton(),
         LoyaltyError(:final message) => _ErrorBody(
             message: message,
             onRetry: () =>
                 ref.read(loyaltyNotifierProvider.notifier).loadDashboard(),
           ),
         LoyaltyLoaded(:final dashboard) => _LoadedBody(dashboard: dashboard),
-        LoyaltyInitial() => const Center(child: CircularProgressIndicator()),
+        LoyaltyInitial() => const LoyaltySkeleton(),
       },
     );
   }
