@@ -213,7 +213,8 @@ final inventoryNotifierProvider =
 });
 
 /// Provider lọc theo danh mục.
-final inventoryCategoryFilterProvider = StateProvider.autoDispose<String?>((ref) => null);
+final inventoryCategoryFilterProvider =
+    StateProvider.autoDispose<String?>((ref) => null);
 
 /// Provider sắp xếp.
 final inventorySortProvider =

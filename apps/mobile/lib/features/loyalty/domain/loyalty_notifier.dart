@@ -70,7 +70,8 @@ final loyaltyNotifierProvider =
 });
 
 /// Provider that fetches available rewards for redemption.
-final availableRewardsProvider = FutureProvider.autoDispose<List<Reward>>((ref) async {
+final availableRewardsProvider =
+    FutureProvider.autoDispose<List<Reward>>((ref) async {
   final repo = ref.watch(loyaltyRepositoryProvider);
   return repo.getAvailableRewards();
 });

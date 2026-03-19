@@ -122,7 +122,8 @@ final staffNotifierProvider =
 });
 
 /// Provider lọc nhân viên theo vai trò.
-final staffRoleFilterProvider = StateProvider.autoDispose<StaffRole?>((ref) => null);
+final staffRoleFilterProvider =
+    StateProvider.autoDispose<StaffRole?>((ref) => null);
 
 /// Provider danh sách nhân viên đã lọc theo vai trò.
 final filteredStaffProvider = Provider.autoDispose<List<StaffMember>>((ref) {

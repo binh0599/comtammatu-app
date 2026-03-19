@@ -80,8 +80,7 @@ MockAuthRepository signInSuccessMockAuthRepo({
 }) {
   final repo = MockAuthRepository();
   when(() => repo.getCurrentUser()).thenReturn(null);
-  when(() => repo.onAuthStateChange())
-      .thenAnswer((_) => authController.stream);
+  when(() => repo.onAuthStateChange()).thenAnswer((_) => authController.stream);
   when(() => repo.signIn(
         phone: any(named: 'phone'),
         password: any(named: 'password'),
