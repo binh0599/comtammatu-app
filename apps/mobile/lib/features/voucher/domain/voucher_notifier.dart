@@ -93,13 +93,13 @@ class MyVouchersNotifier extends StateNotifier<VoucherListState> {
 // ---------------------------------------------------------------------------
 
 final availableVouchersProvider =
-    StateNotifierProvider<AvailableVouchersNotifier, VoucherListState>((ref) {
+    StateNotifierProvider.autoDispose<AvailableVouchersNotifier, VoucherListState>((ref) {
   final repo = ref.watch(voucherRepositoryProvider);
   return AvailableVouchersNotifier(voucherRepository: repo);
 });
 
 final myVouchersProvider =
-    StateNotifierProvider<MyVouchersNotifier, VoucherListState>((ref) {
+    StateNotifierProvider.autoDispose<MyVouchersNotifier, VoucherListState>((ref) {
   final repo = ref.watch(voucherRepositoryProvider);
   return MyVouchersNotifier(voucherRepository: repo);
 });

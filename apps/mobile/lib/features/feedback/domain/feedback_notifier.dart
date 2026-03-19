@@ -39,7 +39,7 @@ class FeedbackNotifier extends StateNotifier<FeedbackState> {
 }
 
 final feedbackNotifierProvider =
-    StateNotifierProvider<FeedbackNotifier, FeedbackState>((ref) {
+    StateNotifierProvider.autoDispose<FeedbackNotifier, FeedbackState>((ref) {
   final repo = ref.watch(feedbackRepositoryProvider);
   return FeedbackNotifier(feedbackRepository: repo);
 });

@@ -50,7 +50,7 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
 
 /// Provider cho trạng thái bảng điều khiển.
 final dashboardNotifierProvider =
-    StateNotifierProvider<DashboardNotifier, DashboardState>((ref) {
+    StateNotifierProvider.autoDispose<DashboardNotifier, DashboardState>((ref) {
   final repo = ref.watch(dashboardRepositoryProvider);
   return DashboardNotifier(repository: repo);
 });

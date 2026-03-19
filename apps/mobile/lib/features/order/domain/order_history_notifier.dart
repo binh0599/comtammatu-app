@@ -102,7 +102,7 @@ class OrderHistoryNotifier extends StateNotifier<OrderHistoryState> {
 
 /// Provider for [OrderHistoryNotifier].
 final orderHistoryNotifierProvider =
-    StateNotifierProvider<OrderHistoryNotifier, OrderHistoryState>((ref) {
+    StateNotifierProvider.autoDispose<OrderHistoryNotifier, OrderHistoryState>((ref) {
   final orderRepo = ref.watch(orderRepositoryProvider);
   return OrderHistoryNotifier(orderRepository: orderRepo);
 });

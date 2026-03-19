@@ -283,7 +283,7 @@ class MenuNotifier extends StateNotifier<MenuLoadState> {
 }
 
 final menuNotifierProvider =
-    StateNotifierProvider<MenuNotifier, MenuLoadState>((ref) {
+    StateNotifierProvider.autoDispose<MenuNotifier, MenuLoadState>((ref) {
   try {
     final apiClient = ref.watch(apiClientProvider);
     final cacheService = ref.watch(cacheServiceProvider);
@@ -304,11 +304,11 @@ final menuNotifierProvider =
 // Fallback providers for when MenuNotifier isn't initialized
 final menuItemsProvider = Provider<List<MenuItem>>((ref) => _kSampleItems);
 
-final menuSearchQueryProvider = StateProvider<String>((ref) => '');
+final menuSearchQueryProvider = StateProvider.autoDispose<String>((ref) => '');
 
-final menuCategoryProvider = StateProvider<int>((ref) => 0);
+final menuCategoryProvider = StateProvider.autoDispose<int>((ref) => 0);
 
-final filteredMenuItemsProvider = Provider<List<MenuItem>>((ref) {
+final filteredMenuItemsProvider = Provider.autoDispose<List<MenuItem>>((ref) {
   final menuState = ref.watch(menuNotifierProvider);
   final items = switch (menuState) {
     MenuLoaded(items: final loadedItems) => loadedItems,

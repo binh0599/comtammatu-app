@@ -62,7 +62,7 @@ class MenuNotifier extends StateNotifier<MenuState> {
 }
 
 final menuNotifierProvider =
-    StateNotifierProvider<MenuNotifier, MenuState>((ref) {
+    StateNotifierProvider.autoDispose<MenuNotifier, MenuState>((ref) {
   final repo = ref.watch(menuRepositoryProvider);
   return MenuNotifier(menuRepository: repo);
 });

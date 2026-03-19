@@ -563,7 +563,7 @@ final initializeNotificationsProvider = FutureProvider<void>((ref) async {
 });
 
 /// Provider lấy FCM token hiện tại.
-final fcmTokenProvider = FutureProvider<String>((ref) async {
+final fcmTokenProvider = FutureProvider.autoDispose<String>((ref) async {
   final service = ref.read(notificationServiceProvider);
   return service.getToken();
 });

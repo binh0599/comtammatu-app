@@ -207,14 +207,14 @@ class InventoryNotifier extends StateNotifier<InventoryState> {
 // -- Providers --------------------------------------------------------------
 
 final inventoryNotifierProvider =
-    StateNotifierProvider<InventoryNotifier, InventoryState>((ref) {
+    StateNotifierProvider.autoDispose<InventoryNotifier, InventoryState>((ref) {
   final repo = ref.watch(inventoryRepositoryProvider);
   return InventoryNotifier(inventoryRepository: repo);
 });
 
 /// Provider lọc theo danh mục.
-final inventoryCategoryFilterProvider = StateProvider<String?>((ref) => null);
+final inventoryCategoryFilterProvider = StateProvider.autoDispose<String?>((ref) => null);
 
 /// Provider sắp xếp.
 final inventorySortProvider =
-    StateProvider<InventorySortBy>((ref) => InventorySortBy.name);
+    StateProvider.autoDispose<InventorySortBy>((ref) => InventorySortBy.name);

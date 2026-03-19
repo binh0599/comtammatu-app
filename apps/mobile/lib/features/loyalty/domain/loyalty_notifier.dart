@@ -64,13 +64,13 @@ class LoyaltyNotifier extends StateNotifier<LoyaltyState> {
 }
 
 final loyaltyNotifierProvider =
-    StateNotifierProvider<LoyaltyNotifier, LoyaltyState>((ref) {
+    StateNotifierProvider.autoDispose<LoyaltyNotifier, LoyaltyState>((ref) {
   final repo = ref.watch(loyaltyRepositoryProvider);
   return LoyaltyNotifier(loyaltyRepository: repo);
 });
 
 /// Provider that fetches available rewards for redemption.
-final availableRewardsProvider = FutureProvider<List<Reward>>((ref) async {
+final availableRewardsProvider = FutureProvider.autoDispose<List<Reward>>((ref) async {
   final repo = ref.watch(loyaltyRepositoryProvider);
   return repo.getAvailableRewards();
 });

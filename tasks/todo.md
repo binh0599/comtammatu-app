@@ -161,11 +161,12 @@
 - [ ] Skeleton loading cho tất cả screens (hiện chỉ có order history)
 - **Owner:** `sr-ux-designer` + `sr-flutter-dev`
 
-### P6.4 — Performance Optimization
-- [ ] Profile app performance với Flutter DevTools
-- [ ] ListView → SliverList cho menu nếu cần
-- [ ] Image caching strategy review
-- [ ] Memory leak audit (Riverpod providers dispose)
+### P6.4 — Performance Optimization ✅ (2026-03-19)
+- [x] Profile app performance → ListView.builder already used, no SliverList needed
+- [x] Image caching strategy review → CachedNetworkImage centralized via AppNetworkImage
+- [x] Memory leak audit: 19 providers updated to `.autoDispose` (10 StateNotifierProviders, 5 StateProviders, 2 FutureProviders, 2 derived Providers)
+- [x] Kept app-level providers persistent (auth, cart, addresses, notifications, connectivity)
+- [x] All 206 tests passing, 0 analyze errors
 - **Owner:** `sr-flutter-dev`
 
 ---

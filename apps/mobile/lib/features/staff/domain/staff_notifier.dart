@@ -116,16 +116,16 @@ class StaffNotifier extends StateNotifier<StaffListState> {
 
 /// Provider chính cho StaffNotifier.
 final staffNotifierProvider =
-    StateNotifierProvider<StaffNotifier, StaffListState>((ref) {
+    StateNotifierProvider.autoDispose<StaffNotifier, StaffListState>((ref) {
   final repo = ref.watch(staffRepositoryProvider);
   return StaffNotifier(staffRepository: repo);
 });
 
 /// Provider lọc nhân viên theo vai trò.
-final staffRoleFilterProvider = StateProvider<StaffRole?>((ref) => null);
+final staffRoleFilterProvider = StateProvider.autoDispose<StaffRole?>((ref) => null);
 
 /// Provider danh sách nhân viên đã lọc theo vai trò.
-final filteredStaffProvider = Provider<List<StaffMember>>((ref) {
+final filteredStaffProvider = Provider.autoDispose<List<StaffMember>>((ref) {
   final state = ref.watch(staffNotifierProvider);
   final roleFilter = ref.watch(staffRoleFilterProvider);
 
