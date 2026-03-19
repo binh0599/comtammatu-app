@@ -4,7 +4,6 @@ import 'package:comtammatu/core/cache/cache_service.dart';
 import 'package:comtammatu/core/network/api_client.dart';
 import 'package:comtammatu/features/auth/data/auth_repository.dart';
 import 'package:comtammatu/features/auth/domain/auth_notifier.dart';
-import 'package:comtammatu/features/auth/domain/auth_state.dart';
 import 'package:comtammatu/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
